@@ -1,5 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://IVANLEE99.github.io</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://IVANLEE99.github.io</link></image><lastBuildDate>Mon, 25 Nov 2024 07:09:24 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>pm2不断重启排查和解决</title><link>https://IVANLEE99.github.io/post/pm2-bu-duan-zhong-qi-pai-cha-he-jie-jue.html</link><description># pm2不断重启排查&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://github.com/IVANLEE99</link><description>人生就是马拉松🏃
+不在起点在坚持✊
+一步一步一脚印👣
+前脚走～后脚放🦶
+良知良心不泯灭❤️
+吾尝终日而思🤔不如须臾之所学也
+少抱怨多思考未来更美好
+一分耕耘 一分收穫
+水滴石穿尽管努力
+开花结果水到渠成
+……………………………………………………………………</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://github.com/IVANLEE99</link></image><lastBuildDate>Mon, 25 Nov 2024 07:39:26 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>pm2不断重启排查和解决</title><link>https://github.com/IVANLEE99/post/2.html</link><description># pm2不断重启排查&#13;
 &#13;
 【p0】pc端进程重启&#13;
 &#13;
@@ -119,9 +129,9 @@ computed 中注释`handleCountDown方法`&#13;
 &#13;
 内存泄漏代码上就那些点～&#13;
 &#13;
-1、事件监听器：如果在组件中添加了事件监听器，但在组件销毁时没有移除它们，可能会导致内存泄漏。</description><guid isPermaLink="true">https://IVANLEE99.github.io/post/pm2-bu-duan-zhong-qi-pai-cha-he-jie-jue.html</guid><pubDate>Mon, 25 Nov 2024 07:08:49 +0000</pubDate></item><item><title>my first blog~</title><link>https://IVANLEE99.github.io/post/my%20first%20blog~.html</link><description>[YoungsDream](https://ivanlee99.github.io/)&#13;
+1、事件监听器：如果在组件中添加了事件监听器，但在组件销毁时没有移除它们，可能会导致内存泄漏。</description><guid isPermaLink="true">https://github.com/IVANLEE99/post/2.html</guid><pubDate>Mon, 25 Nov 2024 07:08:49 +0000</pubDate></item><item><title>my first blog~</title><link>https://github.com/IVANLEE99/post/1.html</link><description>[YoungsDream](https://ivanlee99.github.io/)&#13;
 【创建仓库】完成了&#13;
 请接着按照下面的步骤2和3进行操作，全部成功之后，本README.md文件会自动替换掉的哦！&#13;
 &#13;
 安装&#13;
-【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&amp;template_owner=Meekdai)，建议仓库名称为XXX.github.io，其中XXX为你的github用户名。</description><guid isPermaLink="true">https://IVANLEE99.github.io/post/my%20first%20blog~.html</guid><pubDate>Mon, 25 Nov 2024 06:32:41 +0000</pubDate></item></channel></rss>
+【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&amp;template_owner=Meekdai)，建议仓库名称为XXX.github.io，其中XXX为你的github用户名。</description><guid isPermaLink="true">https://github.com/IVANLEE99/post/1.html</guid><pubDate>Mon, 25 Nov 2024 06:32:41 +0000</pubDate></item></channel></rss>
