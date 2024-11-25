@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# pm2不断重启排查
+
+【p0】pc端进程重启
+
+## 一、问题：pm2 list 显示进程不断重启
+![qcLTdZsBo-KX6H6AGs3q03Xw6YysoQsBo86gLFit1xI](https://github.com/user-attachments/assets/c597e0aa-cb1d-47bd-927f-78139f4e0fa9)
+![aMQgFYFN2LPXrumFoX47qJe6RK5O3XO6lYt8J2DrYsQ](https://github.com/user-attachments/assets/bdf11f94-93e1-4481-bc2d-ed4137a1a0ba)
+![FHkbMpCXktNXOmqTS2Wj4I07igCwIiJStuy6OuVac2g](https://github.com/user-attachments/assets/4049b95d-943e-4c04-8839-0d4d57bb3232)
+
+
+
+## 二、解决办法
+
+本地打包查看内存情况
+
+1、新增.env.development.debug文件
+
+```plain
+# just a flag
+NUXT_APP_ENV = 'development.debug'
+```
+ 
+2、package.json 新增打包命令
+
+```plain
+		'build:debug': 'node ./generate-version.js && cross-env NODE_ENV=development.debug nuxt build',
+		'debug': 'cross-env NODE_ENV=development.debug node --inspect  node_modules/.bin/nuxt start',
+		'start:debug': 'rm -rf node_modules && yarn install && npm run build:debug && npm run debug'
+```
+ 
+3、启动
+
+```plain
+npm run start:debug
+```
+ 
+![GM9Y_Sol16fJv3zDbeMg4yUbGCky_2amLXIdd3pBqHg](https://github.com/user-attachments/assets/c5069739-e147-4c76-9972-6adf96a50297)
+
+
+
+4、检测内存
+
+chrome://inspect/#devices
+
+<img width='778' alt='xAjQj-ESG3p3_LEwMEb8fpb3PAezwC--R9jXU_IF2oI' src='https://github.com/user-attachments/assets/2a3b665c-448b-48cc-b125-9ea9e4d5eaf6'>
+
+
+<img width='1440' alt='OPN3BlYPUJL5Ck8jJi0idNRNLtilt-utioJPBOs66qM' src='https://github.com/user-attachments/assets/075f9c0d-f9e9-41f2-a87a-92229a1bcfff'>
+
+
+未访问localhost:3000前打1次内存快照
+
+访问localhost:3000后打第2次快照
+
+关闭localhost:3000标签后打第三次快照
+
+访问localhost:3000后打第4次快照
+
+关闭localhost:3000标签后打第5次快照
+
+访问localhost:3000后打第6次快照
+
+关闭localhost:3000标签后打第7次快照
+
+
+<img width='1440' alt='WaMxganUC8h_8uXh7CufDioYDDfsiZJIdghHw0VkQb0' src='https://github.com/user-attachments/assets/c85a7014-3bea-454a-9a8c-582d23eaa106'>
+
+
+
+
+内存不断增加，查看第5和弟6次之间分配的内存
+
+点击具体实例，点击对应的文件
+
+查看对应代码的情况
+
+<img width='1440' alt='TrRLtJyTzfoeEfX5MAItHoNbPUn_eo3t9Iilx2P3niI' src='https://github.com/user-attachments/assets/3fdd98da-9f40-434a-bb01-e65a039ec327'>
+
+
+<img width='1440' alt='Dn_qcZ-SlSMP1GTRYl8NXwopGDang393TDkhiRu8Rmo' src='https://github.com/user-attachments/assets/fa757604-b5d7-4db8-9ef7-3e94ef0f7ac6'>
+
+
+![4giPWSgINKpwiChJrJ7VAY8PEXnupSBB3PYXIkvmB8U](https://github.com/user-attachments/assets/5228b2f3-8bb1-4c8d-b517-a78187b27f67)
+
+
+
+![ogtZbpZjy4fjXie5WcgeMAN8H0CuZYbYDha9SFhCg_4](https://github.com/user-attachments/assets/639fd5bf-4ea2-4ff8-8350-1745a0f410d6)
+
+
+发现是layouts/error.vue的computed中调用了setInterval 没清除
+
+## 三、修复
+
+computed 中注释`handleCountDown方法`
+
+改为mounted中调用
+
+![Gc-lsa0Jp4PQRCrHxElSThInc54ZWPVQMkWWNm46mcs](https://github.com/user-attachments/assets/67e4b41b-a54e-455d-8ab8-26c7947efe28)
+
+
+
+
+## 四、修复成功后pm2 list 显示重启为0，内存没有飙升
+
+![H0FWTAsJV1Tzhnx9yCDSiFZj2-sZXqgDql92RKiHTmU](https://github.com/user-attachments/assets/9bc69438-5ab4-4e87-a99d-cce52fb33ab1)
+
+
+
+![HARrZcRYkhGNhlZNXiAiM44BiH2tVwh3F-MovXUBV5k](https://github.com/user-attachments/assets/746415a7-20ba-44cf-9f81-01a3a86b03db)
+
+
+
+![eI5mu3_t-ORlpLh4QEI7jCz5ZHa0a1O5KU6cJWkdF6c](https://github.com/user-attachments/assets/ec20823f-4e05-4b24-8727-ae4b6ca1f9c6)
+
+
+
+## 五、总结
+
+内存泄漏代码上就那些点～
+
+1、事件监听器：如果在组件中添加了事件监听器，但在组件销毁时没有移除它们，可能会导致内存泄漏。">
+<meta property="og:title" content="pm2不断重启排查和解决">
+<meta property="og:description" content="# pm2不断重启排查
+
+【p0】pc端进程重启
+
+## 一、问题：pm2 list 显示进程不断重启
+![qcLTdZsBo-KX6H6AGs3q03Xw6YysoQsBo86gLFit1xI](https://github.com/user-attachments/assets/c597e0aa-cb1d-47bd-927f-78139f4e0fa9)
+![aMQgFYFN2LPXrumFoX47qJe6RK5O3XO6lYt8J2DrYsQ](https://github.com/user-attachments/assets/bdf11f94-93e1-4481-bc2d-ed4137a1a0ba)
+![FHkbMpCXktNXOmqTS2Wj4I07igCwIiJStuy6OuVac2g](https://github.com/user-attachments/assets/4049b95d-943e-4c04-8839-0d4d57bb3232)
+
+
+
+## 二、解决办法
+
+本地打包查看内存情况
+
+1、新增.env.development.debug文件
+
+```plain
+# just a flag
+NUXT_APP_ENV = 'development.debug'
+```
+ 
+2、package.json 新增打包命令
+
+```plain
+		'build:debug': 'node ./generate-version.js && cross-env NODE_ENV=development.debug nuxt build',
+		'debug': 'cross-env NODE_ENV=development.debug node --inspect  node_modules/.bin/nuxt start',
+		'start:debug': 'rm -rf node_modules && yarn install && npm run build:debug && npm run debug'
+```
+ 
+3、启动
+
+```plain
+npm run start:debug
+```
+ 
+![GM9Y_Sol16fJv3zDbeMg4yUbGCky_2amLXIdd3pBqHg](https://github.com/user-attachments/assets/c5069739-e147-4c76-9972-6adf96a50297)
+
+
+
+4、检测内存
+
+chrome://inspect/#devices
+
+<img width='778' alt='xAjQj-ESG3p3_LEwMEb8fpb3PAezwC--R9jXU_IF2oI' src='https://github.com/user-attachments/assets/2a3b665c-448b-48cc-b125-9ea9e4d5eaf6'>
+
+
+<img width='1440' alt='OPN3BlYPUJL5Ck8jJi0idNRNLtilt-utioJPBOs66qM' src='https://github.com/user-attachments/assets/075f9c0d-f9e9-41f2-a87a-92229a1bcfff'>
+
+
+未访问localhost:3000前打1次内存快照
+
+访问localhost:3000后打第2次快照
+
+关闭localhost:3000标签后打第三次快照
+
+访问localhost:3000后打第4次快照
+
+关闭localhost:3000标签后打第5次快照
+
+访问localhost:3000后打第6次快照
+
+关闭localhost:3000标签后打第7次快照
+
+
+<img width='1440' alt='WaMxganUC8h_8uXh7CufDioYDDfsiZJIdghHw0VkQb0' src='https://github.com/user-attachments/assets/c85a7014-3bea-454a-9a8c-582d23eaa106'>
+
+
+
+
+内存不断增加，查看第5和弟6次之间分配的内存
+
+点击具体实例，点击对应的文件
+
+查看对应代码的情况
+
+<img width='1440' alt='TrRLtJyTzfoeEfX5MAItHoNbPUn_eo3t9Iilx2P3niI' src='https://github.com/user-attachments/assets/3fdd98da-9f40-434a-bb01-e65a039ec327'>
+
+
+<img width='1440' alt='Dn_qcZ-SlSMP1GTRYl8NXwopGDang393TDkhiRu8Rmo' src='https://github.com/user-attachments/assets/fa757604-b5d7-4db8-9ef7-3e94ef0f7ac6'>
+
+
+![4giPWSgINKpwiChJrJ7VAY8PEXnupSBB3PYXIkvmB8U](https://github.com/user-attachments/assets/5228b2f3-8bb1-4c8d-b517-a78187b27f67)
+
+
+
+![ogtZbpZjy4fjXie5WcgeMAN8H0CuZYbYDha9SFhCg_4](https://github.com/user-attachments/assets/639fd5bf-4ea2-4ff8-8350-1745a0f410d6)
+
+
+发现是layouts/error.vue的computed中调用了setInterval 没清除
+
+## 三、修复
+
+computed 中注释`handleCountDown方法`
+
+改为mounted中调用
+
+![Gc-lsa0Jp4PQRCrHxElSThInc54ZWPVQMkWWNm46mcs](https://github.com/user-attachments/assets/67e4b41b-a54e-455d-8ab8-26c7947efe28)
+
+
+
+
+## 四、修复成功后pm2 list 显示重启为0，内存没有飙升
+
+![H0FWTAsJV1Tzhnx9yCDSiFZj2-sZXqgDql92RKiHTmU](https://github.com/user-attachments/assets/9bc69438-5ab4-4e87-a99d-cce52fb33ab1)
+
+
+
+![HARrZcRYkhGNhlZNXiAiM44BiH2tVwh3F-MovXUBV5k](https://github.com/user-attachments/assets/746415a7-20ba-44cf-9f81-01a3a86b03db)
+
+
+
+![eI5mu3_t-ORlpLh4QEI7jCz5ZHa0a1O5KU6cJWkdF6c](https://github.com/user-attachments/assets/ec20823f-4e05-4b24-8727-ae4b6ca1f9c6)
+
+
+
+## 五、总结
+
+内存泄漏代码上就那些点～
+
+1、事件监听器：如果在组件中添加了事件监听器，但在组件销毁时没有移除它们，可能会导致内存泄漏。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://IVANLEE99.github.io/post/pm2-bu-duan-zhong-qi-pai-cha-he-jie-jue.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>pm2不断重启排查和解决</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">pm2不断重启排查和解决</h1>
+<div class="title-right">
+    <a href="https://IVANLEE99.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/IVANLEE99/IVANLEE99.github.io/issues/2" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>pm2不断重启排查</h1>
+<p>【p0】pc端进程重启</p>
+<h2>一、问题：pm2 list 显示进程不断重启</h2>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c597e0aa-cb1d-47bd-927f-78139f4e0fa9"><img src="https://github.com/user-attachments/assets/c597e0aa-cb1d-47bd-927f-78139f4e0fa9" alt="qcLTdZsBo-KX6H6AGs3q03Xw6YysoQsBo86gLFit1xI" style="max-width: 100%;"></a><br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bdf11f94-93e1-4481-bc2d-ed4137a1a0ba"><img src="https://github.com/user-attachments/assets/bdf11f94-93e1-4481-bc2d-ed4137a1a0ba" alt="aMQgFYFN2LPXrumFoX47qJe6RK5O3XO6lYt8J2DrYsQ" style="max-width: 100%;"></a><br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4049b95d-943e-4c04-8839-0d4d57bb3232"><img src="https://github.com/user-attachments/assets/4049b95d-943e-4c04-8839-0d4d57bb3232" alt="FHkbMpCXktNXOmqTS2Wj4I07igCwIiJStuy6OuVac2g" style="max-width: 100%;"></a></p>
+<h2>二、解决办法</h2>
+<p>本地打包查看内存情况</p>
+<p>1、新增.env.development.debug文件</p>
+<pre lang="plain" class="notranslate"><code class="notranslate"># just a flag
+NUXT_APP_ENV = 'development.debug'
+</code></pre>
+<p>2、package.json 新增打包命令</p>
+<pre lang="plain" class="notranslate"><code class="notranslate">		"build:debug": "node ./generate-version.js &amp;&amp; cross-env NODE_ENV=development.debug nuxt build",
+		"debug": "cross-env NODE_ENV=development.debug node --inspect  node_modules/.bin/nuxt start",
+		"start:debug": "rm -rf node_modules &amp;&amp; yarn install &amp;&amp; npm run build:debug &amp;&amp; npm run debug"
+</code></pre>
+<p>3、启动</p>
+<pre lang="plain" class="notranslate"><code class="notranslate">npm run start:debug
+</code></pre>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c5069739-e147-4c76-9972-6adf96a50297"><img src="https://github.com/user-attachments/assets/c5069739-e147-4c76-9972-6adf96a50297" alt="GM9Y_Sol16fJv3zDbeMg4yUbGCky_2amLXIdd3pBqHg" style="max-width: 100%;"></a></p>
+<p>4、检测内存</p>
+<p>chrome://inspect/#devices</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2a3b665c-448b-48cc-b125-9ea9e4d5eaf6"><img width="778" alt="xAjQj-ESG3p3_LEwMEb8fpb3PAezwC--R9jXU_IF2oI" src="https://github.com/user-attachments/assets/2a3b665c-448b-48cc-b125-9ea9e4d5eaf6" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/075f9c0d-f9e9-41f2-a87a-92229a1bcfff"><img width="1440" alt="OPN3BlYPUJL5Ck8jJi0idNRNLtilt-utioJPBOs66qM" src="https://github.com/user-attachments/assets/075f9c0d-f9e9-41f2-a87a-92229a1bcfff" style="max-width: 100%;"></a></p>
+<p>未访问localhost:3000前打1次内存快照</p>
+<p>访问localhost:3000后打第2次快照</p>
+<p>关闭localhost:3000标签后打第三次快照</p>
+<p>访问localhost:3000后打第4次快照</p>
+<p>关闭localhost:3000标签后打第5次快照</p>
+<p>访问localhost:3000后打第6次快照</p>
+<p>关闭localhost:3000标签后打第7次快照</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c85a7014-3bea-454a-9a8c-582d23eaa106"><img width="1440" alt="WaMxganUC8h_8uXh7CufDioYDDfsiZJIdghHw0VkQb0" src="https://github.com/user-attachments/assets/c85a7014-3bea-454a-9a8c-582d23eaa106" style="max-width: 100%;"></a></p>
+<p>内存不断增加，查看第5和弟6次之间分配的内存</p>
+<p>点击具体实例，点击对应的文件</p>
+<p>查看对应代码的情况</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3fdd98da-9f40-434a-bb01-e65a039ec327"><img width="1440" alt="TrRLtJyTzfoeEfX5MAItHoNbPUn_eo3t9Iilx2P3niI" src="https://github.com/user-attachments/assets/3fdd98da-9f40-434a-bb01-e65a039ec327" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/fa757604-b5d7-4db8-9ef7-3e94ef0f7ac6"><img width="1440" alt="Dn_qcZ-SlSMP1GTRYl8NXwopGDang393TDkhiRu8Rmo" src="https://github.com/user-attachments/assets/fa757604-b5d7-4db8-9ef7-3e94ef0f7ac6" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5228b2f3-8bb1-4c8d-b517-a78187b27f67"><img src="https://github.com/user-attachments/assets/5228b2f3-8bb1-4c8d-b517-a78187b27f67" alt="4giPWSgINKpwiChJrJ7VAY8PEXnupSBB3PYXIkvmB8U" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/639fd5bf-4ea2-4ff8-8350-1745a0f410d6"><img src="https://github.com/user-attachments/assets/639fd5bf-4ea2-4ff8-8350-1745a0f410d6" alt="ogtZbpZjy4fjXie5WcgeMAN8H0CuZYbYDha9SFhCg_4" style="max-width: 100%;"></a></p>
+<p>发现是layouts/error.vue的computed中调用了setInterval 没清除</p>
+<h2>三、修复</h2>
+<p>computed 中注释<code class="notranslate">handleCountDown方法</code></p>
+<p>改为mounted中调用</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/67e4b41b-a54e-455d-8ab8-26c7947efe28"><img src="https://github.com/user-attachments/assets/67e4b41b-a54e-455d-8ab8-26c7947efe28" alt="Gc-lsa0Jp4PQRCrHxElSThInc54ZWPVQMkWWNm46mcs" style="max-width: 100%;"></a></p>
+<h2>四、修复成功后pm2 list 显示重启为0，内存没有飙升</h2>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9bc69438-5ab4-4e87-a99d-cce52fb33ab1"><img src="https://github.com/user-attachments/assets/9bc69438-5ab4-4e87-a99d-cce52fb33ab1" alt="H0FWTAsJV1Tzhnx9yCDSiFZj2-sZXqgDql92RKiHTmU" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/746415a7-20ba-44cf-9f81-01a3a86b03db"><img src="https://github.com/user-attachments/assets/746415a7-20ba-44cf-9f81-01a3a86b03db" alt="HARrZcRYkhGNhlZNXiAiM44BiH2tVwh3F-MovXUBV5k" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ec20823f-4e05-4b24-8727-ae4b6ca1f9c6"><img src="https://github.com/user-attachments/assets/ec20823f-4e05-4b24-8727-ae4b6ca1f9c6" alt="eI5mu3_t-ORlpLh4QEI7jCz5ZHa0a1O5KU6cJWkdF6c" style="max-width: 100%;"></a></p>
+<h2>五、总结</h2>
+<p>内存泄漏代码上就那些点～</p>
+<p>1、事件监听器：如果在组件中添加了事件监听器，但在组件销毁时没有移除它们，可能会导致内存泄漏。</p>
+<p>2. 定时器和异步操作：使用 setTimeout 或 setInterval 时，如果没有在组件销毁时清除这些定时器，也会导致内存泄漏。</p>
+<p>3. 未清理的引用：在 Vue 组件中，如果有对 DOM 元素或其他对象的引用，而这些引用在组件销毁时没有被清理，可能会导致内存泄漏。</p>
+<p>4. Vuex 状态管理：如果在 Vuex 中存储了大量数据，而这些数据在不再需要时没有被清理，也可能导致内存泄漏</p>
+<h2>六、参考链接</h2>
+<p><a href="https://juejin.cn/post/7228834021152473145" rel="nofollow">排查 Nuxt.js服务器端内存泄漏问题（Nuxt 3同理）</a></p>
+<p><a href="https://juejin.cn/post/7228834021152473145" rel="nofollow">https://juejin.cn/post/7228834021152473145</a></p>
+<p><a href="https://developer.chrome.com/docs/devtools/memory?hl=zh-cn" rel="nofollow">https://developer.chrome.com/docs/devtools/memory?hl=zh-cn</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2018/12/git-bisect.html" rel="nofollow">https://www.ruanyifeng.com/blog/2018/12/git-bisect.html</a></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://IVANLEE99.github.io">Blog Title</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","IVANLEE99/IVANLEE99.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+
+
+</html>
