@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Mon, 25 Nov 2024 07:59:06 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>pm2不断重启排查和解决</title><link>https://ivanlee99.github.io//post/2.html</link><description># pm2不断重启排查&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Mon, 25 Nov 2024 08:04:33 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>pm2不断重启排查和解决</title><link>https://ivanlee99.github.io//post/2.html</link><description># pm2不断重启排查&#13;
 &#13;
 【p0】pc端进程重启&#13;
 &#13;
@@ -124,4 +124,7 @@ computed 中注释`handleCountDown方法`&#13;
 请接着按照下面的步骤2和3进行操作，全部成功之后，本README.md文件会自动替换掉的哦！&#13;
 &#13;
 安装&#13;
-【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&amp;template_owner=Meekdai)，建议仓库名称为XXX.github.io，其中XXX为你的github用户名。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/1.html</guid><pubDate>Mon, 25 Nov 2024 06:32:41 +0000</pubDate></item></channel></rss>
+【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&amp;template_owner=Meekdai)，建议仓库名称为XXX.github.io，其中XXX为你的github用户名。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/1.html</guid><pubDate>Mon, 25 Nov 2024 06:32:41 +0000</pubDate></item><item><title>关于</title><link>https://ivanlee99.github.io//about.html</link><description>本人前端攻城狮～&#13;
+会一点前端知识～&#13;
+但不限于前端～&#13;
+。</description><guid isPermaLink="true">https://ivanlee99.github.io//about.html</guid><pubDate>Mon, 25 Nov 2024 08:04:07 +0000</pubDate></item></channel></rss>
