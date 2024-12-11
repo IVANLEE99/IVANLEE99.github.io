@@ -1,5 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Wed, 11 Dec 2024 07:54:25 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>使用pkg将node打包成exe</title><link>https://ivanlee99.github.io//post/9.html</link><description># 需求描述&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Wed, 11 Dec 2024 08:36:40 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>使用open自动打开浏览器</title><link>https://ivanlee99.github.io//post/10.html</link><description># 使用open自动打开浏览器&#13;
+## 需求背景&#13;
+我用pkg打包成exe后，双击exe自动打开浏览器&#13;
+## 技术实现&#13;
+使用[open](https://github.com/sindresorhus/open)&#13;
+&#13;
++ 安装`npm install open@8`&#13;
++ 使用&#13;
+`&#13;
+app.listen(3003, async () =&gt; {&#13;
+    console.log('Server is running on http://localhost:3003');&#13;
+    // const { default: open } = await import('open'); // 动态导入 open 模块&#13;
+    await open('http://localhost:3003'); // 启动后自动打开浏览器&#13;
+});&#13;
+&#13;
+`&#13;
+![page1](https://github.com/user-attachments/assets/9b107d1b-7b9d-488b-86bd-d368bdb3dc1c)&#13;
+&lt;img width='1195' alt='page' src='https://github.com/user-attachments/assets/7c59122f-1792-4cd3-b581-2779ba59cf0b'&gt;&#13;
+&#13;
+## 注意事项&#13;
+&#13;
+警告：此包是本机 ESM，不再提供 CommonJS 导出。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/10.html</guid><pubDate>Wed, 11 Dec 2024 08:36:08 +0000</pubDate></item><item><title>使用pkg将node打包成exe</title><link>https://ivanlee99.github.io//post/9.html</link><description># 需求描述&#13;
 将node打包成exe&#13;
 &#13;
 # 技术方案&#13;
