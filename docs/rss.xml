@@ -1,5 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Wed, 11 Dec 2024 08:36:40 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>使用open自动打开浏览器</title><link>https://ivanlee99.github.io//post/10.html</link><description># 使用open自动打开浏览器&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Thu, 09 Jan 2025 02:02:19 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>《月亮与六便士》读后感</title><link>https://ivanlee99.github.io//post/11.html</link><description>&#13;
+![album_temp__ssa8b322f0813ab954cg011488ss_1736153171](https://github.com/user-attachments/assets/c35497c2-e34d-4c0d-9da4-ded069eaca43)&#13;
+&#13;
+&#13;
+![album_temp__ssa8b322f0813ab954cg011488ss_1736153913](https://github.com/user-attachments/assets/7c6e6d0c-7455-4620-a230-ad5151779b31)&#13;
+&#13;
+我尽量回忆一下我读过的内容～如有出入以书本为准～&#13;
+&#13;
+作者毛姆以身入局真是还原伟大艺术家（至少后世的人是这么认为的）斯垂兰德的一生～&#13;
+&#13;
+斯垂兰德和斯垂兰德太太一开始过着幸福的生活～&#13;
+育有一儿一女～&#13;
+斯垂兰德是一位股票经纪人～&#13;
+斯垂兰德太太是一位乐于和上流社会交往的人～&#13;
+经常邀请作家等人事到家下午茶～其中包括作者毛姆～&#13;
+作者有幸和斯垂兰德见过一面～&#13;
+。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/11.html</guid><pubDate>Mon, 06 Jan 2025 10:32:02 +0000</pubDate></item><item><title>使用open自动打开浏览器</title><link>https://ivanlee99.github.io//post/10.html</link><description># 使用open自动打开浏览器&#13;
 ## 需求背景&#13;
 我用pkg打包成exe后，双击exe自动打开浏览器&#13;
 ## 技术实现&#13;
