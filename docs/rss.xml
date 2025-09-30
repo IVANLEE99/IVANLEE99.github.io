@@ -1,5 +1,69 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Thu, 13 Mar 2025 09:04:15 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>vue2直接操作 keep-alive 内部缓存</title><link>https://ivanlee99.github.io//post/12.html</link><description>### 需求点击tab关闭按钮，将对应的tab的缓存关掉
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Tue, 30 Sep 2025 01:46:05 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>《陈行甲人生笔记》值得一看</title><link>https://ivanlee99.github.io//post/15.html</link><description>&lt;img width='462' height='1000' alt='Image' src='https://github.com/user-attachments/assets/22bf4b05-539a-4f5b-a7b2-56ba87b94afa' /&gt;
+
+&lt;img width='368' height='998' alt='Image' src='https://github.com/user-attachments/assets/e88e9d7a-ba4f-4a7c-9934-ce10bf781b0d' /&gt;
+
+
+### **我与我周旋久，宁做我。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/15.html</guid><pubDate>Tue, 30 Sep 2025 01:05:45 +0000</pubDate></item><item><title>nuxt2踩坑 process.env.NODE_ENV 只有development/production</title><link>https://ivanlee99.github.io//post/14.html</link><description>nuxt.config.js
+
+```
+const dotenv = require('dotenv')
+const envConfig = dotenv.config({ path: `.env.${process.env.NODE_ENV}` }).parsed
+const isPro = !!(process.env.NODE_ENV !== 'development') //判断是否开发环境
+const isBuildTest = process.env.NUXT_APP_ENV === 'production.dev'
+
+    env: envConfig,
+
+```
+
+.env.production.dev
+
+```
+# just a flag
+NUXT_APP_ENV = 'production.dev'
+```
+
+### 执行
+
+NODE_ENV=production.dev pm2 start ecosystem.config.js
+
+### 需求
+
+需要判断是否是测试环境
+
+### 尝试解决
+const isBuildTest = process.env.NODE_ENV === 'production.dev'//process.env.NODE_ENV-&gt;production-&gt;false
+
+### 解决办法
+const isBuildTest = process.env.NUXT_APP_ENV === 'production.dev'//process.env.NUXT_APP_ENV-&gt;production.dev-&gt;true
+
+
+### 坑坑坑
+process.env.NODE_ENV 只有development/production
+process.env.NODE_ENV 只有development/production
+process.env.NODE_ENV 只有development/production
+。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/14.html</guid><pubDate>Mon, 29 Sep 2025 09:57:01 +0000</pubDate></item><item><title>在网页开发中实现“spoiler-blurred”（剧透内容模糊化）效果</title><link>https://ivanlee99.github.io//post/13.html</link><description>### 在网页开发中实现“spoiler-blurred”（剧透内容模糊化）效果
+
+### 1、代码     filter: ### blur(0.5em);
+
+
+
+```
+.spoiler-blurred {
+    cursor: default;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    **filter: blur(0.5em);**
+}
+```
+### 2、点击后移除poiler-blurred类名即可
+
+![Image](https://github.com/user-attachments/assets/0e4ad262-6dd3-4cc3-a4e3-289a8b987450)
+
+### 点击后移除poiler-blurred类名即可
+
+![Image](https://github.com/user-attachments/assets/2fa395d5-4b66-48c5-a1c5-b1002716068f)。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/13.html</guid><pubDate>Mon, 21 Apr 2025 06:50:09 +0000</pubDate></item><item><title>vue2直接操作 keep-alive 内部缓存</title><link>https://ivanlee99.github.io//post/12.html</link><description>### 需求点击tab关闭按钮，将对应的tab的缓存关掉
 
 ![Image](https://github.com/user-attachments/assets/ed7a5e56-b685-440a-be2e-70ff5d1de495)
 
