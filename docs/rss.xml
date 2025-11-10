@@ -1,5 +1,250 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Thu, 06 Nov 2025 03:05:37 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>Setting up M1/M2 Mac for using package node-gyp</title><link>https://ivanlee99.github.io//post/19.html</link><description># Setting up M1/M2 Mac for using package node-gyp
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Mon, 10 Nov 2025 03:06:42 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>TypeScript 终极复习清单（10 分钟全览）</title><link>https://ivanlee99.github.io//post/20.html</link><description>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;📝 TypeScript 终极复习清单（10 分钟全览）&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2&gt;1️⃣ 基础语法&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;变量声明&lt;/strong&gt;：&lt;code inline=''&gt;let&lt;/code&gt; / &lt;code inline=''&gt;const&lt;/code&gt;，类型可省略（TS 自动推断）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;基本类型&lt;/strong&gt;：&lt;code inline=''&gt;number&lt;/code&gt;, &lt;code inline=''&gt;string&lt;/code&gt;, &lt;code inline=''&gt;boolean&lt;/code&gt;, &lt;code inline=''&gt;null&lt;/code&gt;, &lt;code inline=''&gt;undefined&lt;/code&gt;, &lt;code inline=''&gt;any&lt;/code&gt;, &lt;code inline=''&gt;unknown&lt;/code&gt;, &lt;code inline=''&gt;never&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数组/元组&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;const arr: number[] = [1,2,3]
+const tuple: [string, number] = ['a', 1]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;枚举/字面量类型&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type Role = 'admin' | 'user'
+enum RoleEnum { Admin, User }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;2️⃣ 函数与泛型&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;函数类型&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;function add(a: number, b: number): number { return a + b }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;可选参数 &amp;amp; 默认参数&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;function greet(name?: string) {}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;泛型函数&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;function identity&amp;lt;T&amp;gt;(arg: T): T { return arg }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;泛型约束&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;function merge&amp;lt;T extends object, U extends object&amp;gt;(a: T, b: U): T &amp;amp; U { return {...a,...b} }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;3️⃣ 对象与类型别名&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;interface / type&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;interface User { id: number; name: string }
+type PartialUser = Partial&amp;lt;User&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Mapped Types&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type Nullable&amp;lt;T&amp;gt; = { [K in keyof T]: T[K] | null }
+type RemoveNullable&amp;lt;T&amp;gt; = { [K in keyof T as Exclude&amp;lt;K,'id'&amp;gt;]: T[K] }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;工具类型&lt;/strong&gt;：&lt;code inline=''&gt;Partial&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code inline=''&gt;Required&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code inline=''&gt;Pick&amp;lt;T,K&amp;gt;&lt;/code&gt;, &lt;code inline=''&gt;Omit&amp;lt;T,K&amp;gt;&lt;/code&gt;, &lt;code inline=''&gt;Record&amp;lt;K,T&amp;gt;&lt;/code&gt;, &lt;code inline=''&gt;ReturnType&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code inline=''&gt;Parameters&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2&gt;4️⃣ 高阶类型模板&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;深度可选/深度只读&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type DeepPartial&amp;lt;T&amp;gt; = { [K in keyof T]?: T[K] extends object ? DeepPartial&amp;lt;T[K]&amp;gt; : T[K] }
+type DeepReadonly&amp;lt;T&amp;gt; = { readonly [K in keyof T]: T[K] extends object ? DeepReadonly&amp;lt;T[K]&amp;gt; : T[K] }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;按值类型筛选&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type PickByType&amp;lt;T,V&amp;gt; = { [K in keyof T as T[K] extends V ? K : never]: T[K] }
+type OmitByType&amp;lt;T,V&amp;gt; = { [K in keyof T as T[K] extends V ? never : K]: T[K] }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;联合转交叉&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type UnionToIntersection&amp;lt;U&amp;gt; = (U extends any ? (k: U)=&amp;gt;void : never) extends ((k: infer I)=&amp;gt;void) ? I : never
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;元组工具&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type First&amp;lt;T extends any[]&amp;gt; = T extends [infer F, ...any[]] ? F : never
+type Last&amp;lt;T extends any[]&amp;gt; = T extends [...any[], infer L] ? L : never
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;异步返回类型&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type ReturnTypeAsync&amp;lt;T&amp;gt; = T extends (...args:any)=&amp;gt;Promise&amp;lt;infer R&amp;gt; ? R : never
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;5️⃣ React / Vue 高阶&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;React Hooks&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;const [state, setState] = useState&amp;lt;number&amp;gt;(0)
+const ref = useRef&amp;lt;HTMLInputElement&amp;gt;(null)
+const [count, dispatch] = useReducer(reducer, 0)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;泛型组件&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type ListProps&amp;lt;T&amp;gt; = { items: T[], render: (item:T)=&amp;gt;React.ReactNode }
+function List&amp;lt;T&amp;gt;({items, render}:ListProps&amp;lt;T&amp;gt;) { return &amp;lt;&amp;gt;{items.map(render)}&amp;lt;/&amp;gt; }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Vue Composition API&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;const count = ref&amp;lt;number&amp;gt;(0)
+const double = computed(() =&amp;gt; count.value * 2)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;6️⃣ Node / API 类型&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Express&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;app.get('/user/:id', (req: Request&amp;lt;{id:string}&amp;gt;, res: Response) =&amp;gt; {})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;统一接口类型&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;interface ApiResponse&amp;lt;T&amp;gt; { code: number; message: string; data: T }
+async function fetchUser(): Promise&amp;lt;ApiResponse&amp;lt;User&amp;gt;&amp;gt; { ... }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;7️⃣ 模块与全局声明&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;global.d.ts&lt;/strong&gt;：全局变量 / 接口&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;declare global {
+  interface Window { __APP_VERSION__: string }
+  const __BUILD_TIME__: string
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;module.d.ts&lt;/strong&gt;：模块或资源类型声明&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;declare module '*.png'
+declare module '*.scss' { const classes: {[key:string]:string}; export default classes }
+declare module 'legacy-lib' { export function init(): void }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;8️⃣ 类型守卫 &amp;amp; 类型安全技巧&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;自定义类型守卫&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;function isString(value: unknown): value is string { return typeof value === 'string' }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;事件系统类型安全&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type Events = { login: {user:string} }
+class EventBus&amp;lt;E&amp;gt; { on&amp;lt;K extends keyof E&amp;gt;(event:K, cb:(p:E[K])=&amp;gt;void); emit&amp;lt;K extends keyof E&amp;gt;(event:K, p:E[K]) }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Template Literal + Capitalize&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class='language-ts'&gt;type EventHandler = `on${Capitalize&amp;lt;'click'|'hover'&amp;gt;}` // onClick | onHover
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2&gt;9️⃣ 团队 &amp;amp; 项目实践&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;开启 &lt;code inline=''&gt;'strict': true&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;接口统一放 &lt;code inline=''&gt;types/&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;工具类型集中出口 &lt;code inline=''&gt;types/index.ts&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;推断优先，避免冗余类型&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code inline=''&gt;global.d.ts&lt;/code&gt; 管理全局变量&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code inline=''&gt;module.d.ts&lt;/code&gt; 管理资源导入/无类型库&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2&gt;🔟 小结口诀&lt;/h2&gt;
+
+场景 | 技巧
+-- | --
+基础类型 | 自动推断 + 明确可选/必选
+对象类型 | interface / type + Mapped Types
+泛型 | 泛型约束 + 工具类型
+高阶类型 | DeepPartial / DeepReadonly / PickByType
+React/Vue | Hooks + 泛型组件 + Ref
+Node/API | Request/Response + ApiResponse
+全局/模块 | global.d.ts / module.d.ts
+类型守卫 | value is Type
+事件系统 | 泛型 + 索引类型
+模板字面量 | on${Capitalize&lt;Event&gt;}
+
+&lt;/body&gt;&lt;/html&gt;。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/20.html</guid><pubDate>Mon, 10 Nov 2025 03:06:06 +0000</pubDate></item><item><title>Setting up M1/M2 Mac for using package node-gyp</title><link>https://ivanlee99.github.io//post/19.html</link><description># Setting up M1/M2 Mac for using package node-gyp
 
 If you're using an M1 Mac and trying to use Node.js for native module development, you may run into errors with node-gyp. Node-gyp is a tool that compiles native modules for Node.js, and it needs to be configured correctly to work on an M1 Mac. In this article, we'll explore how to set up an M1 Mac to use node-gyp without errors.
 
