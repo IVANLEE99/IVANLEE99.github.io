@@ -90,4 +90,13 @@ Setting up node-gyp on an M1 Mac can be challenging, but it's necessary for nati
 
  Node v14 doesn't have ARM64 support, which is why `nvm`  failed to find a supported binary, and attempted to build source code (which failed as well)
 
+<img width="1740" height="936" alt="Image" src="https://github.com/user-attachments/assets/7737097b-d6d7-47d8-b302-b1a193896030" />
+
+`/usr/sbin/softwareupdate --install-rosetta --agree-to-license`
+
+```
+arch -x86_64 zsh
+nvm install 14
+```
+
  [https://github.com/nodejs/node/issues/52306#issuecomment-2031073649](https://github.com/nodejs/node/issues/52306#issuecomment-2031073649)

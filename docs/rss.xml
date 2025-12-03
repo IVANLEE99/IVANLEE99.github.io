@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Fri, 21 Nov 2025 09:01:46 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>连续阅读 365 天~阅读是永远不会背叛他的一种快乐</title><link>https://ivanlee99.github.io//post/22.html</link><description>![Image](https://github.com/user-attachments/assets/3a05108a-5d66-498a-bacb-63e4cbda8a30)
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Wed, 03 Dec 2025 14:06:14 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>连续阅读 365 天~阅读是永远不会背叛他的一种快乐</title><link>https://ivanlee99.github.io//post/22.html</link><description>![Image](https://github.com/user-attachments/assets/3a05108a-5d66-498a-bacb-63e4cbda8a30)
 
 &lt;img width='769' height='585' alt='Image' src='https://github.com/user-attachments/assets/8ef7de02-f428-4aae-8117-e0cb53d4e394' /&gt;
 
@@ -350,6 +350,15 @@ Setting up node-gyp on an M1 Mac can be challenging, but it's necessary for nati
 
 
  Node v14 doesn't have ARM64 support, which is why `nvm`  failed to find a supported binary, and attempted to build source code (which failed as well)
+
+&lt;img width='1740' height='936' alt='Image' src='https://github.com/user-attachments/assets/7737097b-d6d7-47d8-b302-b1a193896030' /&gt;
+
+`/usr/sbin/softwareupdate --install-rosetta --agree-to-license`
+
+```
+arch -x86_64 zsh
+nvm install 14
+```
 
  [https://github.com/nodejs/node/issues/52306#issuecomment-2031073649](https://github.com/nodejs/node/issues/52306#issuecomment-2031073649)
 。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/19.html</guid><pubDate>Thu, 06 Nov 2025 03:05:07 +0000</pubDate></item><item><title>2025年10月22日读完《倚天屠龙记(套装共4册)纯文字版》累计时长96小时12分钟</title><link>https://ivanlee99.github.io//post/18.html</link><description># 重温《倚天屠龙记》
