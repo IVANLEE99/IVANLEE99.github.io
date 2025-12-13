@@ -1,5 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Mon, 08 Dec 2025 08:01:55 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>MacOS无法安装Charles 证书</title><link>https://ivanlee99.github.io//post/23.html</link><description>### **问题**
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Sat, 13 Dec 2025 00:48:29 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>App 在macOS 下提示已损坏无法打开解决办法：</title><link>https://ivanlee99.github.io//post/24.html</link><description>### App 在macOS 下提示已损坏无法打开解决办法：
+
+1、打开终端；
+2、输入以下命令，回车；
+`sudo xattr -d com.apple.quarantine /Applications/xxxx.app`
+注意：/Applications/xxxx.app 换成你的App路径（推荐直接将.app文件拖入终端中自动生成路径，以防空格等转义字符手动复制或输入出现错误）
+
+    这是核心命令，分解如下：
+    sudo: 表示“Super User Do”。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/24.html</guid><pubDate>Sat, 13 Dec 2025 00:47:59 +0000</pubDate></item><item><title>MacOS无法安装Charles 证书</title><link>https://ivanlee99.github.io//post/23.html</link><description>### **问题**
 在新的mac上无法安装Charles的证书，无论是直接在Charles中直接安装和将证书保存下来导入都无法安装。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/23.html</guid><pubDate>Mon, 08 Dec 2025 08:01:28 +0000</pubDate></item><item><title>连续阅读 365 天~阅读是永远不会背叛他的一种快乐</title><link>https://ivanlee99.github.io//post/22.html</link><description>![Image](https://github.com/user-attachments/assets/3a05108a-5d66-498a-bacb-63e4cbda8a30)
 
 &lt;img width='769' height='585' alt='Image' src='https://github.com/user-attachments/assets/8ef7de02-f428-4aae-8117-e0cb53d4e394' /&gt;
