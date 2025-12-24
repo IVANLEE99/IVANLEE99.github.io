@@ -1,5 +1,51 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Sat, 13 Dec 2025 00:48:29 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>App 在macOS 下提示已损坏无法打开解决办法：</title><link>https://ivanlee99.github.io//post/24.html</link><description>### App 在macOS 下提示已损坏无法打开解决办法：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Wed, 24 Dec 2025 02:57:53 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>错误提示：The quota has been exceeded分析</title><link>https://ivanlee99.github.io//post/25.html</link><description>### 问题反馈
+
+商城线上BUG应急响应群于2025.12.21 10:31反馈客户无法支付订单,购物车页面提示 The quota has been exceeded
+
+### 问题复现
+
+暂时无法复现
+
+### 问题排查
+
+1、后端代码和日志没找到
+2、前端代码和日志没找到
+3、eta接口不会有这种错误
+4、查看前端代码确定弹窗逻辑,只有在库存检测和catch中有弹窗
+5、后台查看库存检测接口逻辑
+6、前端看catch逻辑,谷歌搜索The quota has been exceeded,发现跟localStorage.setItem有关,代码里确实也存在localStorage.setItem的逻辑
+https://www.cnblogs.com/gwf93/p/10169373.html
+https://community.atlassian.com/forums/Jira-questions/Exception-QuotaExceededError-The-quota-has-been-exceeded/qaq-p/1214711
+7、根据经验感觉 localStorage.setItem报错
+8、前端验证localStorage.setItem错误验证,gpt生成验证代码
+```
+function testLocalStorageOverflow() {
+  let str = '中'; // 中文，稳定占空间
+  try {
+    while (true) {
+      str += str; // 指数级增长
+      localStorage.setItem('nearbycorp', str);
+      console.log('当前长度:', str.length);
+    }
+  } catch (e) {
+    console.error('触发异常！');
+    console.error('字符长度:', str.length);
+    console.error(e.name, e.message);
+  }
+}
+
+testLocalStorageOverflow();
+```
+9、Chrome 验证 Failed to execute 'setItem' on 'Storage': Setting the value of 'nearbycorp' exceeded the quota.
+10、火狐验证 QuotaExceededError The quota has been exceeded.
+11、Safari验证 QuotaExceededError The quota has been exceeded.
+12、代码验证模拟出用户弹窗错误
+
+### 尝试分析Common Causes  常见原因
+
+- LocalStorage Full: Browsers typically limit localStorage to approximately 5MB to 10MB per domain. Attempting to store more than this will trigger the error.
+LocalStorage 满： 浏览器通常将 localStorage 限制在每个域大约 5MB 到 10MB 之间。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/25.html</guid><pubDate>Wed, 24 Dec 2025 02:57:27 +0000</pubDate></item><item><title>App 在macOS 下提示已损坏无法打开解决办法：</title><link>https://ivanlee99.github.io//post/24.html</link><description>### App 在macOS 下提示已损坏无法打开解决办法：
 
 1、打开终端；
 2、输入以下命令，回车；
