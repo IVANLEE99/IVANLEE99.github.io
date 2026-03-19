@@ -25,7 +25,7 @@
 <meta property="og:url" content="https://ivanlee99.github.io//post/33.html">
 <meta property="og:image" content="">
 <title>Docker 常用命令速查表</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -110,60 +110,45 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h2><strong>Docker Hub</strong>                      公共镜像仓库（类似 GitHub）</h2>
 <hr>
 <h2>🐳 二、Docker 基础命令</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate"># 查看 Docker 版本
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 查看 Docker 版本</span>
 docker version
 
-# 查看 Docker 信息
-docker info
-</code></pre>
+<span class="pl-c"><span class="pl-c">#</span> 查看 Docker 信息</span>
+docker info</pre></div>
 <hr>
 <h2>🖼️ 三、镜像（Image）相关命令</h2>
 <h3>查看本地镜像</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker images
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker images</pre></div>
 <h3>从远程仓库拉取镜像</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker pull nginx
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker pull nginx
 docker pull node:18
-docker pull mysql:8.0
-</code></pre>
+docker pull mysql:8.0</pre></div>
 <h3>构建镜像</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker build -t my-app:1.0 .
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker build -t my-app:1.0 <span class="pl-c1">.</span></pre></div>
 <h3>删除本地镜像</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker rmi my-app:1.0
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker rmi my-app:1.0</pre></div>
 <h3>导出镜像为文件</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker save -o my-app.tar my-app:1.0
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker save -o my-app.tar my-app:1.0</pre></div>
 <h3>从文件导入镜像</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker load -i my-app.tar
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker load -i my-app.tar</pre></div>
 <hr>
 <h2>🚀 四、容器（Container）相关命令</h2>
 <h3>运行容器（基础）</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker run -d -p 3000:3000 my-app:1.0
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker run -d -p 3000:3000 my-app:1.0</pre></div>
 <h3>查看运行中的容器</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker ps
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker ps</pre></div>
 <h3>查看所有容器</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker ps -a
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker ps -a</pre></div>
 <h3>查看容器日志</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker logs &lt;container_id&gt;
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker logs <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span></pre></div>
 <h3>进入容器内部</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker exec -it &lt;container_id&gt; /bin/sh
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span> /bin/sh</pre></div>
 <h3>停止容器</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker stop &lt;container_id&gt;
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker stop <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span></pre></div>
 <h3>启动已停止的容器</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker start &lt;container_id&gt;
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker start <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span></pre></div>
 <h3>删除容器</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker rm &lt;container_id&gt;
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker rm <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span></pre></div>
 <hr>
 <h2>💾 五、<strong>文件映射 &amp; 数据保存（重点）</strong></h2>
 <blockquote>
@@ -172,8 +157,7 @@ docker pull mysql:8.0
 <strong>Volume（数据卷）</strong>。</p>
 </blockquote>
 <h3>✅ 方式 1：本机目录映射（Bind Mount，推荐用于开发）</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker run -d   -p 3000:3000   -v $(pwd)/data:/app/data   my-app:1.0
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker run -d   -p 3000:3000   -v <span class="pl-s"><span class="pl-pds">$(</span>pwd<span class="pl-pds">)</span></span>/data:/app/data   my-app:1.0</pre></div>
 <p>含义：\</p>
 <ul>
 <li>左侧 <code class="notranslate">$(pwd)/data</code>：你电脑上的文件夹\</li>
@@ -181,64 +165,54 @@ docker pull mysql:8.0
 <li>容器在 <code class="notranslate">/app/data</code> 写入的文件，会<strong>实时保存在本机 <code class="notranslate">data/</code> 目录</strong>。</li>
 </ul>
 <p><strong>示例（Node）</strong>：</p>
-<pre lang="js" class="notranslate"><code class="notranslate">const fs = require("fs");
-fs.writeFileSync("./data/test.txt", "hello docker volume");
-</code></pre>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">fs</span> <span class="pl-c1">=</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s">"fs"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">fs</span><span class="pl-kos">.</span><span class="pl-en">writeFileSync</span><span class="pl-kos">(</span><span class="pl-s">"./data/test.txt"</span><span class="pl-kos">,</span> <span class="pl-s">"hello docker volume"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <p>文件会出现在：</p>
 <pre class="notranslate"><code class="notranslate">./data/test.txt
 </code></pre>
 <hr>
 <h3>✅ 方式 2：Docker 数据卷（Volume，推荐用于生产）</h3>
 <p><strong>创建数据卷：</strong></p>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker volume create my-data
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker volume create my-data</pre></div>
 <p><strong>查看数据卷：</strong></p>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker volume ls
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker volume ls</pre></div>
 <p><strong>使用数据卷运行容器：</strong></p>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker run -d   -p 3000:3000   -v my-data:/app/data   my-app:1.0
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker run -d   -p 3000:3000   -v my-data:/app/data   my-app:1.0</pre></div>
 <p><strong>查看数据卷详情：</strong></p>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker volume inspect my-data
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker volume inspect my-data</pre></div>
 <hr>
 <h3>✅ 常见场景：MySQL 数据持久化（必会）</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker run -d   -p 3306:3306   -e MYSQL_ROOT_PASSWORD=123456   -v mysql-data:/var/lib/mysql   mysql:8.0
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker run -d   -p 3306:3306   -e MYSQL_ROOT_PASSWORD=123456   -v mysql-data:/var/lib/mysql   mysql:8.0</pre></div>
 <p>即使删除容器：</p>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker rm &lt;container_id&gt;
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker rm <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span></pre></div>
 <p>数据仍保存在 <code class="notranslate">mysql-data</code> 数据卷中。</p>
 <hr>
 <h3>✅ 常用 Volume 管理命令</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate"># 查看所有数据卷
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 查看所有数据卷</span>
 docker volume ls
 
-# 创建数据卷
+<span class="pl-c"><span class="pl-c">#</span> 创建数据卷</span>
 docker volume create my-data
 
-# 查看数据卷详情
+<span class="pl-c"><span class="pl-c">#</span> 查看数据卷详情</span>
 docker volume inspect my-data
 
-# 删除数据卷
+<span class="pl-c"><span class="pl-c">#</span> 删除数据卷</span>
 docker volume rm my-data
 
-# 清理未使用的数据卷（谨慎）
-docker volume prune
-</code></pre>
+<span class="pl-c"><span class="pl-c">#</span> 清理未使用的数据卷（谨慎）</span>
+docker volume prune</pre></div>
 <hr>
 <h2>🔁 六、镜像仓库（Docker Hub）相关命令</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker login
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker login
 docker tag my-app:1.0 yourname/my-app:1.0
 docker push yourname/my-app:1.0
-docker pull yourname/my-app:1.0
-</code></pre>
+docker pull yourname/my-app:1.0</pre></div>
 <hr>
 <h2>🧹 七、清理相关命令（释放磁盘）</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker container prune
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker container prune
 docker image prune
-docker system prune -a
-</code></pre>
+docker system prune -a</pre></div>
 <blockquote>
 <p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <code class="notranslate">docker system prune -a</code><br>
 会删除未使用的容器、镜像、网络和缓存，<strong>慎用</strong>。</p>
@@ -256,89 +230,87 @@ docker system prune -a
 <code class="notranslate">ENV</code>       设置环境变量</p>
 <hr>
 <h2>🎯 九、开发必背 5 条命令</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate">docker build -t my-app:1.0 .
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker build -t my-app:1.0 <span class="pl-c1">.</span>
 docker run -d -p 3000:3000 my-app:1.0
 docker ps
-docker logs &lt;container_id&gt;
-docker stop &lt;container_id&gt;
-</code></pre>
+docker logs <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span>
+docker stop <span class="pl-k">&lt;</span>container_id<span class="pl-k">&gt;</span></pre></div>
 <h2>🎯 十、✅ Dockerfile 教学版（逐行带注释）</h2>
-<pre lang="Dockerfile" class="notranslate"><code class="notranslate"># ============================================================
-# 【Dockerfile 教学版】
-# 场景：Node + Express 后端服务
-# 目标：让你真正“看懂 Dockerfile 在干什么”
-# ============================================================
+<div class="highlight highlight-source-dockerfile"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> ============================================================</span>
+<span class="pl-c"><span class="pl-c">#</span> 【Dockerfile 教学版】</span>
+<span class="pl-c"><span class="pl-c">#</span> 场景：Node + Express 后端服务</span>
+<span class="pl-c"><span class="pl-c">#</span> 目标：让你真正“看懂 Dockerfile 在干什么”</span>
+<span class="pl-c"><span class="pl-c">#</span> ============================================================</span>
 
-# ==============================
-# ① 基础镜像（Base Image）
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ① 基础镜像（Base Image）</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# FROM = 你站在谁的肩膀上
-# node:18-alpine 代表：
-# - Node.js 18
-# - 基于 Alpine Linux（体积小、适合生产）
-FROM node:18-alpine
+<span class="pl-c"><span class="pl-c">#</span> FROM = 你站在谁的肩膀上</span>
+<span class="pl-c"><span class="pl-c">#</span> node:18-alpine 代表：</span>
+<span class="pl-c"><span class="pl-c">#</span> - Node.js 18</span>
+<span class="pl-c"><span class="pl-c">#</span> - 基于 Alpine Linux（体积小、适合生产）</span>
+<span class="pl-k">FROM</span> node:18-alpine
 
-# ==============================
-# ② 设置工作目录
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ② 设置工作目录</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# WORKDIR = 容器里的“工作目录”
-# 类似于：cd /app
-# 之后所有命令（COPY、RUN、CMD）默认在这个目录执行
-WORKDIR /app
+<span class="pl-c"><span class="pl-c">#</span> WORKDIR = 容器里的“工作目录”</span>
+<span class="pl-c"><span class="pl-c">#</span> 类似于：cd /app</span>
+<span class="pl-c"><span class="pl-c">#</span> 之后所有命令（COPY、RUN、CMD）默认在这个目录执行</span>
+<span class="pl-k">WORKDIR</span> /app
 
-# ==============================
-# ③ 先拷贝 package 文件（优化构建缓存）
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ③ 先拷贝 package 文件（优化构建缓存）</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# 为什么要先拷贝 package.json？
-# 👉 如果你的业务代码变了，但依赖没变，
-#    Docker 就可以“复用缓存”，构建更快
+<span class="pl-c"><span class="pl-c">#</span> 为什么要先拷贝 package.json？</span>
+<span class="pl-c"><span class="pl-c">#</span> 👉 如果你的业务代码变了，但依赖没变，</span>
+<span class="pl-c"><span class="pl-c">#</span>    Docker 就可以“复用缓存”，构建更快</span>
 
-COPY package.json package-lock.json ./
+<span class="pl-k">COPY</span> package.json package-lock.json ./
 
-# ==============================
-# ④ 安装依赖
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ④ 安装依赖</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# RUN = 在镜像构建阶段执行的命令
-# 这里相当于在容器里执行：
-# npm install
-RUN npm install
+<span class="pl-c"><span class="pl-c">#</span> RUN = 在镜像构建阶段执行的命令</span>
+<span class="pl-c"><span class="pl-c">#</span> 这里相当于在容器里执行：</span>
+<span class="pl-c"><span class="pl-c">#</span> npm install</span>
+<span class="pl-k">RUN</span> npm install
 
-# （可选：如果是生产环境推荐）
-# RUN npm ci --production
+<span class="pl-c"><span class="pl-c">#</span> （可选：如果是生产环境推荐）</span>
+<span class="pl-c"><span class="pl-c">#</span> RUN npm ci --production</span>
 
-# ==============================
-# ⑤ 拷贝项目代码
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ⑤ 拷贝项目代码</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# COPY &lt;宿主机路径&gt; &lt;容器路径&gt;
-# . 表示当前目录（项目根目录）
-# 作用：把你的代码放进镜像里
-COPY . .
+<span class="pl-c"><span class="pl-c">#</span> COPY &lt;宿主机路径&gt; &lt;容器路径&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span> . 表示当前目录（项目根目录）</span>
+<span class="pl-c"><span class="pl-c">#</span> 作用：把你的代码放进镜像里</span>
+<span class="pl-k">COPY</span> . .
 
-# ==============================
-# ⑥ 暴露端口（说明文档，不会自动映射）
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ⑥ 暴露端口（说明文档，不会自动映射）</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# EXPOSE 只是“声明”
-# 真正映射端口要靠：
-# - docker run -p
-# - 或 docker compose ports
-EXPOSE 3000
+<span class="pl-c"><span class="pl-c">#</span> EXPOSE 只是“声明”</span>
+<span class="pl-c"><span class="pl-c">#</span> 真正映射端口要靠：</span>
+<span class="pl-c"><span class="pl-c">#</span> - docker run -p</span>
+<span class="pl-c"><span class="pl-c">#</span> - 或 docker compose ports</span>
+<span class="pl-k">EXPOSE</span> 3000
 
-# ==============================
-# ⑦ 设置容器启动命令
-# ==============================
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
+<span class="pl-c"><span class="pl-c">#</span> ⑦ 设置容器启动命令</span>
+<span class="pl-c"><span class="pl-c">#</span> ==============================</span>
 
-# CMD = 容器启动时默认执行的命令
-# 下面等价于：
-# node server.js
-CMD ["node", "server.js"]
-
-</code></pre></div>
+<span class="pl-c"><span class="pl-c">#</span> CMD = 容器启动时默认执行的命令</span>
+<span class="pl-c"><span class="pl-c">#</span> 下面等价于：</span>
+<span class="pl-c"><span class="pl-c">#</span> node server.js</span>
+<span class="pl-k">CMD</span> [<span class="pl-s">"node"</span>, <span class="pl-s">"server.js"</span>]
+</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
