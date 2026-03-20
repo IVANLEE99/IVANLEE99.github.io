@@ -25,7 +25,7 @@
 <meta property="og:url" content="https://ivanlee99.github.io//post/32.html">
 <meta property="og:image" content="">
 <title>vue2-zoom-image — 开发 / 调试 / 打包 / 发布 / 使用 全流程指南</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -111,80 +111,75 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 └── dist/
 </code></pre>
 <h3><code class="notranslate">src/ZoomImage.vue</code></h3>
-<pre lang="vue" class="notranslate"><code class="notranslate">&lt;template&gt;
-  &lt;div class="ZoomImage"&gt;
-    &lt;img :src="src" /&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
+<div class="highlight highlight-text-html-vue"><pre class="notranslate">&lt;<span class="pl-ent">template</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>ZoomImage<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">img</span> <span class="pl-e">:src</span>=<span class="pl-s"><span class="pl-pds">"</span>src<span class="pl-pds">"</span></span> /&gt;
+  &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">template</span>&gt;
 
-&lt;script&gt;
-export default {
-  name: "ZoomImage",
-  props: {
-    src: {
-      type: String,
-      required: true
-    }
-  }
-};
-&lt;/script&gt;
+&lt;<span class="pl-ent">script</span>&gt;<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">export</span> <span class="pl-c1">default</span> {</span>
+<span class="pl-s1">  name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ZoomImage<span class="pl-pds">"</span></span>,</span>
+<span class="pl-s1">  props<span class="pl-k">:</span> {</span>
+<span class="pl-s1">    src<span class="pl-k">:</span> {</span>
+<span class="pl-s1">      type<span class="pl-k">:</span> <span class="pl-c1">String</span>,</span>
+<span class="pl-s1">      required<span class="pl-k">:</span> <span class="pl-c1">true</span></span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">  }</span>
+<span class="pl-s1">};</span>
+<span class="pl-s1"></span>&lt;/<span class="pl-ent">script</span>&gt;
 
-&lt;style scoped&gt;
-.ZoomImage {
-  width: 100%;
-}
-&lt;/style&gt;
-</code></pre>
+&lt;<span class="pl-ent">style</span> scoped&gt;<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-e">.ZoomImage</span> {</span>
+<span class="pl-s1">  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">100<span class="pl-k">%</span></span>;</span>
+<span class="pl-s1">}</span>
+<span class="pl-s1"></span>&lt;/<span class="pl-ent">style</span>&gt;</pre></div>
 <h3><code class="notranslate">src/index.js</code>（入口）</h3>
-<pre lang="js" class="notranslate"><code class="notranslate">import ZoomImage from "./ZoomImage.vue";
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-v">ZoomImage</span> <span class="pl-k">from</span> <span class="pl-s">"./ZoomImage.vue"</span><span class="pl-kos">;</span>
 
-export default {
-  install(Vue) {
-    Vue.component("ZoomImage", ZoomImage);
-  }
-};
+<span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-kos">{</span>
+  <span class="pl-en">install</span><span class="pl-kos">(</span><span class="pl-v">Vue</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-v">Vue</span><span class="pl-kos">.</span><span class="pl-en">component</span><span class="pl-kos">(</span><span class="pl-s">"ZoomImage"</span><span class="pl-kos">,</span> <span class="pl-v">ZoomImage</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
 
-export { ZoomImage };
-</code></pre>
+<span class="pl-k">export</span> <span class="pl-kos">{</span> <span class="pl-v">ZoomImage</span> <span class="pl-kos">}</span><span class="pl-kos">;</span></pre></div>
 <hr>
 <h2>📦 3. Rollup 打包配置（自动内联 CSS）</h2>
 <h3>安装依赖</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">npm install -D rollup rollup-plugin-vue rollup-plugin-commonjs rollup-plugin-node-resolve rollup-plugin-postcss
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm install -D rollup rollup-plugin-vue rollup-plugin-commonjs rollup-plugin-node-resolve rollup-plugin-postcss</pre></div>
 <h3><code class="notranslate">rollup.config.js</code></h3>
-<pre lang="js" class="notranslate"><code class="notranslate">import vue from "rollup-plugin-vue";
-import postcss from "rollup-plugin-postcss";
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">vue</span> <span class="pl-k">from</span> <span class="pl-s">"rollup-plugin-vue"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-s1">postcss</span> <span class="pl-k">from</span> <span class="pl-s">"rollup-plugin-postcss"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-s1">resolve</span> <span class="pl-k">from</span> <span class="pl-s">"rollup-plugin-node-resolve"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-s1">commonjs</span> <span class="pl-k">from</span> <span class="pl-s">"rollup-plugin-commonjs"</span><span class="pl-kos">;</span>
 
-export default {
-  input: "src/index.js",
-  output: [
-    {
-      file: "dist/vue2-zoom-image.esm.js",
-      format: "esm"
-    },
-    {
-      file: "dist/vue2-zoom-image.umd.js",
-      format: "umd",
-      name: "Vue2ZoomImage",
-      globals: {
-        vue: "Vue"
-      }
-    }
-  ],
-  external: ["vue"],
-  plugins: [
-    vue({ css: false }),
-    postcss({ extract: false, minimize: true }), // ✅ CSS 直接打进 JS
-    resolve(),
-    commonjs()
-  ]
-};
-</code></pre>
+<span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">input</span>: <span class="pl-s">"src/index.js"</span><span class="pl-kos">,</span>
+  <span class="pl-c1">output</span>: <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span>
+      <span class="pl-c1">file</span>: <span class="pl-s">"dist/vue2-zoom-image.esm.js"</span><span class="pl-kos">,</span>
+      <span class="pl-c1">format</span>: <span class="pl-s">"esm"</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">{</span>
+      <span class="pl-c1">file</span>: <span class="pl-s">"dist/vue2-zoom-image.umd.js"</span><span class="pl-kos">,</span>
+      <span class="pl-c1">format</span>: <span class="pl-s">"umd"</span><span class="pl-kos">,</span>
+      <span class="pl-c1">name</span>: <span class="pl-s">"Vue2ZoomImage"</span><span class="pl-kos">,</span>
+      <span class="pl-c1">globals</span>: <span class="pl-kos">{</span>
+        <span class="pl-c1">vue</span>: <span class="pl-s">"Vue"</span>
+      <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-c1">external</span>: <span class="pl-kos">[</span><span class="pl-s">"vue"</span><span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-c1">plugins</span>: <span class="pl-kos">[</span>
+    <span class="pl-en">vue</span><span class="pl-kos">(</span><span class="pl-kos">{</span> <span class="pl-c1">css</span>: <span class="pl-c1">false</span> <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">postcss</span><span class="pl-kos">(</span><span class="pl-kos">{</span> <span class="pl-c1">extract</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-c1">minimize</span>: <span class="pl-c1">true</span> <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-c">// ✅ CSS 直接打进 JS</span>
+    <span class="pl-en">resolve</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">commonjs</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span></pre></div>
 <h3>打包</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">npm run build
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm run build</pre></div>
 <p>产物：</p>
 <pre class="notranslate"><code class="notranslate">dist/
   ├── vue2-zoom-image.esm.js
@@ -193,36 +188,31 @@ export default {
 <hr>
 <h2>🔗 4. 本地调试（npm link）</h2>
 <h3>在组件库项目</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">cd vue2-zoom-image
-npm link
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> vue2-zoom-image
+npm link</pre></div>
 <h3>在 Nuxt2 / Vue2 项目</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">cd nuxt-mall-pc
-npm link vue2-zoom-image
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> nuxt-mall-pc
+npm link vue2-zoom-image</pre></div>
 <hr>
 <h2>🧪 5. 在 Nuxt2 中使用</h2>
 <h3>创建插件</h3>
 <p><code class="notranslate">plugins/vue2-zoom-image.js</code></p>
-<pre lang="js" class="notranslate"><code class="notranslate">import Vue from "vue";
-import Vue2ZoomImage from "vue2-zoom-image";
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-v">Vue</span> <span class="pl-k">from</span> <span class="pl-s">"vue"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-v">Vue2ZoomImage</span> <span class="pl-k">from</span> <span class="pl-s">"vue2-zoom-image"</span><span class="pl-kos">;</span>
 
-Vue.use(Vue2ZoomImage);
-</code></pre>
+<span class="pl-v">Vue</span><span class="pl-kos">.</span><span class="pl-en">use</span><span class="pl-kos">(</span><span class="pl-v">Vue2ZoomImage</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <h3>注册插件（nuxt.config.js）</h3>
-<pre lang="js" class="notranslate"><code class="notranslate">export default {
-  plugins: [
-    { src: "~/plugins/vue2-zoom-image.js", mode: "client" }
-  ]
-};
-</code></pre>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">plugins</span>: <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span> <span class="pl-c1">src</span>: <span class="pl-s">"~/plugins/vue2-zoom-image.js"</span><span class="pl-kos">,</span> <span class="pl-c1">mode</span>: <span class="pl-s">"client"</span> <span class="pl-kos">}</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span></pre></div>
 <h3>页面中使用</h3>
-<pre lang="vue" class="notranslate"><code class="notranslate">&lt;template&gt;
-  &lt;div&gt;
-    &lt;ZoomImage src="https://via.placeholder.com/300" /&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-</code></pre>
+<div class="highlight highlight-text-html-vue"><pre class="notranslate">&lt;<span class="pl-ent">template</span>&gt;
+  &lt;<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">ZoomImage</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>https://via.placeholder.com/300<span class="pl-pds">"</span></span> /&gt;
+  &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">template</span>&gt;</pre></div>
 <hr>
 <h2>🐛 6. 常见问题与解决</h2>
 <markdown-accessiblity-table><table role="table">
@@ -264,52 +254,45 @@ Vue.use(Vue2ZoomImage);
 <hr>
 <h2>🚀 7. 发布到 npm</h2>
 <h3>登录（需 2FA）</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">npm login
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm login</pre></div>
 <h3>发布</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">npm publish
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm publish</pre></div>
 <hr>
 <h2>📦 8. 正式环境测试（不使用 link）</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate">cd nuxt-mall-pc
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> nuxt-mall-pc
 npm unlink vue2-zoom-image
 npm install vue2-zoom-image
-npm run dev
-</code></pre>
+npm run dev</pre></div>
 <hr>
 <h2>🧹 9. 清理本地 link</h2>
 <h3>在测试项目</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">cd nuxt-mall-pc
-npm unlink vue2-zoom-image
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> nuxt-mall-pc
+npm unlink vue2-zoom-image</pre></div>
 <h3>在组件库项目</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">cd vue2-zoom-image
-npm unlink
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> vue2-zoom-image
+npm unlink</pre></div>
 <h3>校验</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">npm ls vue2-zoom-image
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm ls vue2-zoom-image</pre></div>
 <p>若显示<strong>版本号而非本地路径</strong>，说明清理完成。</p>
 <hr>
 <h2>🎯 10. 一页速查版</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate"># 开发 → 打包
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 开发 → 打包</span>
 npm run build
 
-# 本地调试
-cd vue2-zoom-image &amp;&amp; npm link
-cd nuxt-mall-pc &amp;&amp; npm link vue2-zoom-image
+<span class="pl-c"><span class="pl-c">#</span> 本地调试</span>
+<span class="pl-c1">cd</span> vue2-zoom-image <span class="pl-k">&amp;&amp;</span> npm link
+<span class="pl-c1">cd</span> nuxt-mall-pc <span class="pl-k">&amp;&amp;</span> npm link vue2-zoom-image
 
-# 发布
-cd vue2-zoom-image &amp;&amp; npm publish
+<span class="pl-c"><span class="pl-c">#</span> 发布</span>
+<span class="pl-c1">cd</span> vue2-zoom-image <span class="pl-k">&amp;&amp;</span> npm publish
 
-# 正式测试
-cd nuxt-mall-pc
+<span class="pl-c"><span class="pl-c">#</span> 正式测试</span>
+<span class="pl-c1">cd</span> nuxt-mall-pc
 npm unlink vue2-zoom-image
 npm install vue2-zoom-image
 
-# 清理
-cd vue2-zoom-image &amp;&amp; npm unlink
-</code></pre></div>
+<span class="pl-c"><span class="pl-c">#</span> 清理</span>
+<span class="pl-c1">cd</span> vue2-zoom-image <span class="pl-k">&amp;&amp;</span> npm unlink</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
