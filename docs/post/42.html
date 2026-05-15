@@ -230,85 +230,36 @@ Step 6: 返回 Issue 编号和链接
 </ul>
 <hr>
 <h2>五、文件内容</h2>
-<h3>SKILL.md（完整内容）</h3>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">Publish Markdown to GitHub Issue</span></span>
-
-将 Markdown 内容发布为 GitHub Issue
-
-<span class="pl-mh">## <span class="pl-en">触发条件</span></span>
-
-当用户提到以下关键词时，自动触发此 Skill：
-<span class="pl-v">-</span> 发布 issue / publish issue
-<span class="pl-v">-</span> 提交 issue / submit issue
-<span class="pl-v">-</span> 将 markdown 发布到 github
-<span class="pl-v">-</span> 新建 issue / create issue
-<span class="pl-v">-</span> 写完文档要发布
-
-<span class="pl-mh">## <span class="pl-en">执行步骤</span></span>
-
-<span class="pl-mh">### <span class="pl-en">第 1 步：选择目标仓库</span></span>
-
-向用户展示以下选项：
-
-请选择目标仓库：
-<span class="pl-s">1</span><span class="pl-v">.</span> IVANLEE99/IVANLEE99.github.io（个人站点）
-<span class="pl-s">2</span><span class="pl-v">.</span> 当前目录对应的 GitHub 仓库（通过 git remote 获取）
-<span class="pl-s">3</span><span class="pl-v">.</span> 自定义仓库（格式：owner/repo）
-
-<span class="pl-mh">### <span class="pl-en">第 2 步：读取 GitHub Token</span></span>
-
-从 <span class="pl-s">~</span>/.claude/settings.json 中读取 mcpServers.github.env.GITHUB_PERSONAL_ACCESS_TOKEN
-
-<span class="pl-mh">### <span class="pl-en">第 3 步：获取并选择标签</span></span>
-
-使用 token 调用 GitHub API 获取目标仓库的所有 labels，展示给用户选择。
-
-<span class="pl-mh">### <span class="pl-en">第 4 步：读取 Markdown 内容</span></span>
-
-提取第一个 # 标题作为 Issue 标题，剩余内容作为 Issue body
-
-<span class="pl-mh">### <span class="pl-en">第 5 步：创建 Issue</span></span>
-
-使用 GitHub API 创建 Issue
-
-<span class="pl-mh">### <span class="pl-en">第 6 步：输出结果</span></span>
-
-返回 Issue 编号和链接</pre></div>
-<h3>references/create-issue-api.md（完整内容）</h3>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">GitHub API - Create Issue</span></span>
-
-<span class="pl-mh">## <span class="pl-en">认证 Token</span></span>
-Token 从 <span class="pl-s">~</span>/.claude/settings.json 动态读取
-
-<span class="pl-mh">## <span class="pl-en">获取仓库所有 Labels</span></span>
-GET <span class="pl-corl">https://api.github.com/repos/{owner}/{repo}/labels</span>
-
-<span class="pl-mh">## <span class="pl-en">创建 Issue</span></span>
-POST <span class="pl-corl">https://api.github.com/repos/{owner}/{repo}/issues</span>
-
-请求体：
-{
-  "title": "Issue 标题",
-  "body": "Issue 内容",
-  "labels": <span class="pl-s">[</span>"label1", "label2"<span class="pl-s">]</span>
-}</pre></div>
-<h3>references/publish-config.md（完整内容）</h3>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">仓库和标签配置</span></span>
-
-<span class="pl-mh">## <span class="pl-en">目标仓库（可选）</span></span>
-<span class="pl-s">1</span><span class="pl-v">.</span> IVANLEE99/IVANLEE99.github.io — 固定选项
-<span class="pl-s">2</span><span class="pl-v">.</span> 当前项目仓库 — git remote get-url origin 解析
-<span class="pl-s">3</span><span class="pl-v">.</span> 自定义仓库 — 用户输入 owner/repo
-
-<span class="pl-mh">## <span class="pl-en">标签</span></span>
-从 GitHub API 动态获取，不硬编码
-
-<span class="pl-mh">## <span class="pl-en">Token</span></span>
-从 <span class="pl-s">~</span>/.claude/settings.json 的 mcpServers.github.env 读取
-
-<span class="pl-mh">## <span class="pl-en">权限</span></span>
-必需: repo (完整仓库访问，包含 issues 读写)</pre></div>
-<hr>
+<p>Skill 已备份至 <a href="https://github.com/IVANLEE99/learn-claude-code/tree/main/skills/publish-issue">learn-claude-code/skills/publish-issue/</a>，完整文件请查看：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKILL.md</td>
+<td>入口文件（触发条件 + 执行步骤）</td>
+<td><a href="https://github.com/IVANLEE99/learn-claude-code/blob/main/skills/publish-issue/SKILL.md">查看</a></td>
+</tr>
+<tr>
+<td>create-issue-api.md</td>
+<td>GitHub API 调用参考</td>
+<td><a href="https://github.com/IVANLEE99/learn-claude-code/blob/main/skills/publish-issue/references/create-issue-api.md">查看</a></td>
+</tr>
+<tr>
+<td>publish-config.md</td>
+<td>仓库和标签配置</td>
+<td><a href="https://github.com/IVANLEE99/learn-claude-code/blob/main/skills/publish-issue/references/publish-config.md">查看</a></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>完整文档：<a href="https://github.com/IVANLEE99/learn-claude-code/blob/main/skills/Claude-Code-Skill%E8%AF%A6%E8%A7%A3-publish-issue.md">Claude Code Skill 详解：publish-issue</a></p>
+</blockquote>
 <h2>六、使用方式</h2>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 手动调用</span>
 /publish-issue ./mcp/GitHub-MCP-Server配置指南.md
