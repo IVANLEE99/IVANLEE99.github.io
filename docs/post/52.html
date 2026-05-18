@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekBSZ.js'></script>
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="> 基于微信读书数据，分析阅读习惯、识别信息茧房、推荐扩展认知的书单。">
+<meta property="og:title" content="读书特点分析与认知扩展指南">
+<meta property="og:description" content="> 基于微信读书数据，分析阅读习惯、识别信息茧房、推荐扩展认知的书单。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ivanlee99.github.io//post/52.html">
+<meta property="og:image" content="">
+<title>读书特点分析与认知扩展指南</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">读书特点分析与认知扩展指南</h1>
+<div class="title-right">
+    <a href="https://ivanlee99.github.io/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/IVANLEE99/IVANLEE99.github.io/issues/52" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><blockquote>
+<p>基于微信读书数据，分析阅读习惯、识别信息茧房、推荐扩展认知的书单。</p>
+</blockquote>
+<hr>
+<h2>一、阅读数据概览</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>指标</th>
+<th>数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>书架总量</td>
+<td>373 本</td>
+</tr>
+<tr>
+<td>读过</td>
+<td>110 本</td>
+</tr>
+<tr>
+<td>读完</td>
+<td>25 本（完成率 23%）</td>
+</tr>
+<tr>
+<td>阅读天数</td>
+<td>796 天</td>
+</tr>
+<tr>
+<td>总时长</td>
+<td>567 小时</td>
+</tr>
+<tr>
+<td>笔记</td>
+<td>8,326 条</td>
+</tr>
+<tr>
+<td>日均阅读</td>
+<td>约 42 分钟</td>
+</tr>
+<tr>
+<td>偏好时段</td>
+<td>下午与夜晚</td>
+</tr>
+<tr>
+<td>文字阅读占比</td>
+<td>高（主要为电子书）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>二、读书特点分析</h2>
+<h3>1. 阅读习惯特征</h3>
+<p><strong>稳定型读者</strong>：796 天的阅读记录说明你有良好的阅读习惯，几乎每天都在阅读。</p>
+<p><strong>笔记型读者</strong>：8,326 条笔记，平均每天 10+ 条，说明你不是被动阅读，而是主动思考和记录。</p>
+<p><strong>广撒网型读者</strong>：373 本藏书只读完 25 本（完成率 23%），你倾向于同时开启很多本书，但完整读完的较少。</p>
+<h3>2. 阅读偏好画像</h3>
+<p><strong>按阅读时长排序（TOP 8）：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>排名</th>
+<th>分类</th>
+<th>本数</th>
+<th>时长</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>文学</td>
+<td>42 本</td>
+<td>275 小时</td>
+<td>48%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>社会小说</td>
+<td>10 本</td>
+<td>209 小时</td>
+<td>37%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>影视原著</td>
+<td>4 本</td>
+<td>128 小时</td>
+<td>23%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>武侠小说</td>
+<td>2 本</td>
+<td>104 小时</td>
+<td>18%</td>
+</tr>
+<tr>
+<td>5</td>
+<td>历史</td>
+<td>16 本</td>
+<td>53 小时</td>
+<td>9%</td>
+</tr>
+<tr>
+<td>6</td>
+<td>个人成长</td>
+<td>11 本</td>
+<td>39 小时</td>
+<td>7%</td>
+</tr>
+<tr>
+<td>7</td>
+<td>漫画</td>
+<td>10 本</td>
+<td>25 小时</td>
+<td>4%</td>
+</tr>
+<tr>
+<td>8</td>
+<td>经济理财</td>
+<td>7 本</td>
+<td>16 小时</td>
+<td>3%</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>一句话总结</strong>：你是一个 <strong>文学叙事型读者</strong>——超过 80% 的阅读时间花在小说和故事上。</p>
+<h3>3. 阅读品味</h3>
+<p><strong>读得最久的书：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>书名</th>
+<th>时长</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>教父三部曲</td>
+<td>120 小时</td>
+<td>外国文学</td>
+</tr>
+<tr>
+<td>倚天屠龙记</td>
+<td>96 小时</td>
+<td>武侠小说</td>
+</tr>
+<tr>
+<td>万历十五年</td>
+<td>40 小时</td>
+<td>历史</td>
+</tr>
+<tr>
+<td>欲乐园</td>
+<td>28 小时</td>
+<td>外国文学</td>
+</tr>
+<tr>
+<td>我与地坛</td>
+<td>25 小时</td>
+<td>散文</td>
+</tr>
+<tr>
+<td>罪与罚</td>
+<td>22 小时</td>
+<td>外国文学</td>
+</tr>
+<tr>
+<td>月亮与六便士</td>
+<td>20 小时</td>
+<td>外国文学</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>偏好作者</strong>：陀思妥耶夫斯基、金庸、鲁迅、泰戈尔</p>
+<p><strong>品味特征</strong>：偏爱 <strong>经典文学 + 人性深度探索</strong>，喜欢有厚重感的作品。</p>
+<h3>4. 书架构成</h3>
+<pre class="notranslate"><code class="notranslate">文学叙事 ████████████████████ 80%+
+科学理性 ██░░░░░░░░░░░░░░░░░░ &lt;5%
+社会科学 ███░░░░░░░░░░░░░░░░░ &lt;8%
+哲学思辨 ██░░░░░░░░░░░░░░░░░░ &lt;5%
+</code></pre>
+<hr>
+<h2>三、信息茧房与认知局限</h2>
+<p>基于阅读数据，识别出 <strong>5 个认知盲区</strong>：</p>
+<h3>茧房 1：叙事思维主导，缺乏科学思维</h3>
+<p><strong>现状</strong>：书架几乎全是故事和叙事——小说、散文、传记、历史故事。</p>
+<p><strong>缺失</strong>：</p>
+<ul>
+<li>科学方法论（如何用实证思维理解世界）</li>
+<li>数据思维（如何用数据而非故事做判断）</li>
+<li>进化论、认知科学等底层框架</li>
+</ul>
+<p><strong>风险</strong>：倾向于用「故事」理解世界，但世界很多问题不是故事能解释的。可能低估概率、忽视统计、过度依赖个案。</p>
+<h3>茧房 2：中国视角为主，缺少全球视野</h3>
+<p><strong>现状</strong>：历史书几乎全是 <strong>中国史</strong>（万历十五年、潜规则、半小时漫画中国史），世界史只有 2 本。</p>
+<p><strong>缺失</strong>：</p>
+<ul>
+<li>欧美历史与文明</li>
+<li>全球化视角</li>
+<li>非西方文明（印度、中东、非洲）</li>
+</ul>
+<p><strong>风险</strong>：对中国有深刻理解，但对世界其他地区的理解可能停留在表面。</p>
+<h3>茧房 3：感性丰富，理性薄弱</h3>
+<p><strong>现状</strong>：读了大量文学和情感类书籍，但 <strong>经济学、政治学、社会学、心理学</strong> 的严肃著作很少。「经济理财」15 本大多是漫画或通俗读物。</p>
+<p><strong>缺失</strong>：</p>
+<ul>
+<li>经济学原理</li>
+<li>政治学基础</li>
+<li>社会学视角</li>
+<li>心理学研究</li>
+</ul>
+<p><strong>风险</strong>：可能对社会运行的底层逻辑（权力、市场、制度）缺乏系统理解。</p>
+<h3>茧房 4：个人成长类停留在鸡汤层</h3>
+<p><strong>现状</strong>：个人成长书籍大多是 <strong>励志型</strong>（谁动了我的奶酪、刻意练习、认知觉醒），缺少深度思维训练。</p>
+<p><strong>缺失</strong>：</p>
+<ul>
+<li>批判性思维</li>
+<li>元认知（思考「思考本身」）</li>
+<li>复杂系统思维</li>
+</ul>
+<p><strong>风险</strong>：可能用「努力就能成功」的框架理解一切，忽视结构性因素。</p>
+<h3>茧房 5：缺少「反舒适区」的阅读</h3>
+<p><strong>现状</strong>：阅读整体偏 <strong>舒适和愉悦</strong>——经典文学、武侠、漫画。缺少让人「不舒服」的书。</p>
+<p><strong>缺失</strong>：</p>
+<ul>
+<li>挑战世界观的书</li>
+<li>让人困惑的书</li>
+<li>需要反复思考的书</li>
+</ul>
+<p><strong>风险</strong>：阅读变成了一种「确认偏误」——不断读自己喜欢的类型，而非拓展认知边界。</p>
+<hr>
+<h2>四、推荐书单：破除茧房，扩展认知</h2>
+<h3>第一组：建立科学思维</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>书名</th>
+<th>作者</th>
+<th>为什么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>《思考，快与慢》</td>
+<td>丹尼尔·卡尼曼</td>
+<td>理解人类思维的系统性偏差</td>
+</tr>
+<tr>
+<td>《自私的基因》</td>
+<td>理查德·道金斯</td>
+<td>用进化论框架重新理解生命和行为</td>
+</tr>
+<tr>
+<td>《规模》</td>
+<td>杰弗里·韦斯特</td>
+<td>用数学思维理解城市、公司、生命的规律</td>
+</tr>
+<tr>
+<td>《噪声》</td>
+<td>丹尼尔·卡尼曼</td>
+<td>为什么专家的判断常常是错的</td>
+</tr>
+<tr>
+<td>《反脆弱》</td>
+<td>纳西姆·塔勒布</td>
+<td>如何从不确定性中获益</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>第二组：拓展全球视野</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>书名</th>
+<th>作者</th>
+<th>为什么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>《枪炮、病菌与钢铁》</td>
+<td>贾雷德·戴蒙德</td>
+<td>为什么欧亚文明征服了其他大陆</td>
+</tr>
+<tr>
+<td>《人类简史》</td>
+<td>尤瓦尔·赫拉利</td>
+<td>用全新视角理解人类文明的演进</td>
+</tr>
+<tr>
+<td>《耶路撒冷三千年》</td>
+<td>西蒙·蒙蒂菲奥理</td>
+<td>理解中东冲突的历史根源</td>
+</tr>
+<tr>
+<td>《文明的冲突》</td>
+<td>塞缪尔·亨廷顿</td>
+<td>理解当今世界格局的底层逻辑</td>
+</tr>
+<tr>
+<td>《美国反对美国》</td>
+<td>王沪宁</td>
+<td>用中国学者视角看美国</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>第三组：理解社会运行逻辑</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>书名</th>
+<th>作者</th>
+<th>为什么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>《置身事内》</td>
+<td>兰小欢</td>
+<td>中国政府与经济发展的真实逻辑</td>
+</tr>
+<tr>
+<td>《事实》</td>
+<td>汉斯·罗斯林</td>
+<td>用数据打破对世界的错误直觉</td>
+</tr>
+<tr>
+<td>《贫穷的本质》</td>
+<td>阿比吉特·班纳吉</td>
+<td>为什么穷人会做出「不理性」的选择</td>
+</tr>
+<tr>
+<td>《权力与繁荣》</td>
+<td>曼瑟·奥尔森</td>
+<td>权力如何影响经济发展</td>
+</tr>
+<tr>
+<td>《21世纪资本论》</td>
+<td>托马斯·皮凯蒂</td>
+<td>贫富差距为什么会扩大</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>第四组：升级思维操作系统</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>书名</th>
+<th>作者</th>
+<th>为什么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>《穷查理宝典》</td>
+<td>查理·芒格</td>
+<td>多元思维模型</td>
+</tr>
+<tr>
+<td>《原则》</td>
+<td>瑞·达利欧</td>
+<td>用系统化原则做决策</td>
+</tr>
+<tr>
+<td>《系统之美》</td>
+<td>德内拉·梅多斯</td>
+<td>系统思维入门</td>
+</tr>
+<tr>
+<td>《批判性思维》</td>
+<td>理查德·保罗</td>
+<td>学会质疑和独立思考</td>
+</tr>
+<tr>
+<td>《认知觉醒》</td>
+<td>周岭</td>
+<td>元认知与自我改变</td>
+</tr>
+<tr>
+<td>《学会提问》</td>
+<td>尼尔·布朗</td>
+<td>批判性思维实践</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>第五组：让你「不舒服」的书</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>书名</th>
+<th>作者</th>
+<th>为什么读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>《1984》</td>
+<td>乔治·奥威尔</td>
+<td>理解极权主义的运作逻辑</td>
+</tr>
+<tr>
+<td>《美丽新世界》</td>
+<td>阿道司·赫胥黎</td>
+<td>与 1984 对比，理解两种控制方式</td>
+</tr>
+<tr>
+<td>《乌合之众》</td>
+<td>古斯塔夫·勒庞</td>
+<td>群体心理的黑暗面</td>
+</tr>
+<tr>
+<td>《娱乐至死》</td>
+<td>尼尔·波兹曼</td>
+<td>媒体如何塑造我们的思维</td>
+</tr>
+<tr>
+<td>《沉默的大多数》</td>
+<td>王小波</td>
+<td>用理性对抗荒诞</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>五、阅读策略建议</h2>
+<h3>1. 调整阅读比例</h3>
+<p><strong>当前</strong>：80%+ 文学叙事<br>
+<strong>建议</strong>：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>类型</th>
+<th>当前占比</th>
+<th>建议占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文学叙事</td>
+<td>80%+</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>科学思维</td>
+<td>&lt;5%</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>社会科学</td>
+<td>&lt;8%</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>哲学思辨</td>
+<td>&lt;5%</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>个人成长</td>
+<td>7%</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>2. 提高完成率</h3>
+<p><strong>当前</strong>：23% 完成率<br>
+<strong>建议</strong>：</p>
+<ul>
+<li>同时在读不超过 3 本</li>
+<li>设定「30 页规则」：读 30 页后决定是否继续</li>
+<li>定期清理不想读的书</li>
+</ul>
+<h3>3. 建立阅读主题</h3>
+<p><strong>每季度一个主题</strong>，深度阅读 3-5 本相关书籍：</p>
+<ul>
+<li>Q1：科学思维（《思考，快与慢》《自私的基因》《规模》）</li>
+<li>Q2：全球视野（《人类简史》《枪炮、病菌与钢铁》《文明的冲突》）</li>
+<li>Q3：社会运行（《置身事内》《事实》《贫穷的本质》）</li>
+<li>Q4：思维升级（《穷查理宝典》《原则》《系统之美》）</li>
+</ul>
+<h3>4. 保持文学阅读</h3>
+<p><strong>不要放弃文学</strong>——你的文学品味很好。建议：</p>
+<ul>
+<li>每读 3 本「硬核」书，奖励自己 1 本文学</li>
+<li>尝试不同国家和时代的文学（拉美、日本、非洲）</li>
+<li>读一些「不舒服」的文学（卡夫卡、加缪、博尔赫斯）</li>
+</ul>
+<hr>
+<h2>六、阅读画像</h2>
+<pre class="notranslate"><code class="notranslate">文学叙事型读者  ████████████████████░░░░░  80%
+历史爱好者      ████████████░░░░░░░░░░░░░  50%
+成长探索者      ██████░░░░░░░░░░░░░░░░░░░  25%
+理性思维        ███░░░░░░░░░░░░░░░░░░░░░░  12%（待加强）
+全球视野        ██░░░░░░░░░░░░░░░░░░░░░░░   8%（待加强）
+</code></pre>
+<hr>
+<h2>七、总结</h2>
+<blockquote>
+<p><strong>你是一个优秀的文学读者，但世界不只由故事构成。</strong></p>
+<p>用 20% 的阅读时间去读那些「不舒服」的书——科学、经济学、政治学、哲学——它们会让你成为一个更完整的人。</p>
+<p>文学让你理解人性，科学让你理解世界，哲学让你理解思考本身。三者兼备，才能看清全貌。</p>
+</blockquote>
+<hr>
+<p><em>分析基于微信读书数据，生成时间：2026-05-18</em></p></div>
+<div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://ivanlee99.github.io/">Youngs羊示</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("11/25/2024"!=""){
+    var startSite=new Date("11/25/2024");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","IVANLEE99/IVANLEE99.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
