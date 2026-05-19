@@ -34,6 +34,7 @@ Authorization: Bearer <your_access_secret>
 
 知乎搜索每日调用额度为 **10 次**（试用用户），实名认证后可提升至 **1000 次**。
 
+![知乎MCP额度](https://github.com/IVANLEE99/IVANLEE99.github.io/raw/main/mcp/知乎额度.png)
 
 - API Token 管理：https://developer.zhihu.com/profile
 - 知乎数据开发平台文档中心：https://developer.zhihu.com/docs?key=authorization
