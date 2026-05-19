@@ -206,4 +206,3 @@ data: {"jsonrpc":"2.0","id":3,"result":{"content":[{"type":"text","text":"<globa
 - **时间**：2026-05-07
 - **链接**：https://zhuanlan.zhihu.com/p/2035301907799986501
 - **简介**：利用 Claude Code + DeepSeek 搭建全自动因子挖掘循环，支持设计→回测→评分→诊断→改进的 Agent 研究流程。
-
