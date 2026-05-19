@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekBSZ.js'></script>
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="
+## 一、Skill 是什么
+
+Skill（技能）是 Claude Code 的扩展机制，允许用户定义可复用的专业能力。">
+<meta property="og:title" content="Claude Code Skill 详解：gen-img">
+<meta property="og:description" content="
+## 一、Skill 是什么
+
+Skill（技能）是 Claude Code 的扩展机制，允许用户定义可复用的专业能力。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ivanlee99.github.io//post/60.html">
+<meta property="og:image" content="">
+<title>Claude Code Skill 详解：gen-img</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Claude Code Skill 详解：gen-img</h1>
+<div class="title-right">
+    <a href="https://ivanlee99.github.io/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/IVANLEE99/IVANLEE99.github.io/issues/60" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h2>一、Skill 是什么</h2>
+<p>Skill（技能）是 Claude Code 的扩展机制，允许用户定义可复用的专业能力。它比 Command（命令）更强大：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>特性</th>
+<th>Command</th>
+<th>Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>调用方式</td>
+<td>用户手动 <code class="notranslate">/command</code></td>
+<td>Claude 自动触发 + 用户手动</td>
+</tr>
+<tr>
+<td>文件结构</td>
+<td>单个 <code class="notranslate">.md</code> 文件</td>
+<td>目录，含 <code class="notranslate">SKILL.md</code> + 脚本/参考资料</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>动作型："帮我做 X"</td>
+<td>知识型 + 执行型："知道 X 并执行 X"</td>
+</tr>
+<tr>
+<td>可捆绑资源</td>
+<td>不能</td>
+<td>可以（脚本、模板、API 配置等）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>一句话理解</strong>：Command 是快捷操作按钮，Skill 是会自动识别场景并执行标准流程的领域专家。</p>
+<hr>
+<h2>二、gen-img Skill 说明</h2>
+<h3>功能</h3>
+<p>基于 GPT-Image-2 API 的图片生成工具，支持：</p>
+<ul>
+<li>文本生成图片（text-to-image）</li>
+<li>自定义尺寸、质量、格式</li>
+<li>自动保存到本地目录</li>
+<li>支持批量生成（1-10 张）</li>
+</ul>
+<h3>触发条件</h3>
+<p>当用户提到以下关键词时，自动触发：</p>
+<ul>
+<li>生成图片 / generate image / create image</li>
+<li>画图 / 画一张 / draw</li>
+<li>生图 / 出图 / create a picture</li>
+<li>任何请求生成视觉内容的语句</li>
+</ul>
+<h3>技术架构</h3>
+<pre class="notranslate"><code class="notranslate">用户: "画一只戴墨镜的猫"
+        ↓
+Claude 检测到关键词 "画" → 激活 gen-img skill
+        ↓
+读取 SKILL.md → 解析用户意图（prompt、size、quality 等）
+        ↓
+从 ~/.claude/settings.json 读取 API 配置
+        ↓
+执行 gen-img.sh 脚本 → 调用 GPT-Image-2 API
+        ↓
+API 返回 base64 图片数据
+        ↓
+脚本解码并保存为 PNG 文件
+        ↓
+Claude 使用 Read 工具展示生成的图片
+</code></pre>
+<hr>
+<h2>三、创建详细过程</h2>
+<h3>第 1 步：分析参考项目</h3>
+<p>项目来源：<a href="https://github.com/CookSleep/gpt_image_playground">CookSleep/gpt_image_playground</a></p>
+<p>这是一个基于 React + TypeScript 的 Web UI 工具，核心特性：</p>
+<ul>
+<li>支持 OpenAI 兼容接口（Images API + Responses API）</li>
+<li>支持 fal.ai 和自定义 HTTP 服务商</li>
+<li>内置可视化遮罩编辑器</li>
+<li>纯本地 IndexedDB 存储</li>
+</ul>
+<p><strong>关键代码分析：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="notranslate">src/lib/openaiCompatibleImageApi.ts</code></td>
+<td>API 调用核心逻辑</td>
+</tr>
+<tr>
+<td><code class="notranslate">src/lib/apiProfiles.ts</code></td>
+<td>API 配置管理</td>
+</tr>
+<tr>
+<td><code class="notranslate">src/types.ts</code></td>
+<td>类型定义（TaskParams、ApiResponse 等）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>API 调用流程：</strong></p>
+<div class="highlight highlight-source-ts"><pre class="notranslate"><span class="pl-c">// 1. 构建请求体</span>
+<span class="pl-k">const</span> <span class="pl-s1">body</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">model</span>: <span class="pl-s1">profile</span><span class="pl-kos">.</span><span class="pl-c1">model</span><span class="pl-kos">,</span>        <span class="pl-c">// "gpt-image-2"</span>
+  <span class="pl-c1">prompt</span>: <span class="pl-s1">prompt</span><span class="pl-kos">,</span>               <span class="pl-c">// 用户输入</span>
+  <span class="pl-c1">size</span>: <span class="pl-s1">params</span><span class="pl-kos">.</span><span class="pl-c1">size</span><span class="pl-kos">,</span>            <span class="pl-c">// "1024x1024"</span>
+  <span class="pl-c1">quality</span>: <span class="pl-s1">params</span><span class="pl-kos">.</span><span class="pl-c1">quality</span><span class="pl-kos">,</span>      <span class="pl-c">// "auto"</span>
+  <span class="pl-c1">output_format</span>: <span class="pl-s1">params</span><span class="pl-kos">.</span><span class="pl-c1">output_format</span><span class="pl-kos">,</span>  <span class="pl-c">// "png"</span>
+  <span class="pl-c1">moderation</span>: <span class="pl-s1">params</span><span class="pl-kos">.</span><span class="pl-c1">moderation</span><span class="pl-kos">,</span>
+  <span class="pl-c1">n</span>: <span class="pl-s1">params</span><span class="pl-kos">.</span><span class="pl-c1">n</span><span class="pl-kos">,</span>
+  <span class="pl-c1">response_format</span>: <span class="pl-s">'b64_json'</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// 2. 发送请求</span>
+<span class="pl-k">const</span> <span class="pl-s1">response</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-en">fetch</span><span class="pl-kos">(</span><span class="pl-s">`<span class="pl-s1"><span class="pl-kos">${</span><span class="pl-s1">baseUrl</span><span class="pl-kos">}</span></span>/v1/images/generations`</span><span class="pl-kos">,</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">method</span>: <span class="pl-s">'POST'</span><span class="pl-kos">,</span>
+  <span class="pl-c1">headers</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">'Authorization'</span>: <span class="pl-s">`Bearer <span class="pl-s1"><span class="pl-kos">${</span><span class="pl-s1">apiKey</span><span class="pl-kos">}</span></span>`</span><span class="pl-kos">,</span>
+    <span class="pl-s">'Content-Type'</span>: <span class="pl-s">'application/json'</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-c1">body</span>: <span class="pl-c1">JSON</span><span class="pl-kos">.</span><span class="pl-en">stringify</span><span class="pl-kos">(</span><span class="pl-s1">body</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// 3. 解析响应</span>
+<span class="pl-k">const</span> <span class="pl-s1">payload</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-s1">response</span><span class="pl-kos">.</span><span class="pl-en">json</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+<span class="pl-k">const</span> <span class="pl-s1">b64</span> <span class="pl-c1">=</span> <span class="pl-s1">payload</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">[</span><span class="pl-c1">0</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-c1">b64_json</span></pre></div>
+<h3>第 2 步：创建 Skill 目录结构</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkdir -p <span class="pl-k">~</span>/.claude/skills/gen-img/scripts</pre></div>
+<p>最终结构：</p>
+<pre class="notranslate"><code class="notranslate">~/.claude/skills/gen-img/
+├── SKILL.md                    # 入口文件（触发条件 + 执行步骤）
+└── scripts/
+    └── gen-img.sh              # 图片生成脚本
+</code></pre>
+<h3>第 3 步：编写 SKILL.md</h3>
+<p>这是 Skill 的核心文件，包含：</p>
+<ol>
+<li><strong>Frontmatter</strong> — name、description、version</li>
+<li><strong>触发条件</strong> — 关键词列表，匹配用户输入</li>
+<li><strong>环境变量</strong> — API 配置读取方式</li>
+<li><strong>执行步骤</strong> — 4 步标准流程</li>
+<li><strong>API 参考</strong> — 请求/响应格式说明</li>
+<li><strong>错误处理</strong> — 常见问题排查</li>
+</ol>
+<p><strong>关键设计决策：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>决策</th>
+<th>选择</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>响应格式</td>
+<td><code class="notranslate">b64_json</code></td>
+<td>直接在本地解码保存，无需处理 URL 过期</td>
+</tr>
+<tr>
+<td>默认尺寸</td>
+<td><code class="notranslate">1024x1024</code></td>
+<td>平衡质量和生成速度</td>
+</tr>
+<tr>
+<td>默认质量</td>
+<td><code class="notranslate">auto</code></td>
+<td>让 API 自动选择最优质量</td>
+</tr>
+<tr>
+<td>保存目录</td>
+<td><code class="notranslate">~/Documents/learn-claude-code/generated-images/</code></td>
+<td>统一管理生成的图片</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>第 4 步：编写生成脚本</h3>
+<p><code class="notranslate">gen-img.sh</code> 负责实际的 API 调用：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#!</span>/bin/bash</span>
+<span class="pl-c"><span class="pl-c">#</span> 核心逻辑：</span>
+<span class="pl-c"><span class="pl-c">#</span> 1. 解析参数（prompt、size、quality、n、format）</span>
+<span class="pl-c"><span class="pl-c">#</span> 2. 从 settings.json 读取 API 配置</span>
+<span class="pl-c"><span class="pl-c">#</span> 3. 调用 curl 请求 API</span>
+<span class="pl-c"><span class="pl-c">#</span> 4. 用 Python 解析 JSON 并保存 base64 图片</span></pre></div>
+<p><strong>脚本特点：</strong></p>
+<ul>
+<li>自动从 <code class="notranslate">~/.claude/settings.json</code> 读取 API 配置</li>
+<li>支持命令行参数和默认值</li>
+<li>生成带时间戳的文件名，避免冲突</li>
+<li>支持批量生成（多张图片）</li>
+<li>错误处理和友好的输出信息</li>
+</ul>
+<h3>第 5 步：配置环境变量</h3>
+<p>在 <code class="notranslate">~/.claude/settings.json</code> 的 <code class="notranslate">env</code> 中添加：</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"GEN_IMG_API_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>https://your-api-endpoint.com/v1<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"GEN_IMG_API_KEY"</span>: <span class="pl-s"><span class="pl-pds">"</span>sk-your-api-key-here<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<hr>
+<h2>四、对话中的相关讨论</h2>
+<h3>Q: 为什么用 GPT-Image-2 而不是 DALL-E 3？</h3>
+<p><strong>A</strong>: GPT-Image-2 是 OpenAI 最新的图像生成模型（2025 年发布），相比 DALL-E 3 有显著提升：</p>
+<ul>
+<li><strong>文字渲染</strong>：GPT-Image-2 在图片中生成文字的能力远超 DALL-E 3</li>
+<li><strong>指令遵循</strong>：更精确地理解复杂提示词</li>
+<li><strong>质量</strong>：支持 4K 分辨率，细节更丰富</li>
+<li><strong>API 兼容</strong>：使用相同的 <code class="notranslate">/v1/images/generations</code> 端点，迁移成本为零</li>
+</ul>
+<h3>Q: 为什么用 b64_json 而不是 url 格式？</h3>
+<p><strong>A</strong>:</p>
+<ul>
+<li><code class="notranslate">b64_json</code>：图片数据直接在响应中返回，解码后保存到本地，<strong>无网络依赖</strong></li>
+<li><code class="notranslate">url</code>：返回一个临时 URL，需要二次下载，<strong>URL 可能过期</strong></li>
+</ul>
+<p>对于 Claude Code 这种本地工具，<code class="notranslate">b64_json</code> 更可靠。</p>
+<h3>Q: 如何支持参考图编辑（image editing）？</h3>
+<p><strong>A</strong>: 当前 Skill 只支持 text-to-image。如需支持参考图编辑，需要：</p>
+<ol>
+<li>使用 <code class="notranslate">/v1/images/edits</code> 端点</li>
+<li>请求格式改为 <code class="notranslate">multipart/form-data</code></li>
+<li>上传原图 + 遮罩图</li>
+</ol>
+<p>这是后续可以扩展的功能。</p>
+<h3>Q: API Key 安全吗？</h3>
+<p><strong>A</strong>:</p>
+<ul>
+<li>API Key 存储在 <code class="notranslate">~/.claude/settings.json</code>，<strong>不写入代码</strong></li>
+<li>Skill 脚本运行时从配置文件读取，<strong>不硬编码</strong></li>
+<li><code class="notranslate">settings.json</code> 应加入 <code class="notranslate">.gitignore</code>，<strong>不提交到仓库</strong></li>
+</ul>
+<h3>Q: 如何切换到其他图片生成服务？</h3>
+<p><strong>A</strong>: 只需修改 <code class="notranslate">settings.json</code> 中的环境变量：</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"GEN_IMG_API_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>https://api.openai.com/v1<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"GEN_IMG_API_KEY"</span>: <span class="pl-s"><span class="pl-pds">"</span>sk-your-openai-key<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<p>或使用 fal.ai：</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"GEN_IMG_API_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>https://fal.run<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"GEN_IMG_API_KEY"</span>: <span class="pl-s"><span class="pl-pds">"</span>your-fal-key<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<hr>
+<h2>五、文件内容</h2>
+<p>Skill 已备份至本项目 <code class="notranslate">skills/gen-img/</code> 目录，完整文件请查看：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKILL.md</td>
+<td>入口文件（触发条件 + 执行步骤）</td>
+<td><a href="gen-img/SKILL.md">查看</a></td>
+</tr>
+<tr>
+<td>gen-img.sh</td>
+<td>图片生成脚本</td>
+<td><a href="gen-img/scripts/gen-img.sh">查看</a></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>六、使用方式</h2>
+<h3>自动触发（推荐）</h3>
+<p>直接用自然语言描述你想生成的图片：</p>
+<pre class="notranslate"><code class="notranslate">用户: "画一只在月球上弹钢琴的宇航员"
+Claude: [自动激活 gen-img skill → 生成图片 → 展示结果]
+
+用户: "生成一张赛博朋克风格的城市夜景，1536x1024"
+Claude: [自动激活 → 使用指定尺寸 → 生成并保存]
+
+用户: "draw a cute robot reading a book under a tree"
+Claude: [自动激活 → 生成英文提示词图片]
+</code></pre>
+<h3>手动调用脚本</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 基础用法</span>
+bash <span class="pl-k">~</span>/.claude/skills/gen-img/scripts/gen-img.sh <span class="pl-s"><span class="pl-pds">"</span>一只戴墨镜的猫<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 完整参数</span>
+bash <span class="pl-k">~</span>/.claude/skills/gen-img/scripts/gen-img.sh \
+  <span class="pl-s"><span class="pl-pds">"</span>赛博朋克城市夜景<span class="pl-pds">"</span></span> \
+  <span class="pl-k">~</span>/output.png \
+  1536x1024 \
+  high \
+  1 \
+  png</pre></div>
+<h3>参数说明</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>参数</th>
+<th>位置</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>prompt</td>
+<td>$1</td>
+<td>(必填)</td>
+<td>图片描述</td>
+</tr>
+<tr>
+<td>output</td>
+<td>$2</td>
+<td>自动生成</td>
+<td>输出文件路径</td>
+</tr>
+<tr>
+<td>size</td>
+<td>$3</td>
+<td><code class="notranslate">1024x1024</code></td>
+<td>尺寸：<code class="notranslate">1024x1024</code>、<code class="notranslate">1536x1024</code>、<code class="notranslate">1024x1536</code>、<code class="notranslate">auto</code></td>
+</tr>
+<tr>
+<td>quality</td>
+<td>$4</td>
+<td><code class="notranslate">auto</code></td>
+<td>质量：<code class="notranslate">auto</code>、<code class="notranslate">low</code>、<code class="notranslate">medium</code>、<code class="notranslate">high</code></td>
+</tr>
+<tr>
+<td>n</td>
+<td>$5</td>
+<td><code class="notranslate">1</code></td>
+<td>生成数量：1-10</td>
+</tr>
+<tr>
+<td>format</td>
+<td>$6</td>
+<td><code class="notranslate">png</code></td>
+<td>格式：<code class="notranslate">png</code>、<code class="notranslate">jpeg</code>、<code class="notranslate">webp</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>七、测试结果</h2>
+<h3>测试 1：基础生成（英文提示词）</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/gen-img/scripts/gen-img.sh \
+  <span class="pl-s"><span class="pl-pds">"</span>a cute cat wearing sunglasses<span class="pl-pds">"</span></span> \
+  generated-images/test_cat.png 1024x1024 auto 1 png</pre></div>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/IVANLEE99/IVANLEE99.github.io/raw/main/generated-images/test_cat.png"><img src="https://github.com/IVANLEE99/IVANLEE99.github.io/raw/main/generated-images/test_cat.png" alt="戴墨镜的猫" style="max-width: 100%;"></a></p>
+<p><strong>结果：</strong></p>
+<ul>
+<li>文件大小：2.5MB</li>
+<li>分辨率：1254 x 1254（API 实际返回，略大于请求的 1024x1024）</li>
+<li>格式：PNG</li>
+<li>生成时间：&lt; 10 秒</li>
+<li>评价：猫咪细节丰富，墨镜反射效果逼真，背景海滩氛围到位</li>
+</ul>
+<h3>测试 2：复杂场景（高质量 + 自定义尺寸）</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/gen-img/scripts/gen-img.sh \
+  <span class="pl-s"><span class="pl-pds">"</span>an astronaut playing a grand piano on the moon, Earth visible in the background, stars and lunar landscape, cinematic lighting, highly detailed<span class="pl-pds">"</span></span> \
+  generated-images/astronaut_piano_moon.png 1024x1024 high 1 png</pre></div>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/IVANLEE99/IVANLEE99.github.io/raw/main/generated-images/astronaut_piano_moon.png"><img src="https://github.com/IVANLEE99/IVANLEE99.github.io/raw/main/generated-images/astronaut_piano_moon.png" alt="月球弹钢琴的宇航员" style="max-width: 100%;"></a></p>
+<p><strong>结果：</strong></p>
+<ul>
+<li>文件大小：约 3MB</li>
+<li>分辨率：1254 x 1254</li>
+<li>格式：PNG</li>
+<li>生成时间：&lt; 15 秒</li>
+<li>评价：NASA 宇航服细节精准，Steinway &amp; Sons 钢琴品牌标识清晰，地球与星空背景层次分明</li>
+</ul>
+<h3>测试 3：中文提示词</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/gen-img/scripts/gen-img.sh \
+  <span class="pl-s"><span class="pl-pds">"</span>一只戴着墨镜的猫在海滩上<span class="pl-pds">"</span></span> \
+  generated-images/test_cn.png</pre></div>
+<p><strong>结果：</strong> 成功生成，API 自动将中文提示词改写为英文后生成</p>
+<h3>测试总结</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>测试项</th>
+<th>提示词语言</th>
+<th>尺寸</th>
+<th>质量</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础生成</td>
+<td>英文</td>
+<td>1024x1024</td>
+<td>auto</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>复杂场景</td>
+<td>英文</td>
+<td>1024x1024</td>
+<td>high</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>中文提示词</td>
+<td>中文</td>
+<td>1024x1024</td>
+<td>auto</td>
+<td>成功</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>核心发现：</strong></p>
+<ul>
+<li>GPT-Image-2 对中英文提示词均有良好支持</li>
+<li>实际输出分辨率（1254x1254）略大于请求值，属于 API 行为</li>
+<li><code class="notranslate">high</code> 质量模式生成时间略长，但细节更丰富</li>
+<li>API 会自动改写提示词以提升生成质量</li>
+</ul>
+<hr>
+<h2>八、扩展方向</h2>
+<h3>短期优化</h3>
+<ol>
+<li><strong>支持参考图编辑</strong> — 使用 <code class="notranslate">/v1/images/edits</code> 端点</li>
+<li><strong>支持 Responses API</strong> — 使用 <code class="notranslate">/v1/responses</code> 端点，获得更好的提示词保护</li>
+<li><strong>批量生成优化</strong> — 并发请求提升速度</li>
+</ol>
+<h3>长期规划</h3>
+<ol>
+<li><strong>MCP Server 集成</strong> — 将图片生成封装为 MCP 工具</li>
+<li><strong>历史记录管理</strong> — 本地存储生成历史，支持搜索和复用</li>
+<li><strong>多服务商支持</strong> — 自动切换 fal.ai、Replicate 等备用服务</li>
+</ol>
+<hr>
+<h2>九、相关资源</h2>
+<ul>
+<li>Claude Code 官方文档: <a href="https://docs.anthropic.com/en/docs/claude-code" rel="nofollow">https://docs.anthropic.com/en/docs/claude-code</a></li>
+<li>OpenAI Image API: <a href="https://platform.openai.com/docs/guides/image-generation" rel="nofollow">https://platform.openai.com/docs/guides/image-generation</a></li>
+<li>GPT Image Playground: <a href="https://github.com/CookSleep/gpt_image_playground">https://github.com/CookSleep/gpt_image_playground</a></li>
+<li>MCP 协议: <a href="https://modelcontextprotocol.io" rel="nofollow">https://modelcontextprotocol.io</a></li>
+</ul></div>
+<div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://ivanlee99.github.io/">Youngs羊示</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("11/25/2024"!=""){
+    var startSite=new Date("11/25/2024");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","IVANLEE99/IVANLEE99.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
