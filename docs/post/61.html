@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekBSZ.js'></script>
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="
+> 基于小米 MiMo V2.5 TTS 模型的 Claude Code 语音合成技能，支持预置音色、风格控制、声音克隆、音色设计和音色档案管理。">
+<meta property="og:title" content="MiMo 语音合成 Skill 详解">
+<meta property="og:description" content="
+> 基于小米 MiMo V2.5 TTS 模型的 Claude Code 语音合成技能，支持预置音色、风格控制、声音克隆、音色设计和音色档案管理。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ivanlee99.github.io//post/61.html">
+<meta property="og:image" content="">
+<title>MiMo 语音合成 Skill 详解</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">MiMo 语音合成 Skill 详解</h1>
+<div class="title-right">
+    <a href="https://ivanlee99.github.io/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/IVANLEE99/IVANLEE99.github.io/issues/61" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><blockquote>
+<p>基于小米 MiMo V2.5 TTS 模型的 Claude Code 语音合成技能，支持预置音色、风格控制、声音克隆、音色设计和音色档案管理。</p>
+</blockquote>
+<hr>
+<h2>目录</h2>
+<ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
+<li><a href="#2-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84">2. 文件结构</a></li>
+<li><a href="#3-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">3. 环境配置</a></li>
+<li><a href="#4-%E5%8A%9F%E8%83%BD%E7%89%B9%E6%80%A7">4. 功能特性</a></li>
+<li><a href="#5-%E8%84%9A%E6%9C%AC%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3">5. 脚本参数详解</a></li>
+<li><a href="#6-%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B">6. 使用示例</a></li>
+<li><a href="#7-%E9%A2%84%E7%BD%AE%E9%9F%B3%E8%89%B2%E5%88%97%E8%A1%A8">7. 预置音色列表</a></li>
+<li><a href="#8-%E9%A3%8E%E6%A0%BC%E6%8E%A7%E5%88%B6">8. 风格控制</a></li>
+<li><a href="#9-%E9%9F%B3%E8%89%B2%E6%A1%A3%E6%A1%88%E7%AE%A1%E7%90%86">9. 音色档案管理</a></li>
+<li><a href="#10-api-%E5%8F%82%E8%80%83">10. API 参考</a></li>
+<li><a href="#11-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86">11. 错误处理</a></li>
+<li><a href="#12-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">12. 常见问题</a></li>
+</ul>
+<hr>
+<h2>1. 概述</h2>
+<p><code class="notranslate">mimo-tts</code> 是一个 Claude Code Skill，将文本转换为自然流畅的语音。基于小米 MiMo V2.5 TTS 系列模型，提供三种合成模式：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>模式</th>
+<th>模型 ID</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>预置音色</strong></td>
+<td><code class="notranslate">mimo-v2.5-tts</code></td>
+<td>使用 9 个精品音色直接合成</td>
+</tr>
+<tr>
+<td><strong>声音克隆</strong></td>
+<td><code class="notranslate">mimo-v2.5-tts-voiceclone</code></td>
+<td>基于音频样本复刻任意音色</td>
+</tr>
+<tr>
+<td><strong>音色设计</strong></td>
+<td><code class="notranslate">mimo-v2.5-tts-voicedesign</code></td>
+<td>通过自然语言描述生成定制音色</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>输出格式：</strong> 24kHz PCM16LE 单声道 WAV</p>
+<hr>
+<h2>2. 文件结构</h2>
+<pre class="notranslate"><code class="notranslate">~/.claude/skills/mimo-tts/
+├── SKILL.md                    # Skill 元数据和触发条件
+├── scripts/
+│   └── mimo-tts.sh             # 主执行脚本（358 行）
+├── voices/
+│   ├── profiles.json           # 音色档案索引
+│   └── 曼波.mp3                # 已保存的音色样本
+└── examples/
+    └── 逍遥游.wav              # 示例音频输出
+</code></pre>
+<hr>
+<h2>3. 环境配置</h2>
+<p>在 <code class="notranslate">~/.claude/settings.json</code> 的 <code class="notranslate">env</code> 中配置：</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"MIMO_TTS_API_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>https://token-plan-cn.xiaomimimo.com<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"MIMO_TTS_API_KEY"</span>: <span class="pl-s"><span class="pl-pds">"</span>your-api-key-here<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="notranslate">MIMO_TTS_API_URL</code></td>
+<td>MiMo API 基础 URL</td>
+<td><code class="notranslate">https://token-plan-cn.xiaomimimo.com</code></td>
+</tr>
+<tr>
+<td><code class="notranslate">MIMO_TTS_API_KEY</code></td>
+<td>API 密钥（必填）</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>当前限时免费，可在 <a href="https://platform.xiaomimimo.com/" rel="nofollow">MiMo 控制台</a> 查看用量。</p>
+</blockquote>
+<hr>
+<h2>4. 功能特性</h2>
+<h3>4.1 预置音色合成</h3>
+<p>使用 9 个精品音色，支持中英文：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好世界<span class="pl-pds">"</span></span> --voice <span class="pl-s"><span class="pl-pds">"</span>冰糖<span class="pl-pds">"</span></span></pre></div>
+<h3>4.2 风格控制</h3>
+<p>两种风格标签：</p>
+<ul>
+<li><strong>Style Tags</strong>：<code class="notranslate">(开心 温柔)你好</code> — 放在文本开头</li>
+<li><strong>Fine-grained Tags</strong>：<code class="notranslate">你好[笑]世界</code> — 放在文本任意位置</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好世界<span class="pl-pds">"</span></span> --style <span class="pl-s"><span class="pl-pds">"</span>开心 温柔<span class="pl-pds">"</span></span></pre></div>
+<h3>4.3 声音克隆</h3>
+<p>基于 mp3/wav 音频样本复刻音色：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好世界<span class="pl-pds">"</span></span> --clone /path/to/voice.mp3</pre></div>
+<p><strong>音频要求：</strong></p>
+<ul>
+<li>支持 mp3 和 wav 格式</li>
+<li>Base64 编码后不超过 10 MB</li>
+<li>建议 10-30 秒清晰语音</li>
+</ul>
+<h3>4.4 音色设计</h3>
+<p>通过自然语言描述生成定制音色：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好世界<span class="pl-pds">"</span></span> --voice-desc <span class="pl-s"><span class="pl-pds">"</span>年轻女性，温柔甜美，语速稍慢<span class="pl-pds">"</span></span></pre></div>
+<p><strong>描述维度：</strong></p>
+<ul>
+<li>性别与年龄</li>
+<li>音色/质感（磁性、清亮、沙哑等）</li>
+<li>情绪/语气（温柔、活泼、严肃等）</li>
+<li>语速/节奏</li>
+<li>角色/人设、说话风格、场景描写</li>
+</ul>
+<h3>4.5 音色档案管理</h3>
+<p>保存常用音色，下次直接调用：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 保存音色档案</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --clone voice.mp3 --save-profile 我的声音
+
+<span class="pl-c"><span class="pl-c">#</span> 使用已保存的音色</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --profile 我的声音
+
+<span class="pl-c"><span class="pl-c">#</span> 列出所有档案</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --list-profiles</pre></div>
+<h3>4.6 唱歌模式</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>两只老虎两只老虎跑得快<span class="pl-pds">"</span></span> --singing</pre></div>
+<blockquote>
+<p>唱歌模式标签必须在最开头，歌词建议用中文。</p>
+</blockquote>
+<hr>
+<h2>5. 脚本参数详解</h2>
+<pre class="notranslate"><code class="notranslate">用法: mimo-tts.sh --text "文本" [选项]
+</code></pre>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>必填</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="notranslate">--text TEXT</code></td>
+<td>string</td>
+<td>是</td>
+<td>—</td>
+<td>待合成的文本内容</td>
+</tr>
+<tr>
+<td><code class="notranslate">--voice VOICE</code></td>
+<td>string</td>
+<td>否</td>
+<td><code class="notranslate">mimo_default</code></td>
+<td>预置音色 ID</td>
+</tr>
+<tr>
+<td><code class="notranslate">--style STYLE</code></td>
+<td>string</td>
+<td>否</td>
+<td>—</td>
+<td>风格标签，空格分隔多个</td>
+</tr>
+<tr>
+<td><code class="notranslate">--singing</code></td>
+<td>flag</td>
+<td>否</td>
+<td>false</td>
+<td>启用唱歌模式</td>
+</tr>
+<tr>
+<td><code class="notranslate">--clone FILE</code></td>
+<td>string</td>
+<td>否</td>
+<td>—</td>
+<td>克隆音色的音频文件路径</td>
+</tr>
+<tr>
+<td><code class="notranslate">--voice-desc DESC</code></td>
+<td>string</td>
+<td>否</td>
+<td>—</td>
+<td>音色设计描述文本</td>
+</tr>
+<tr>
+<td><code class="notranslate">--profile NAME</code></td>
+<td>string</td>
+<td>否</td>
+<td>—</td>
+<td>使用已保存的音色档案</td>
+</tr>
+<tr>
+<td><code class="notranslate">--save-profile NAME</code></td>
+<td>string</td>
+<td>否</td>
+<td>—</td>
+<td>将当前 --clone 音频保存为档案</td>
+</tr>
+<tr>
+<td><code class="notranslate">--list-profiles</code></td>
+<td>flag</td>
+<td>否</td>
+<td>false</td>
+<td>列出所有已保存的音色档案</td>
+</tr>
+<tr>
+<td><code class="notranslate">--output PATH</code></td>
+<td>string</td>
+<td>否</td>
+<td>自动生成</td>
+<td>输出文件路径</td>
+</tr>
+<tr>
+<td><code class="notranslate">--model MODEL</code></td>
+<td>string</td>
+<td>否</td>
+<td>自动选择</td>
+<td>强制指定模型</td>
+</tr>
+<tr>
+<td><code class="notranslate">-h, --help</code></td>
+<td>flag</td>
+<td>否</td>
+<td>false</td>
+<td>显示帮助信息</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>模型自动选择逻辑：</strong></p>
+<pre class="notranslate"><code class="notranslate">有 --clone     → mimo-v2.5-tts-voiceclone
+有 --voice-desc → mimo-v2.5-tts-voicedesign
+其他           → mimo-v2.5-tts
+</code></pre>
+<hr>
+<h2>6. 使用示例</h2>
+<h3>基础用法</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 默认音色</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好，世界！<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 指定音色</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --voice <span class="pl-s"><span class="pl-pds">"</span>茉莉<span class="pl-pds">"</span></span></pre></div>
+<h3>风格控制</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 单个风格</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --style <span class="pl-s"><span class="pl-pds">"</span>开心<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 多个风格叠加</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --style <span class="pl-s"><span class="pl-pds">"</span>温柔 甜美 慵懒<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 方言</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好啊<span class="pl-pds">"</span></span> --style <span class="pl-s"><span class="pl-pds">"</span>粤语<span class="pl-pds">"</span></span></pre></div>
+<h3>声音克隆</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 直接克隆</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --clone <span class="pl-k">~</span>/voice.mp3
+
+<span class="pl-c"><span class="pl-c">#</span> 克隆并保存为档案</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --clone <span class="pl-k">~</span>/voice.mp3 --save-profile 小明
+
+<span class="pl-c"><span class="pl-c">#</span> 使用已保存的档案</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --profile 小明</pre></div>
+<h3>音色设计</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 年轻女性</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --voice-desc <span class="pl-s"><span class="pl-pds">"</span>年轻女性，温柔甜美，语速稍慢<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 老年男性</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --voice-desc <span class="pl-s"><span class="pl-pds">"</span>老年男性，声音沙哑苍老，语速缓慢<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 动漫角色</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --voice-desc <span class="pl-s"><span class="pl-pds">"</span>萝莉音，活泼可爱，元气满满<span class="pl-pds">"</span></span></pre></div>
+<h3>组合使用</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 克隆音色 + 风格控制</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --profile 曼波 --style <span class="pl-s"><span class="pl-pds">"</span>开心<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 音色设计 + 方言</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>你好<span class="pl-pds">"</span></span> --voice-desc <span class="pl-s"><span class="pl-pds">"</span>年轻女性<span class="pl-pds">"</span></span> --style <span class="pl-s"><span class="pl-pds">"</span>四川话<span class="pl-pds">"</span></span></pre></div>
+<h3>实战案例：庄子《逍遥游》</h3>
+<p>使用曼波音色 + 深沉醇厚风格朗读古典文学：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">bash ~/.claude/skills/mimo-tts/scripts/mimo-tts.sh   --text "北冥有鱼，其名为鲲。鲲之大，不知其几千里也。化而为鸟，其名为鹏。鹏之背，不知其几千里也；怒而飞，其翼若垂天之云。是鸟也，海运则将徙于南冥。南冥者，天池也。齐谐者，志怪者也。谐之言曰：鹏之徙于南冥也，水击三千里，抟扶摇而上者九万里，去以六月息者也。野马也，尘埃也，生物之以息相吹也。天之苍苍，其正色邪？其远而无所至极邪？其视下也亦若是，则已矣。且夫水之积也不厚，则负大舟也无力。覆杯水于坳堂之上，则芥为之舟，置杯焉则胶，水浅而舟大也。风之积也不厚，则其负大翼也无力。故九万里则风斯在下矣，而后乃今培风；背负青天而莫之夭阏者，而后乃今将图南。蜩与学鸠笑之曰：我决起而飞，枪榆枋，时则不至而控于地而已矣，奚以之九万里而南为？适莽苍者三湌而反，腹犹果然；适百里者宿舂粮；适千里者三月聚粮。之二虫又何知！小知不及大知，小年不及大年。奚以知其然也？朝菌不知晦朔，蟪蛄不知春秋，此小年也。楚之南有冥灵者，以五百岁为春，五百岁为秋；上古有大椿者，以八千岁为春，八千岁为秋。而彭祖乃今以久特闻，众人匹之，不亦悲乎！"   --profile 曼波   --style "深沉 醇厚"</pre></div>
+<p><strong>合成结果：</strong></p>
+<ul>
+<li>音色：曼波（克隆音色）</li>
+<li>风格：深沉 + 醇厚</li>
+<li>文本长度：约 450 字</li>
+<li>输出大小：3.7 MB</li>
+<li>时长：约 2 分钟</li>
+</ul>
+<p><strong>示例音频：</strong> <a href="mimo-tts/examples/%E9%80%8D%E9%81%A5%E6%B8%B8.wav">逍遥游.wav</a></p>
+<blockquote>
+<p>此案例展示了克隆音色档案 + 风格叠加的实际效果。曼波的音色配合深沉醇厚的风格，非常适合朗读古典文学作品。</p>
+</blockquote>
+<hr>
+<h2>7. 预置音色列表</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>音色</th>
+<th>Voice ID</th>
+<th>语言</th>
+<th>性别</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MiMo-默认</td>
+<td><code class="notranslate">mimo_default</code></td>
+<td>—</td>
+<td>—</td>
+<td>系统默认音色</td>
+</tr>
+<tr>
+<td>冰糖</td>
+<td><code class="notranslate">冰糖</code></td>
+<td>中文</td>
+<td>女性</td>
+<td>甜美女声</td>
+</tr>
+<tr>
+<td>茉莉</td>
+<td><code class="notranslate">茉莉</code></td>
+<td>中文</td>
+<td>女性</td>
+<td>清新女声</td>
+</tr>
+<tr>
+<td>苏打</td>
+<td><code class="notranslate">苏打</code></td>
+<td>中文</td>
+<td>男性</td>
+<td>清爽男声</td>
+</tr>
+<tr>
+<td>白桦</td>
+<td><code class="notranslate">白桦</code></td>
+<td>中文</td>
+<td>男性</td>
+<td>沉稳男声</td>
+</tr>
+<tr>
+<td>Mia</td>
+<td><code class="notranslate">Mia</code></td>
+<td>英文</td>
+<td>女性</td>
+<td>English female</td>
+</tr>
+<tr>
+<td>Chloe</td>
+<td><code class="notranslate">Chloe</code></td>
+<td>英文</td>
+<td>女性</td>
+<td>English female</td>
+</tr>
+<tr>
+<td>Milo</td>
+<td><code class="notranslate">Milo</code></td>
+<td>英文</td>
+<td>男性</td>
+<td>English male</td>
+</tr>
+<tr>
+<td>Dean</td>
+<td><code class="notranslate">Dean</code></td>
+<td>英文</td>
+<td>男性</td>
+<td>English male</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>中国集群默认为 <code class="notranslate">冰糖</code>，其他集群默认为 <code class="notranslate">Mia</code>。</p>
+</blockquote>
+<hr>
+<h2>8. 风格控制</h2>
+<h3>8.1 Style Tags（放在文本开头）</h3>
+<p>格式：<code class="notranslate">(风格1 风格2)待合成文本</code></p>
+<p>支持 <code class="notranslate">()</code>、<code class="notranslate">（）</code>、<code class="notranslate">[]</code> 三种括号。</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>类别</th>
+<th>可用标签</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>基础情绪</strong></td>
+<td>开心、悲伤、愤怒、恐惧、惊讶、兴奋、委屈、平静、冷漠</td>
+</tr>
+<tr>
+<td><strong>复合情绪</strong></td>
+<td>怅然、欣慰、无奈、愧疚、释然、嫉妒、厌倦、忐忑、动情</td>
+</tr>
+<tr>
+<td><strong>整体语调</strong></td>
+<td>温柔、高冷、活泼、严肃、慵懒、俏皮、深沉、干练、凌厉</td>
+</tr>
+<tr>
+<td><strong>音色定位</strong></td>
+<td>磁性、醇厚、清亮、空灵、稚嫩、苍老、甜美、沙哑、醇雅</td>
+</tr>
+<tr>
+<td><strong>人设腔调</strong></td>
+<td>夹子音、御姐音、正太音、大叔音、台湾腔</td>
+</tr>
+<tr>
+<td><strong>方言</strong></td>
+<td>东北话、四川话、河南话、粤语</td>
+</tr>
+<tr>
+<td><strong>角色扮演</strong></td>
+<td>孙悟空、林黛玉</td>
+</tr>
+<tr>
+<td><strong>唱歌</strong></td>
+<td>唱歌（必须在最开头，歌词建议用中文）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>8.2 Fine-grained Tags（放在文本任意位置）</h3>
+<p>格式：<code class="notranslate">[标签]</code>，例如 <code class="notranslate">你好[笑]世界[叹气]</code></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>类别</th>
+<th>可用标签</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>语速与节奏</strong></td>
+<td>吸气、深呼吸、叹气、长叹一口气、喘息、屏息</td>
+</tr>
+<tr>
+<td><strong>情绪状态</strong></td>
+<td>紧张、害怕、激动、疲惫、委屈、撒娇、心虚、震惊、不耐烦</td>
+</tr>
+<tr>
+<td><strong>语音特征</strong></td>
+<td>颤抖、变调、破音、鼻音、气声、沙哑</td>
+</tr>
+<tr>
+<td><strong>哭笑表达</strong></td>
+<td>笑、轻笑、大笑、冷笑、抽泣、呜咽、哽咽、嚎啕大哭</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>8.3 自然语言控制</h3>
+<p>通过 <code class="notranslate">role: user</code> 的 <code class="notranslate">content</code> 传入自然语言描述，支持导演模式（角色 + 场景 + 指导三维度）。</p>
+<hr>
+<h2>9. 音色档案管理</h2>
+<h3>9.1 存储位置</h3>
+<pre class="notranslate"><code class="notranslate">~/.claude/skills/mimo-tts/voices/
+├── profiles.json       # 音色档案索引
+├── 曼波.mp3            # 音色样本文件
+└── ...                 # 更多样本
+</code></pre>
+<h3>9.2 profiles.json 格式</h3>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"曼波"</span>: {
+    <span class="pl-ent">"file"</span>: <span class="pl-s"><span class="pl-pds">"</span>曼波.mp3<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"description"</span>: <span class="pl-s"><span class="pl-pds">"</span>曼波音色克隆<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"added"</span>: <span class="pl-s"><span class="pl-pds">"</span>2026-05-24<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<h3>9.3 操作命令</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 列出所有档案</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --list-profiles
+
+<span class="pl-c"><span class="pl-c">#</span> 保存新档案（需要配合 --clone）</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --clone voice.mp3 --save-profile 名称
+
+<span class="pl-c"><span class="pl-c">#</span> 使用档案</span>
+bash <span class="pl-k">~</span>/.claude/skills/mimo-tts/scripts/mimo-tts.sh --text <span class="pl-s"><span class="pl-pds">"</span>文本<span class="pl-pds">"</span></span> --profile 名称</pre></div>
+<hr>
+<h2>10. API 参考</h2>
+<h3>10.1 Endpoint</h3>
+<pre class="notranslate"><code class="notranslate">POST {API_URL}/v1/chat/completions
+</code></pre>
+<p><strong>Headers：</strong></p>
+<pre class="notranslate"><code class="notranslate">Content-Type: application/json
+api-key: {API_KEY}
+</code></pre>
+<h3>10.2 预置音色请求</h3>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"model"</span>: <span class="pl-s"><span class="pl-pds">"</span>mimo-v2.5-tts<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"messages"</span>: [
+    {<span class="pl-ent">"role"</span>: <span class="pl-s"><span class="pl-pds">"</span>user<span class="pl-pds">"</span></span>, <span class="pl-ent">"content"</span>: <span class="pl-s"><span class="pl-pds">"</span>用温柔的语气<span class="pl-pds">"</span></span>},
+    {<span class="pl-ent">"role"</span>: <span class="pl-s"><span class="pl-pds">"</span>assistant<span class="pl-pds">"</span></span>, <span class="pl-ent">"content"</span>: <span class="pl-s"><span class="pl-pds">"</span>(温柔)你好，世界！<span class="pl-pds">"</span></span>}
+  ],
+  <span class="pl-ent">"audio"</span>: {
+    <span class="pl-ent">"format"</span>: <span class="pl-s"><span class="pl-pds">"</span>wav<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"voice"</span>: <span class="pl-s"><span class="pl-pds">"</span>冰糖<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<h3>10.3 声音克隆请求</h3>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"model"</span>: <span class="pl-s"><span class="pl-pds">"</span>mimo-v2.5-tts-voiceclone<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"messages"</span>: [
+    {<span class="pl-ent">"role"</span>: <span class="pl-s"><span class="pl-pds">"</span>user<span class="pl-pds">"</span></span>, <span class="pl-ent">"content"</span>: <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>},
+    {<span class="pl-ent">"role"</span>: <span class="pl-s"><span class="pl-pds">"</span>assistant<span class="pl-pds">"</span></span>, <span class="pl-ent">"content"</span>: <span class="pl-s"><span class="pl-pds">"</span>你好，世界！<span class="pl-pds">"</span></span>}
+  ],
+  <span class="pl-ent">"audio"</span>: {
+    <span class="pl-ent">"format"</span>: <span class="pl-s"><span class="pl-pds">"</span>wav<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"voice"</span>: <span class="pl-s"><span class="pl-pds">"</span>data:audio/mpeg;base64,&lt;BASE64_AUDIO&gt;<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<p><strong>音频样本要求：</strong></p>
+<ul>
+<li>支持 mp3 和 wav 格式</li>
+<li>Base64 编码后不超过 10 MB</li>
+<li>必须携带前缀：<code class="notranslate">data:{MIME_TYPE};base64,$BASE64_AUDIO</code></li>
+<li>MIME 类型：<code class="notranslate">audio/mpeg</code>（mp3）、<code class="notranslate">audio/wav</code>（wav）</li>
+</ul>
+<h3>10.4 音色设计请求</h3>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"model"</span>: <span class="pl-s"><span class="pl-pds">"</span>mimo-v2.5-tts-voicedesign<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"messages"</span>: [
+    {<span class="pl-ent">"role"</span>: <span class="pl-s"><span class="pl-pds">"</span>user<span class="pl-pds">"</span></span>, <span class="pl-ent">"content"</span>: <span class="pl-s"><span class="pl-pds">"</span>年轻女性，温柔甜美，语速稍慢<span class="pl-pds">"</span></span>},
+    {<span class="pl-ent">"role"</span>: <span class="pl-s"><span class="pl-pds">"</span>assistant<span class="pl-pds">"</span></span>, <span class="pl-ent">"content"</span>: <span class="pl-s"><span class="pl-pds">"</span>你好，世界！<span class="pl-pds">"</span></span>}
+  ],
+  <span class="pl-ent">"audio"</span>: {
+    <span class="pl-ent">"format"</span>: <span class="pl-s"><span class="pl-pds">"</span>wav<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<h3>10.5 响应格式</h3>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"model"</span>: <span class="pl-s"><span class="pl-pds">"</span>mimo-v2.5-tts<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"choices"</span>: [
+    {
+      <span class="pl-ent">"message"</span>: {
+        <span class="pl-ent">"audio"</span>: {
+          <span class="pl-ent">"format"</span>: <span class="pl-s"><span class="pl-pds">"</span>wav<span class="pl-pds">"</span></span>,
+          <span class="pl-ent">"data"</span>: <span class="pl-s"><span class="pl-pds">"</span>&lt;base64-encoded-wav&gt;<span class="pl-pds">"</span></span>
+        }
+      }
+    }
+  ]
+}</pre></div>
+<hr>
+<h2>11. 错误处理</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>状态码</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>401</strong></td>
+<td>API Key 无效或缺失</td>
+<td>检查 <code class="notranslate">MIMO_TTS_API_KEY</code> 配置</td>
+</tr>
+<tr>
+<td><strong>400</strong></td>
+<td>请求参数错误</td>
+<td>检查文本内容、音色 ID、模型选择</td>
+</tr>
+<tr>
+<td><strong>429</strong></td>
+<td>请求频率超限</td>
+<td>等待后重试</td>
+</tr>
+<tr>
+<td><strong>404</strong></td>
+<td>API 端点不存在</td>
+<td>检查 <code class="notranslate">MIMO_TTS_API_URL</code> 配置</td>
+</tr>
+<tr>
+<td><strong>超时</strong></td>
+<td>网络问题或文本过长</td>
+<td>检查网络连接，缩短文本</td>
+</tr>
+<tr>
+<td><strong>无响应</strong></td>
+<td>网络不可达</td>
+<td>检查 API_URL 连通性</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>12. 常见问题</h2>
+<h3>Q: 音色档案保存在哪里？</h3>
+<p>A: 保存在 <code class="notranslate">~/.claude/skills/mimo-tts/voices/</code> 目录，包含音频文件和 <code class="notranslate">profiles.json</code> 索引。</p>
+<h3>Q: 声音克隆的音频有什么要求？</h3>
+<p>A: 支持 mp3 和 wav 格式，Base64 编码后不超过 10 MB。建议使用 10-30 秒清晰、无背景噪音的语音样本。</p>
+<h3>Q: 可以同时使用风格控制和声音克隆吗？</h3>
+<p>A: 可以。风格标签会应用到克隆的音色上。</p>
+<h3>Q: 唱歌模式有什么限制？</h3>
+<p>A: 唱歌标签 <code class="notranslate">(唱歌)</code> 必须放在文本最开头，歌词建议用中文。唱歌模式与风格控制互斥。</p>
+<h3>Q: 音色设计的描述有什么建议？</h3>
+<p>A: 1-4 句即可，从性别、年龄、音色质感、情绪语气、语速节奏等维度描述。避免矛盾特征和音质效果词（混响、回声等）。</p>
+<h3>Q: 输出音频的格式是什么？</h3>
+<p>A: 24kHz PCM16LE 单声道 WAV 文件。</p>
+<hr>
+<h2>附录：触发条件</h2>
+<p>当用户输入以下关键词时自动触发：</p>
+<ul>
+<li>语音合成 / 文字转语音 / TTS / tts</li>
+<li>朗读 / 读出来 / 合成语音</li>
+<li>克隆音色 / 声音克隆 / 用XX的声音读</li>
+<li>任何需要将文本转为语音的请求</li>
+</ul></div>
+<div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://ivanlee99.github.io/">Youngs羊示</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("11/25/2024"!=""){
+    var startSite=new Date("11/25/2024");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","IVANLEE99/IVANLEE99.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
