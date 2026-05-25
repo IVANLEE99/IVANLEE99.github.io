@@ -12,11 +12,11 @@
     </script>
 <meta name="description" content="## 简介
 
-Playwright MCP Server 是 Anthropic 官方提供的浏览器自动化 MCP 服务器，基于 Playwright（支持 Chromium、Firefox、WebKit），让 Claude Code 可以直接操控浏览器——导航网页、截图、点击、填表、执行 JavaScript 等。">
+Playwright MCP Server 是基于 Playwright（支持 Chromium、Firefox、WebKit）的浏览器自动化 MCP 服务器，让 Claude Code 可以直接操控浏览器——导航网页、截图、点击、填表、执行 JavaScript 等。">
 <meta property="og:title" content="Playwright MCP Server 配置指南">
 <meta property="og:description" content="## 简介
 
-Playwright MCP Server 是 Anthropic 官方提供的浏览器自动化 MCP 服务器，基于 Playwright（支持 Chromium、Firefox、WebKit），让 Claude Code 可以直接操控浏览器——导航网页、截图、点击、填表、执行 JavaScript 等。">
+Playwright MCP Server 是基于 Playwright（支持 Chromium、Firefox、WebKit）的浏览器自动化 MCP 服务器，让 Claude Code 可以直接操控浏览器——导航网页、截图、点击、填表、执行 JavaScript 等。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://ivanlee99.github.io//post/47.html">
 <meta property="og:image" content="">
@@ -88,7 +88,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h2>简介</h2>
-<p>Playwright MCP Server 是 Anthropic 官方提供的浏览器自动化 MCP 服务器，基于 Playwright（支持 Chromium、Firefox、WebKit），让 Claude Code 可以直接操控浏览器——导航网页、截图、点击、填表、执行 JavaScript 等。</p>
+<p>Playwright MCP Server 是基于 Playwright（支持 Chromium、Firefox、WebKit）的浏览器自动化 MCP 服务器，让 Claude Code 可以直接操控浏览器——导航网页、截图、点击、填表、执行 JavaScript 等。npm 包为 <code class="notranslate">@playwright/mcp</code>，由 Microsoft 维护。</p>
 <h2>前置条件</h2>
 <ul>
 <li>Node.js (v18+) 和 npx</li>
@@ -142,7 +142,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
       <span class="pl-ent">"command"</span>: <span class="pl-s"><span class="pl-pds">"</span>npx<span class="pl-pds">"</span></span>,
       <span class="pl-ent">"args"</span>: [
         <span class="pl-s"><span class="pl-pds">"</span>-y<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>@anthropic-ai/mcp-server-playwright<span class="pl-pds">"</span></span>
+        <span class="pl-s"><span class="pl-pds">"</span>@playwright/mcp<span class="pl-pds">"</span></span>
       ]
     }
   }
@@ -155,7 +155,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
       <span class="pl-ent">"command"</span>: <span class="pl-s"><span class="pl-pds">"</span>npx<span class="pl-pds">"</span></span>,
       <span class="pl-ent">"args"</span>: [
         <span class="pl-s"><span class="pl-pds">"</span>-y<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>@anthropic-ai/mcp-server-playwright<span class="pl-pds">"</span></span>
+        <span class="pl-s"><span class="pl-pds">"</span>@playwright/mcp<span class="pl-pds">"</span></span>
       ]
     }
   }
@@ -189,7 +189,7 @@ npx playwright install webkit</pre></div>
 </ul>
 <h2>相关资源</h2>
 <ul>
-<li><a href="https://github.com/anthropics/mcp-server-playwright">Playwright MCP Server 源码</a></li>
+<li><a href="https://github.com/microsoft/playwright-mcp">Playwright MCP Server 源码</a></li>
 <li><a href="https://playwright.dev/" rel="nofollow">Playwright 官方文档</a></li>
 <li><a href="https://modelcontextprotocol.io" rel="nofollow">MCP 协议</a></li>
 </ul></div>
