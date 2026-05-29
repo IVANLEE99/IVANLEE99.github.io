@@ -1,5 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Thu, 28 May 2026 10:15:49 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>Chrome DevTools MCP Server 配置指南</title><link>https://ivanlee99.github.io//post/62.html</link><description>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Youngs羊示</title><link>https://ivanlee99.github.io/</link><description>对酒当歌，人生几何？譬如朝露，去日苦多。哀吾生之须臾，羡长江之无穷。吾尝终日而思矣，不如须臾之所学也。</description><copyright>Youngs羊示</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/18308725?v=4</url><title>avatar</title><link>https://ivanlee99.github.io/</link></image><lastBuildDate>Fri, 29 May 2026 01:58:48 +0000</lastBuildDate><managingEditor>Youngs羊示</managingEditor><ttl>60</ttl><webMaster>Youngs羊示</webMaster><item><title>TTS → ASR → 字幕 精确对齐工作流</title><link>https://ivanlee99.github.io//post/63.html</link><description>
+&gt; AI News Factory 字幕同步方案详解
+
+---
+
+## 一、为什么需要精确对齐？
+
+### 1.1 问题背景
+
+制作短视频时，字幕必须与配音精确同步。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/63.html</guid><pubDate>Fri, 29 May 2026 01:58:12 +0000</pubDate></item><item><title>Chrome DevTools MCP Server 配置指南</title><link>https://ivanlee99.github.io//post/62.html</link><description>
 ## 简介
 
 Chrome DevTools MCP Server（`chrome-devtools-mcp`）是 Google Chrome 团队官方维护的 MCP 服务器，让 Claude Code、Cursor、Copilot 等 AI 编程助手直接操控和检查实时 Chrome 浏览器。</description><guid isPermaLink="true">https://ivanlee99.github.io//post/62.html</guid><pubDate>Thu, 28 May 2026 10:15:19 +0000</pubDate></item><item><title>MiMo 语音合成 Skill 详解</title><link>https://ivanlee99.github.io//post/61.html</link><description>
