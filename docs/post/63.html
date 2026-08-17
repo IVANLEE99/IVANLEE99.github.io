@@ -35,7 +35,7 @@
 <meta property="og:url" content="https://ivanlee99.github.io//post/63.html">
 <meta property="og:image" content="">
 <title>TTS → ASR → 字幕 精确对齐工作流</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -143,10 +143,11 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>开源免费：<code class="notranslate">pip install funasr</code></li>
 </ul>
 <p><strong>FunASR 输出格式</strong>：</p>
-<div class="highlight highlight-source-json"><pre class="notranslate">{
-  <span class="pl-ent">"text"</span>: <span class="pl-s"><span class="pl-pds">"</span>高 老 夫 四 点 八 ...<span class="pl-pds">"</span></span>,
-  <span class="pl-ent">"timestamp"</span>: [[<span class="pl-c1">190</span>,<span class="pl-c1">390</span>], [<span class="pl-c1">390</span>,<span class="pl-c1">510</span>], <span class="pl-ii">...</span>]
-}</pre></div>
+<pre lang="json" class="notranslate"><code class="notranslate">{
+  "text": "高 老 夫 四 点 八 ...",
+  "timestamp": [[190,390], [390,510], ...]
+}
+</code></pre>
 <p>每个 token（可能包含多个字符）有精确的起止时间 ms。</p>
 <h3>2.3 字符级展开</h3>
 <p>将 FunASR 的多字符 token 展开为单字符列表，每个字符共享时间戳：</p>
@@ -272,33 +273,37 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <hr>
 <h2>四、关键代码</h2>
 <h3>4.1 语义拆句</h3>
-<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">def</span> <span class="pl-en">semantic_split</span>(<span class="pl-s1">text</span>: <span class="pl-smi">str</span>, <span class="pl-s1">min_chars</span><span class="pl-c1">=</span><span class="pl-c1">6</span>, <span class="pl-s1">max_chars</span><span class="pl-c1">=</span><span class="pl-c1">15</span>) <span class="pl-c1">-&gt;</span> <span class="pl-smi">list</span>:
-    <span class="pl-s">"""按语义拆成 8-15 字小句，保护专有名词"""</span>
-    <span class="pl-c"># 1. 按句号/叹号/问号拆成大句</span>
-    <span class="pl-c"># 2. 按逗号/顿号/破折号拆分</span>
-    <span class="pl-c"># 3. 合并过短句，拆分过长句</span>
-    <span class="pl-c"># 4. 保护英文专有名词不被拆断</span></pre></div>
+<pre lang="python" class="notranslate"><code class="notranslate">def semantic_split(text: str, min_chars=6, max_chars=15) -&gt; list:
+    """按语义拆成 8-15 字小句，保护专有名词"""
+    # 1. 按句号/叹号/问号拆成大句
+    # 2. 按逗号/顿号/破折号拆分
+    # 3. 合并过短句，拆分过长句
+    # 4. 保护英文专有名词不被拆断
+</code></pre>
 <h3>4.2 FunASR 提取</h3>
-<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">from</span> <span class="pl-s1">funasr</span> <span class="pl-k">import</span> <span class="pl-v">AutoModel</span>
+<pre lang="python" class="notranslate"><code class="notranslate">from funasr import AutoModel
 
-<span class="pl-s1">model</span> <span class="pl-c1">=</span> <span class="pl-en">AutoModel</span>(<span class="pl-s1">model</span><span class="pl-c1">=</span><span class="pl-s">"paraformer-zh"</span>)
-<span class="pl-s1">result</span> <span class="pl-c1">=</span> <span class="pl-s1">model</span>.<span class="pl-c1">generate</span>(<span class="pl-s1">input</span><span class="pl-c1">=</span><span class="pl-s">"scene1.wav"</span>, <span class="pl-s1">batch_size_s</span><span class="pl-c1">=</span><span class="pl-c1">300</span>)
-<span class="pl-c"># result[0]["text"]: "高 老 夫 四 点 八 ..."</span>
-<span class="pl-c"># result[0]["timestamp"]: [[190,390], [390,510], ...]</span></pre></div>
+model = AutoModel(model="paraformer-zh")
+result = model.generate(input="scene1.wav", batch_size_s=300)
+# result[0]["text"]: "高 老 夫 四 点 八 ..."
+# result[0]["timestamp"]: [[190,390], [390,510], ...]
+</code></pre>
 <h3>4.3 逐句对齐</h3>
-<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">def</span> <span class="pl-en">align_single_sentence</span>(<span class="pl-s1">sentence</span>, <span class="pl-s1">expanded</span>, <span class="pl-s1">search_start</span>):
-    <span class="pl-s">"""在字符序列中搜索小句的最佳匹配位置"""</span>
-    <span class="pl-c"># 滑动窗口：从 search_start 开始</span>
-    <span class="pl-c"># 允许跳过 ≤5 个不匹配字符（处理音译品牌名）</span>
-    <span class="pl-c"># 匹配分数 &gt; 0.25 且 &gt; 25% 字符匹配即视为成功</span>
-    <span class="pl-c"># 匹配分数 ≥ 0.7 提前终止搜索</span></pre></div>
+<pre lang="python" class="notranslate"><code class="notranslate">def align_single_sentence(sentence, expanded, search_start):
+    """在字符序列中搜索小句的最佳匹配位置"""
+    # 滑动窗口：从 search_start 开始
+    # 允许跳过 ≤5 个不匹配字符（处理音译品牌名）
+    # 匹配分数 &gt; 0.25 且 &gt; 25% 字符匹配即视为成功
+    # 匹配分数 ≥ 0.7 提前终止搜索
+</code></pre>
 <h3>4.4 无间隙后处理</h3>
-<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">def</span> <span class="pl-en">ensure_no_gaps</span>(<span class="pl-s1">captions</span>, <span class="pl-s1">scene_duration_ms</span>, <span class="pl-s1">max_gap_ms</span><span class="pl-c1">=</span><span class="pl-c1">500</span>):
-    <span class="pl-s">"""如果相邻字幕间隙 &gt; 500ms，将前一句 endMs 延伸"""</span>
-    <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">1</span>, <span class="pl-en">len</span>(<span class="pl-s1">captions</span>)):
-        <span class="pl-s1">gap</span> <span class="pl-c1">=</span> <span class="pl-s1">captions</span>[<span class="pl-s1">i</span>][<span class="pl-s">"startMs"</span>] <span class="pl-c1">-</span> <span class="pl-s1">captions</span>[<span class="pl-s1">i</span><span class="pl-c1">-</span><span class="pl-c1">1</span>][<span class="pl-s">"endMs"</span>]
-        <span class="pl-k">if</span> <span class="pl-s1">gap</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">max_gap_ms</span>:
-            <span class="pl-s1">captions</span>[<span class="pl-s1">i</span><span class="pl-c1">-</span><span class="pl-c1">1</span>][<span class="pl-s">"endMs"</span>] <span class="pl-c1">=</span> <span class="pl-s1">captions</span>[<span class="pl-s1">i</span>][<span class="pl-s">"startMs"</span>] <span class="pl-c1">-</span> <span class="pl-c1">50</span></pre></div>
+<pre lang="python" class="notranslate"><code class="notranslate">def ensure_no_gaps(captions, scene_duration_ms, max_gap_ms=500):
+    """如果相邻字幕间隙 &gt; 500ms，将前一句 endMs 延伸"""
+    for i in range(1, len(captions)):
+        gap = captions[i]["startMs"] - captions[i-1]["endMs"]
+        if gap &gt; max_gap_ms:
+            captions[i-1]["endMs"] = captions[i]["startMs"] - 50
+</code></pre>
 <hr>
 <h2>五、实际效果对比</h2>
 <h3>5.1 2026-05-29 视频数据</h3>
@@ -349,12 +354,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </code></pre>
 <hr>
 <h2>六、依赖安装</h2>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> FunASR（必须）</span>
+<pre lang="bash" class="notranslate"><code class="notranslate"># FunASR（必须）
 pip install funasr
 
-<span class="pl-c"><span class="pl-c">#</span> 首次运行会自动下载模型（~1GB）</span>
-<span class="pl-c"><span class="pl-c">#</span> 模型: paraformer-zh（阿里达摩院）</span>
-<span class="pl-c"><span class="pl-c">#</span> 缓存: ~/.cache/modelscope/hub/models/</span></pre></div>
+# 首次运行会自动下载模型（~1GB）
+# 模型: paraformer-zh（阿里达摩院）
+# 缓存: ~/.cache/modelscope/hub/models/
+</code></pre>
 <hr>
 <h2>七、常见问题</h2>
 <h3>Q1: FunASR vs faster-whisper，选哪个？</h3>
