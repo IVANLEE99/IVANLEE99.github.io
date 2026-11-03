@@ -1,0 +1,2891 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekBSZ.js'></script>
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="> **一句话：** CC Switch 是一个跨平台桌面应用，把 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode 等十多个 AI 编程工具的**供应商配置、MCP、Skills、提示词、会话和用量**收进一个界面——换 API 供应商不用再手改 JSON / TOML / YAML。">
+<meta property="og:title" content="CC Switch 新手上手文档（第 1 篇：第 0–12 章）">
+<meta property="og:description" content="> **一句话：** CC Switch 是一个跨平台桌面应用，把 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode 等十多个 AI 编程工具的**供应商配置、MCP、Skills、提示词、会话和用量**收进一个界面——换 API 供应商不用再手改 JSON / TOML / YAML。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ivanlee99.github.io//post/66.html">
+<meta property="og:image" content="">
+<title>CC Switch 新手上手文档（第 1 篇：第 0–12 章）</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">CC Switch 新手上手文档（第 1 篇：第 0–12 章）</h1>
+<div class="title-right">
+    <a href="https://ivanlee99.github.io/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/IVANLEE99/IVANLEE99.github.io/issues/66" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><blockquote>
+<p><strong>一句话：</strong> CC Switch 是一个跨平台桌面应用，把 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode 等十多个 AI 编程工具的<strong>供应商配置、MCP、Skills、提示词、会话和用量</strong>收进一个界面——换 API 供应商不用再手改 JSON / TOML / YAML。</p>
+</blockquote>
+<hr>
+<h2>关于本文</h2>
+<ul>
+<li><strong>适用对象</strong>：第一次接触 CC Switch，想给自己的 AI 编程工具换供应商、做多账号管理、或想统一管理 MCP / Skills / 提示词的人。</li>
+<li><strong>资料依据</strong>：官方中文 README（<code class="notranslate">README_ZH.md</code>）、官方中文用户手册（<code class="notranslate">docs/user-manual/zh/</code> 全部章节）、官方使用攻略（<code class="notranslate">docs/guides/</code>）、官方更新日志（<code class="notranslate">CHANGELOG.md</code>）、Kimi Code 接入说明。</li>
+<li><strong>版本基准</strong>：<strong>v4.0.25</strong>（2026-11-02 发布）。CC Switch 迭代很快，界面文案、菜单位置、默认参数都可能变化；遇到对不上时，以应用内实际显示和最新 Release Notes 为准。</li>
+<li><strong>一处已知的版本差异</strong>：README 已列出 <strong>12 个工具</strong>（新增 Kimi Code、Oh My Pi），但用户手册 1.1 / 1.3 仍按旧的 <strong>10 个工具</strong> 编写。本文以 README 为准，涉及手册旧文案的地方会注明。</li>
+<li><strong>安全提醒</strong>：本文涉及的所有「用订阅当供应商」「OAuth 反向代理」功能，都可能违反厂商服务条款、导致账号被限制。文中有专门的<strong>风险提示</strong>章节，请务必先读再做。</li>
+</ul>
+<p><strong>官方资料：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">资料</th>
+<th align="left">地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">官网（唯一官方站点）</td>
+<td align="left"><a href="https://ccswitch.io" rel="nofollow">https://ccswitch.io</a></td>
+</tr>
+<tr>
+<td align="left">下载页</td>
+<td align="left"><a href="https://ccswitch.io/download" rel="nofollow">https://ccswitch.io/download</a></td>
+</tr>
+<tr>
+<td align="left">GitHub 仓库</td>
+<td align="left"><a href="https://github.com/farion1231/cc-switch">https://github.com/farion1231/cc-switch</a></td>
+</tr>
+<tr>
+<td align="left">Releases</td>
+<td align="left"><a href="https://github.com/farion1231/cc-switch/releases">https://github.com/farion1231/cc-switch/releases</a></td>
+</tr>
+<tr>
+<td align="left">中文 README</td>
+<td align="left"><a href="https://github.com/farion1231/cc-switch/blob/main/README_ZH.md">https://github.com/farion1231/cc-switch/blob/main/README_ZH.md</a></td>
+</tr>
+<tr>
+<td align="left">中文用户手册</td>
+<td align="left"><a href="https://github.com/farion1231/cc-switch/tree/main/docs/user-manual/zh">https://github.com/farion1231/cc-switch/tree/main/docs/user-manual/zh</a></td>
+</tr>
+<tr>
+<td align="left">更新日志</td>
+<td align="left"><a href="https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md">https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md</a></td>
+</tr>
+<tr>
+<td align="left">深链生成器</td>
+<td align="left"><a href="https://ccswitch.io/deplink.html" rel="nofollow">https://ccswitch.io/deplink.html</a></td>
+</tr>
+<tr>
+<td align="left">Issues</td>
+<td align="left"><a href="https://github.com/farion1231/cc-switch/issues">https://github.com/farion1231/cc-switch/issues</a></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>只从 ccswitch.io、GitHub Releases 或源码仓库获取 CC Switch。</strong> 任何要求付费、充值或索取登录凭据的「CC Switch」网站或客户端都不是官方渠道。</p>
+</blockquote>
+<hr>
+<h2>目录</h2>
+<ul>
+<li><a href="#0-10-%E5%88%86%E9%92%9F%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84">0. 10 分钟最短路径</a></li>
+<li><a href="#1-cc-switch-%E6%98%AF%E4%BB%80%E4%B9%88">1. CC Switch 是什么</a></li>
+<li><a href="#2-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">2. 核心概念</a></li>
+<li><a href="#3-%E6%94%AF%E6%8C%81%E7%9A%84%E5%8D%81%E4%BA%8C%E4%B8%AA%E5%B7%A5%E5%85%B7">3. 支持的十二个工具</a></li>
+<li><a href="#4-%E5%AE%89%E8%A3%85">4. 安装</a></li>
+<li><a href="#5-%E9%A6%96%E6%AC%A1%E5%90%AF%E5%8A%A8%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88">5. 首次启动会发生什么</a></li>
+<li><a href="#6-%E7%95%8C%E9%9D%A2%E5%AF%BC%E8%A7%88">6. 界面导览</a></li>
+<li><a href="#7-%E6%B7%BB%E5%8A%A0%E4%BE%9B%E5%BA%94%E5%95%86">7. 添加供应商</a></li>
+<li><a href="#8-%E5%88%87%E6%8D%A2%E4%BE%9B%E5%BA%94%E5%95%86">8. 切换供应商</a></li>
+<li><a href="#9-%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE">9. 验证配置</a></li>
+<li><a href="#10-%E6%9C%AC%E5%9C%B0%E8%B7%AF%E7%94%B1%E8%AE%A9-claude-code-%E7%94%A8-gpt%E8%AE%A9-codex-%E7%94%A8-claude">10. 本地路由：让 Claude Code 用 GPT、让 Codex 用 Claude</a></li>
+<li><a href="#11-%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E4%B8%8E%E7%86%94%E6%96%AD">11. 故障转移与熔断</a></li>
+<li><a href="#12-%E8%81%9A%E5%90%88%E6%A8%A1%E5%BC%8F">12. 聚合模式</a></li>
+<li><a href="#13-claude-desktop-%E4%B8%93%E9%A1%B9">13. Claude Desktop 专项</a></li>
+<li><a href="#14-claude-%E5%AE%98%E6%96%B9%E5%A4%9A%E8%B4%A6%E5%8F%B7">14. Claude 官方多账号</a></li>
+<li><a href="#15-%E6%8E%88%E6%9D%83%E4%B8%AD%E5%BF%83%E4%B8%8E%E8%AE%A2%E9%98%85%E5%BD%93%E4%BE%9B%E5%BA%94%E5%95%86">15. 授权中心与订阅当供应商</a></li>
+<li><a href="#16-mcp%E6%8F%90%E7%A4%BA%E8%AF%8Dskills%E4%BC%9A%E8%AF%9D%E5%B7%A5%E4%BD%9C%E5%8C%BA">16. MCP、提示词、Skills、会话、工作区</a></li>
+<li><a href="#17-%E7%94%A8%E9%87%8F%E6%88%90%E6%9C%AC%E4%B8%8E%E9%A2%9D%E5%BA%A6">17. 用量、成本与额度</a></li>
+<li><a href="#18-%E9%A1%B9%E7%9B%AE%E6%95%B4%E5%A5%97%E9%85%8D%E7%BD%AE%E4%B8%80%E9%94%AE%E5%88%87%E6%8D%A2">18. 项目：整套配置一键切换</a></li>
+<li><a href="#19-%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%BA%91%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">19. 数据、备份、云同步与配置文件</a></li>
+<li><a href="#20-%E6%B7%B1%E5%BA%A6%E9%93%BE%E6%8E%A5%E4%B8%8E%E9%85%8D%E7%BD%AE%E5%88%86%E4%BA%AB">20. 深度链接与配置分享</a></li>
+<li><a href="#21-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%86%B2%E7%AA%81">21. 环境变量冲突</a></li>
+<li><a href="#22-%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%B8%8E%E5%8D%87%E7%BA%A7">22. 工具安装与升级</a></li>
+<li><a href="#23-%E8%AE%BE%E7%BD%AE%E9%A1%B9%E5%85%A8%E8%A1%A8">23. 设置项全表</a></li>
+<li><a href="#24-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-faq">24. 常见问题 FAQ</a></li>
+<li><a href="#25-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E6%89%8B%E5%86%8C">25. 故障排查手册</a></li>
+<li><a href="#26-%E5%8D%B8%E8%BD%BD">26. 卸载</a></li>
+<li><a href="#27-%E6%9C%AF%E8%AF%AD%E8%A1%A8">27. 术语表</a></li>
+<li><a href="#%E9%99%84%E5%BD%95-a%E5%90%84%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%9F%E6%9F%A5">附录 A：各工具配置文件速查</a></li>
+<li><a href="#%E9%99%84%E5%BD%95-b%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5">附录 B：默认参数速查</a></li>
+<li><a href="#%E9%99%84%E5%BD%95-c%E4%B8%8A%E7%BA%BF%E5%89%8D%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95">附录 C：上线前检查清单</a></li>
+</ul>
+<hr>
+<h2>0. 10 分钟最短路径</h2>
+<p>如果你不想先读概念，照着做即可。</p>
+<h3>场景 A：我只有一个 API Key，想给 Claude Code 换上</h3>
+<ol>
+<li>安装 CC Switch（见 <a href="#4-%E5%AE%89%E8%A3%85">4. 安装</a>）。</li>
+<li>打开应用，左侧栏选中 <strong>Claude Code</strong>。</li>
+<li>点页面右上角的 <strong>＋（添加供应商）</strong>。</li>
+<li>在预设列表里搜厂商名（如 <code class="notranslate">deepseek</code>、<code class="notranslate">kimi</code>、<code class="notranslate">智谱</code>、<code class="notranslate">openrouter</code>），点它。</li>
+<li>填入 <strong>API Key</strong>，点页脚 <strong>添加</strong>。</li>
+<li>回到供应商列表，点新卡片的 <strong>切换</strong>。</li>
+<li><strong>Claude Code 无需重启</strong>，新开一个 <code class="notranslate">claude</code> 会话即可。</li>
+</ol>
+<h3>场景 B：我想在 Codex 里用别家的模型</h3>
+<ol>
+<li>左侧栏选中 <strong>Codex</strong> → <strong>＋ 添加供应商</strong>。</li>
+<li>选预设（如 Kimi、DeepSeek、智谱 GLM），填 Key，添加。</li>
+<li>点卡片的 <strong>切换</strong>。</li>
+<li><strong>关闭并重新打开终端</strong>，再运行 <code class="notranslate">codex</code>。</li>
+</ol>
+<blockquote>
+<p>如果预设卡片带 <strong>「需要路由」</strong> 徽章，说明上游协议和 Codex 不一致，要先按 <a href="#10-%E6%9C%AC%E5%9C%B0%E8%B7%AF%E7%94%B1%E8%AE%A9-claude-code-%E7%94%A8-gpt%E8%AE%A9-codex-%E7%94%A8-claude">10. 本地路由</a> 开启路由。</p>
+</blockquote>
+<h3>场景 C：我想让 Claude Code 用 GPT</h3>
+<p>→ 走 <strong>本地路由 + Codex OAuth</strong> 或 <strong>本地路由 + Responses 网关</strong>，见 <a href="#10-%E6%9C%AC%E5%9C%B0%E8%B7%AF%E7%94%B1%E8%AE%A9-claude-code-%E7%94%A8-gpt%E8%AE%A9-codex-%E7%94%A8-claude">10. 本地路由</a>。</p>
+<h3>最短验收</h3>
+<ol>
+<li>卡片显示 <strong>「使用中」</strong>；</li>
+<li>重开对应工具，随便问一句能正常回复；</li>
+<li>侧栏 <strong>用量统计</strong> 里能看到这次请求（不开路由也能从会话记录统计到）。</li>
+</ol>
+<p>三条都成立，第一步就完成了。</p>
+<hr>
+<h2>1. CC Switch 是什么</h2>
+<h3>1.1 它解决的问题</h3>
+<p>Claude Code、Codex、Gemini CLI 等工具各有各的配置格式：JSON、TOML、YAML、<code class="notranslate">.env</code>。换一个 API 供应商，就得手动改配置文件；MCP、Skills 和提示词还要在每个工具里分别维护。</p>
+<p>具体痛点：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">痛点</th>
+<th align="left">表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>多供应商切换麻烦</strong></td>
+<td align="left">官方、中转站、编程套餐来回换，每次都要改 JSON</td>
+</tr>
+<tr>
+<td align="left"><strong>配置分散</strong></td>
+<td align="left">每个工具一套格式，改错一个逗号整个工具起不来</td>
+</tr>
+<tr>
+<td align="left"><strong>订阅只能在一处用</strong></td>
+<td align="left">买了 ChatGPT 订阅，却只能在 Codex 里用</td>
+</tr>
+<tr>
+<td align="left"><strong>无法监控用量</strong></td>
+<td align="left">不知道调用了多少次、花了多少钱</td>
+</tr>
+<tr>
+<td align="left"><strong>服务不稳定</strong></td>
+<td align="left">单一供应商挂了，工作流直接中断</td>
+</tr>
+<tr>
+<td align="left"><strong>扩展难管理</strong></td>
+<td align="left">MCP、Skills、提示词在每个工具里重复配置</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>CC Switch 把这些收进<strong>一个桌面应用</strong>：</p>
+<ul>
+<li><strong>一键切换供应商</strong>：只替换地址、Key、模型等连接信息，插件、Hook、MCP、注释原样保留；</li>
+<li><strong>90+ 供应商预设</strong>：选预设、填 Key 即可，也能自定义；</li>
+<li><strong>三种连接模式</strong>：直连 / 路由 / 聚合；</li>
+<li><strong>统一管理扩展</strong>：MCP、Skills、提示词按工具勾选同步；</li>
+<li><strong>会话可读</strong>：把各工具的会话记录整理成阅读页；</li>
+<li><strong>用量与额度</strong>：不开路由也能统计 Token 和花费。</li>
+</ul>
+<h3>1.2 它的技术形态</h3>
+<ul>
+<li><strong>桌面应用</strong>，基于 <strong>Tauri 2 + Rust</strong>，前端 <strong>React 18 + TypeScript</strong>；</li>
+<li>数据存在本地 <strong>SQLite</strong>（<code class="notranslate">cc-switch.db</code>）+ 一个 JSON 设置文件；</li>
+<li>支持 <strong>Windows / macOS / Linux</strong>；</li>
+<li>有系统托盘，可快速切换供应商；</li>
+<li><strong>没有官方命令行版本</strong>（服务器场景见 <a href="#15-%E5%AE%83%E4%B8%8D%E6%98%AF%E4%BB%80%E4%B9%88">1.5</a>）。</li>
+</ul>
+<h3>1.3 三种连接模式</h3>
+<p>这是理解 CC Switch 的关键。Claude Code、Codex、Gemini CLI、Grok Build 的页面顶部都有 <strong>「直连 / 路由 / 聚合」</strong> 标签（聚合只有 Claude Code 和 Codex 有）。</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">请求怎么走</th>
+<th align="left">能做什么</th>
+<th align="left">适合谁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>直连</strong></td>
+<td align="left">客户端直接连供应商</td>
+<td align="left">改配置文件里的关键字段</td>
+<td align="left">日常使用，一家供应商够用</td>
+</tr>
+<tr>
+<td align="left"><strong>路由</strong></td>
+<td align="left">先经过本机 CC Switch（默认 <code class="notranslate">127.0.0.1:15721</code>）再转给供应商</td>
+<td align="left">接口格式转换、自动故障转移、热切换、逐条请求日志</td>
+<td align="left">想跨协议用模型、要高可用</td>
+</tr>
+<tr>
+<td align="left"><strong>聚合</strong></td>
+<td align="left">同样经过本机路由，但按 <code class="notranslate">/model</code> 里选的模型分发</td>
+<td align="left">多家供应商的模型出现在同一个模型列表</td>
+<td align="left">想在客户端里随时换模型</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>重要规则：</strong></p>
+<ul>
+<li><strong>点标签只是查看</strong>，不会改配置；真正切换要点页面上写明后果的按钮：「开始路由」「切换到聚合模式」「回到直连」。</li>
+<li><strong>一个应用同一时间只能处于三种模式之一。</strong></li>
+<li><strong>路由和聚合都需要 CC Switch 保持运行。</strong> 退出 CC Switch 时会先写回直连配置，下次启动再接上。</li>
+<li><strong>官方订阅不经过路由</strong>（Codex 的 OpenAI Official 例外）。</li>
+</ul>
+<h3>1.4 切换式 vs 共存式</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">工具</th>
+<th align="left">行为</th>
+<th align="left">按钮</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>切换式</strong></td>
+<td align="left">Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build</td>
+<td align="left">同一时间只启用一个供应商，切换时改写该工具的配置文件</td>
+<td align="left">「切换 / 启用」</td>
+</tr>
+<tr>
+<td align="left"><strong>共存式</strong></td>
+<td align="left">OpenCode、OpenClaw、Hermes、Pi、MiniMax Code、Kimi Code、Oh My Pi</td>
+<td align="left">多个供应商同时写进工具自身的配置，在工具里选</td>
+<td align="left">「添加 / 移除」（Pi、Oh My Pi 为「启用 / 移除」）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>共存式工具不支持</strong>：托盘切换、故障转移队列、本地路由、聚合。</p>
+<h3>1.5 它不是什么</h3>
+<ul>
+<li><strong>不是模型提供商</strong>：它不卖 token，也不转发到自己的服务器（路由是本机进程）。</li>
+<li><strong>不是 Agent</strong>：它不会替你写代码，只负责配置管理和本机转发。</li>
+<li><strong>没有官方 CLI / 无界面版本</strong>：官方只提供图形界面桌面版。服务器、SSH 远程场景推荐社区维护的 <a href="https://github.com/SaladDay/cc-switch-cli">CC Switch CLI</a>（TUI + 命令行，支持 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes、Pi）。</li>
+<li><strong>不会改你的其他配置</strong>：只替换关键字段，插件、Hook、权限、MCP、注释和排版都保留。</li>
+<li><strong>不能删除正在使用的供应商</strong>：这是有意设计——卸载 CC Switch 后工具仍能正常工作。</li>
+</ul>
+<hr>
+<h2>2. 核心概念</h2>
+<h3>2.1 供应商（Provider）</h3>
+<p>一份「连接信息」：名称、请求地址、API Key、模型、上游接口格式。每个工具可以有多张供应商卡片。</p>
+<p>卡片上可能有这些徽章：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">徽章</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>使用中 / 路由中 / 当前默认</strong></td>
+<td align="left">当前生效的供应商</td>
+</tr>
+<tr>
+<td align="left"><strong>官方</strong></td>
+<td align="left">厂商官方供应商（Claude Official、OpenAI Official 等）</td>
+</tr>
+<tr>
+<td align="left"><strong>需要路由</strong></td>
+<td align="left">上游协议与客户端不一致，必须开本地路由</td>
+</tr>
+<tr>
+<td align="left"><strong>直连 / 模型映射</strong></td>
+<td align="left">Claude Desktop 专用，表示接入方式</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>2.2 连接模式</h3>
+<p>见 <a href="#13-%E4%B8%89%E7%A7%8D%E8%BF%9E%E6%8E%A5%E6%A8%A1%E5%BC%8F">1.3</a>。</p>
+<h3>2.3 上游格式</h3>
+<p>告诉 CC Switch「这个供应商说的是哪种 API」：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">格式</th>
+<th align="left">说明</th>
+<th align="left">谁需要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Anthropic Messages（原生）</strong></td>
+<td align="left">Claude 格式</td>
+<td align="left">Claude Code、Claude Desktop</td>
+</tr>
+<tr>
+<td align="left"><strong>OpenAI Chat Completions</strong></td>
+<td align="left">大多数第三方网关</td>
+<td align="left">需要路由</td>
+</tr>
+<tr>
+<td align="left"><strong>OpenAI Responses API</strong></td>
+<td align="left">OpenAI 新接口，Codex 原生</td>
+<td align="left">Codex 原生；Claude 需路由</td>
+</tr>
+<tr>
+<td align="left"><strong>Gemini Native generateContent</strong></td>
+<td align="left">Google 原生</td>
+<td align="left">需要路由</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>选错格式的典型表现</strong>：404 或 405。</p>
+<h3>2.4 项目（Profile）</h3>
+<p>把 Claude Code 或 Codex 当前的<strong>供应商、MCP、Skills、提示词</strong>保存成一个命名快照（Claude Desktop 只保存供应商）。之后一键整套切换；切到其他项目时，当前状态会自动存回原项目。</p>
+<p>项目切换器默认隐藏，要在 <strong>设置 → 通用 → 显示项目切换</strong> 打开。</p>
+<h3>2.5 授权中心</h3>
+<p>统一管理第三方 OAuth 账号：</p>
+<ul>
+<li>GitHub Copilot</li>
+<li>ChatGPT（Codex OAuth）</li>
+<li>xAI（Grok）</li>
+<li>Kimi Code</li>
+<li>Claude 官方多账号（v4.0.21+）</li>
+</ul>
+<p>把订阅当作供应商使用。</p>
+<h3>2.6 本地路由</h3>
+<p>CC Switch 在本机起的 HTTP 服务，默认 <code class="notranslate">127.0.0.1:15721</code>。它负责：</p>
+<ul>
+<li>接口格式转换（Anthropic / OpenAI Chat / OpenAI Responses / Gemini Native 互转）；</li>
+<li>故障转移；</li>
+<li>热切换；</li>
+<li>请求日志与用量。</li>
+</ul>
+<h3>2.7 数据目录</h3>
+<p>默认 <code class="notranslate">~/.cc-switch/</code>（Windows 为 <code class="notranslate">C:\Users\&lt;用户名&gt;\.cc-switch</code>）。</p>
+<hr>
+<h2>3. 支持的十二个工具</h2>
+<h3>3.1 功能矩阵</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">工具</th>
+<th align="left">供应商</th>
+<th align="center">本地路由</th>
+<th align="center">聚合</th>
+<th align="center">托盘切换</th>
+<th align="center">MCP</th>
+<th align="center">Skills</th>
+<th align="left">提示词</th>
+<th align="center">会话</th>
+<th align="center">用量统计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left">切换</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">CLAUDE.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">Claude Desktop</td>
+<td align="left">切换</td>
+<td align="center">模型映射时</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="left">–</td>
+<td align="center">–</td>
+<td align="center">模型映射时</td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left">切换</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left">切换</td>
+<td align="center">✓</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">GEMINI.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">Grok Build</td>
+<td align="left">切换</td>
+<td align="center">✓</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">OpenCode</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">OpenClaw</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="left">工作区编辑器</td>
+<td align="center">✓</td>
+<td align="center">–</td>
+</tr>
+<tr>
+<td align="left">Hermes</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left">记忆管理</td>
+<td align="center">✓</td>
+<td align="center">–</td>
+</tr>
+<tr>
+<td align="left">Pi</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code>、<code class="notranslate">SYSTEM.md</code>、提示词模板</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">MiniMax Code</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">Kimi Code</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+</tr>
+<tr>
+<td align="left">Oh My Pi</td>
+<td align="left">共存</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="left"><code class="notranslate">AGENTS.md</code></td>
+<td align="center">✓</td>
+<td align="center">–</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>说明：</strong></p>
+<ul>
+<li><strong>切换</strong>：同一时间只启用一个供应商；<strong>共存</strong>：多个供应商同时写入工具自身的配置，在工具里选择。</li>
+<li><strong>Claude Desktop 没有独立的 MCP / Skills / 提示词 / 会话</strong>：这些面板操作的是 Claude Code 的数据。</li>
+<li><strong>OpenClaw、Hermes 暂不支持用量统计</strong>。</li>
+<li><strong>Hermes 只显示最近 500 个会话</strong>，且不支持命令行恢复。</li>
+<li><strong>Claude Code 的聚合模型需要 2.1.243 或更新版本</strong>。</li>
+</ul>
+<h3>3.2 官方供应商</h3>
+<p>每个切换式工具都自带一个官方供应商：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">工具</th>
+<th align="left">官方供应商</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left">Claude Official</td>
+</tr>
+<tr>
+<td align="left">Claude Desktop</td>
+<td align="left">Claude Desktop Official</td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left">OpenAI Official</td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left">Google Official</td>
+</tr>
+<tr>
+<td align="left">Grok Build</td>
+<td align="left">Grok Official</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>用途</strong>：切过去，重启工具，按工具自己的登录流程操作（如 Claude Code 的 <code class="notranslate">/login</code>、Codex 的 <code class="notranslate">codex login</code>），就能恢复官方登录。删掉了可以从预设里重新添加。</p>
+<hr>
+<h2>4. 安装</h2>
+<h3>4.1 系统要求</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">系统</th>
+<th align="left">最低版本</th>
+<th align="left">架构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Windows</td>
+<td align="left">Windows 10 及以上</td>
+<td align="left">x64 / ARM64</td>
+</tr>
+<tr>
+<td align="left">macOS</td>
+<td align="left">macOS 12 (Monterey) 及以上</td>
+<td align="left">Intel (x64) / Apple Silicon (arm64)</td>
+</tr>
+<tr>
+<td align="left">Linux</td>
+<td align="left">glibc 2.35+ 和 WebKitGTK 4.1</td>
+<td align="left">x64 / ARM64</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>Linux 支持的发行版</strong>：Ubuntu 22.04+、Debian 12+、较新的 Fedora、Arch。<br>
+<strong>不支持的</strong>：RHEL / Rocky / Alma 8–9（系统库版本不够）。</p>
+<blockquote>
+<p>CC Switch <strong>本身不需要 Node.js</strong>。它管理的是你已经装好的 Claude Code 等工具。</p>
+</blockquote>
+<h3>4.2 Windows</h3>
+<p><strong>安装包：</strong></p>
+<ol>
+<li>从 <a href="https://github.com/farion1231/cc-switch/releases">Releases</a> 或 <a href="https://ccswitch.io/download" rel="nofollow">下载页</a> 下载 <code class="notranslate">CC-Switch-v{版本号}-Windows.msi</code>；</li>
+<li>ARM 版 Windows 下载 <code class="notranslate">CC-Switch-v{版本号}-Windows-arm64.msi</code>；</li>
+<li>双击运行，按提示完成安装。</li>
+</ol>
+<p><strong>绿色版：</strong></p>
+<ol>
+<li>下载 <code class="notranslate">CC-Switch-v{版本号}-Windows-Portable.zip</code>；</li>
+<li>解压到任意目录；</li>
+<li>运行 <code class="notranslate">CC-Switch.exe</code>。</li>
+</ol>
+<p><strong>静默安装（跳过桌面快捷方式）：</strong></p>
+<div class="highlight highlight-source-powershell"><pre class="notranslate">msiexec <span class="pl-k">/</span>i <span class="pl-s"><span class="pl-pds">"</span>CC-Switch-v{版本号}-Windows.msi<span class="pl-pds">"</span></span> <span class="pl-k">/</span>qn CREATEDESKTOPSHORTCUT<span class="pl-k">=</span><span class="pl-c1">0</span></pre></div>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>双击安装包没反应 → 右键 → 属性 → 常规 → 安全 → 勾选「解除锁定」；</li>
+<li>安装后无法启动 → 装 <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/" rel="nofollow">Microsoft Edge WebView2</a>，并把 CC Switch 加入杀毒软件白名单。</li>
+</ul>
+<h3>4.3 macOS</h3>
+<p><strong>方式一：Homebrew（推荐）</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">brew install --cask cc-switch</pre></div>
+<p>更新：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">brew upgrade --cask cc-switch</pre></div>
+<p><strong>方式二：手动下载</strong></p>
+<ol>
+<li>下载 <code class="notranslate">CC-Switch-v{版本号}-macOS.dmg</code>（推荐）或 <code class="notranslate">.zip</code>；</li>
+<li>这是 <strong>Universal 通用包</strong>，Apple Silicon 和 Intel Mac 都能原生运行；</li>
+<li>打开 DMG，把 <code class="notranslate">CC Switch.app</code> 拖到「应用程序」。</li>
+</ol>
+<blockquote>
+<p>macOS 版本已通过 <strong>Apple 代码签名和公证</strong>，可直接打开，无需额外操作。</p>
+</blockquote>
+<h3>4.4 Linux</h3>
+<p><strong>Arch Linux：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">paru -S cc-switch-bin
+<span class="pl-c"><span class="pl-c">#</span> 或</span>
+yay -S cc-switch-bin</pre></div>
+<p><strong>Debian / Ubuntu：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo dpkg -i CC-Switch-v{版本号}-Linux-<span class="pl-k">*</span>.deb
+<span class="pl-c"><span class="pl-c">#</span> 有依赖问题时</span>
+sudo apt-get install -f</pre></div>
+<p><strong>Fedora 等 RPM 发行版：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo dnf install ./CC-Switch-v{版本号}-Linux-<span class="pl-k">*</span>.rpm</pre></div>
+<p><strong>AppImage（通用）：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">chmod +x CC-Switch-v{版本号}-Linux-<span class="pl-k">*</span>.AppImage
+./CC-Switch-v{版本号}-Linux-<span class="pl-k">*</span>.AppImage</pre></div>
+<p><strong>AppImage 启动失败的排查：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">报错</th>
+<th align="left">处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">GLIBC_2.xx not found</code></td>
+<td align="left">系统版本过旧，不满足 glibc 2.35+</td>
+</tr>
+<tr>
+<td align="left">FUSE 相关错误</td>
+<td align="left">安装 FUSE 2 兼容库（如 Ubuntu 的 <code class="notranslate">libfuse2</code>），或改用 <code class="notranslate">.deb</code> / <code class="notranslate">.rpm</code></td>
+</tr>
+<tr>
+<td align="left">托盘图标不显示</td>
+<td align="left">安装 <code class="notranslate">libappindicator</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>Wayland + NVIDIA 点击无响应 / 缩放后黑屏：</strong></p>
+<p>AppImage 会强制 <code class="notranslate">GDK_BACKEND=x11</code> 规避历史上的原生 Wayland 崩溃；但在较新的 Wayland + NVIDIA 环境下，这会导致网页内容区点不动。用内置开关切回原生 Wayland：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">CC_SWITCH_GDK_BACKEND=wayland ./CC-Switch-<span class="pl-k">*</span>.AppImage</pre></div>
+<p>从桌面图标启动时，写进 <code class="notranslate">.desktop</code> 的 <code class="notranslate">Exec=</code> 行：</p>
+<pre class="notranslate"><code class="notranslate">Exec=env CC_SWITCH_GDK_BACKEND=wayland /path/to/AppImage
+</code></pre>
+<blockquote>
+<p>该变量是通用的：在 tiling Wayland 合成器（sway/Hyprland）下若反而点击失效，可设 <code class="notranslate">CC_SWITCH_GDK_BACKEND=x11</code>。</p>
+</blockquote>
+<p><strong>Flatpak</strong>：官方 Release 不包含 Flatpak 包，可从 <code class="notranslate">.deb</code> 自行构建（见仓库 <code class="notranslate">flatpak/README.md</code>）。</p>
+<h3>4.5 验证安装</h3>
+<ol>
+<li>应用窗口正常显示；</li>
+<li>系统托盘出现 CC Switch 图标；</li>
+<li>左侧栏能看到已显示的受管应用，点击能进入供应商页。</li>
+</ol>
+<h3>4.6 自动更新</h3>
+<ul>
+<li>启动时自动检查更新；</li>
+<li>有新版本时界面显示提示；</li>
+<li>点击即可下载安装；</li>
+<li>也可以在 <strong>设置 → 关于</strong> 里手动检查；</li>
+<li>便携版需要手动下载。</li>
+</ul>
+<h3>4.7 先装好要管理的工具</h3>
+<p>CC Switch 不替你装 Claude Code 等工具（除了可以在「应用」页一键装）。<strong>推荐顺序</strong>：先装 CC Switch，再用它里面的「应用」页安装工具；或者按各工具官方方式装好。</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">工具</th>
+<th align="left">安装命令（macOS / Linux）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left"><code class="notranslate">curl -fsSL https://claude.ai/install.sh | bash</code> 或 <code class="notranslate">npm i -g @anthropic-ai/claude-code</code></td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left"><code class="notranslate">npm i -g @openai/codex</code> 或 <code class="notranslate">brew install --cask codex</code></td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left"><code class="notranslate">npm i -g @google/gemini-cli</code></td>
+</tr>
+<tr>
+<td align="left">Grok Build</td>
+<td align="left"><code class="notranslate">curl -fsSL https://x.ai/cli/install.sh | bash</code> 或 <code class="notranslate">npm i -g @xai-official/grok</code></td>
+</tr>
+<tr>
+<td align="left">OpenCode</td>
+<td align="left"><code class="notranslate">curl -fsSL https://opencode.ai/install | bash</code> 或 <code class="notranslate">npm i -g opencode-ai</code></td>
+</tr>
+<tr>
+<td align="left">OpenClaw</td>
+<td align="left"><code class="notranslate">npm i -g openclaw</code></td>
+</tr>
+<tr>
+<td align="left">Hermes</td>
+<td align="left"><code class="notranslate">curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash</code></td>
+</tr>
+<tr>
+<td align="left">Pi</td>
+<td align="left"><code class="notranslate">npm i -g @earendil-works/pi-coding-agent</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>用 npm 安装需要先装 Node.js。各工具要求不同（Claude Code 需要 22+，OpenClaw 需要 24.16+ 的 24.x 或 26.1+），建议装当前 LTS。</p>
+<p>国内 npm 慢可以加 <code class="notranslate">--registry=https://registry.npmmirror.com</code>，或全局设置镜像源：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm config <span class="pl-c1">set</span> registry https://registry.npmmirror.com</pre></div>
+</blockquote>
+<hr>
+<h2>5. 首次启动会发生什么</h2>
+<p>第一次启动时，CC Switch 会<strong>自动做三件事</strong>：</p>
+<ol>
+<li><strong>把 Claude Code、Codex、Gemini CLI、Grok Build 的现有配置导入</strong>为名为 <code class="notranslate">default</code> 的供应商；</li>
+<li>为这几个工具和 Claude Desktop <strong>添加官方供应商</strong>；</li>
+<li>把每个工具的配置文件<strong>第一次改写前</strong>备份到 <code class="notranslate">~/.cc-switch/backups/live-first-write/</code>。</li>
+</ol>
+<p><strong>原有配置不会丢失。</strong></p>
+<blockquote>
+<p>如果你在 Claude Code 里已经配了很多供应商，之后还可以在 Claude Desktop 页点 <strong>「将 Claude Code 中已有的供应商导入」</strong> 一键带过去（见 <a href="#133-%E4%BB%8E-claude-code-%E4%B8%80%E9%94%AE%E5%AF%BC%E5%85%A5">13.3</a>）。</p>
+</blockquote>
+<hr>
+<h2>6. 界面导览</h2>
+<h3>6.1 主界面布局</h3>
+<pre class="notranslate"><code class="notranslate">┌────────────┬──────────────────────────────────────────┐
+│  左侧栏     │  内容区                                   │
+│            │  ┌────────────────────────────────────┐  │
+│  应用列表   │  │ 页头：应用名 · 添加供应商 · ⋯ 菜单   │  │
+│  ├ Claude  │  ├────────────────────────────────────┤  │
+│  ├ Codex   │  │ 直连 / 路由 / 聚合 标签             │  │
+│  ├ Gemini  │  ├────────────────────────────────────┤  │
+│  └ …       │  │ 供应商卡片列表                       │  │
+│            │  │  ┌──────┐ ┌──────┐ ┌──────┐        │  │
+│  全局页     │  │  │ 卡片 │ │ 卡片 │ │ 卡片 │        │  │
+│  ├ MCP     │  │  └──────┘ └──────┘ └──────┘        │  │
+│  ├ Skills  │  └────────────────────────────────────┘  │
+│  ├ 提示词   │                                          │
+│  ├ 会话     │                                          │
+│  ├ 授权中心 │                                          │
+│  └ 用量统计 │                                          │
+│            │                                          │
+│  底部       │                                          │
+│  ├ 应用     │                                          │
+│  └ 设置     │                                          │
+└────────────┴──────────────────────────────────────────┘
+</code></pre>
+<h3>6.2 左侧栏</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">区域</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>应用列表</strong></td>
+<td align="left">你选择显示的受管应用。点一个应用，右侧显示它的供应商页。应用名旁的小标记表示它当前用的是路由、聚合还是模型映射，出问题时会提示「需要处理」</td>
+</tr>
+<tr>
+<td align="left"><strong>全局页</strong></td>
+<td align="left">MCP、Skills、提示词、会话、授权中心、用量统计（有今日花费时会显示「今日 $xx」）。这些页面不属于某个应用，每个只有一个入口</td>
+</tr>
+<tr>
+<td align="left"><strong>底部</strong></td>
+<td align="left">「应用」（安装、升级、选择侧栏显示哪些应用）和「设置」</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<ul>
+<li>点侧栏顶部的收起按钮，侧栏缩成只剩图标；</li>
+<li>「应用」或「设置」旁出现圆点，表示有 CLI 工具或 CC Switch 本身有新版本。</li>
+</ul>
+<h3>6.3 应用页页头</h3>
+<p>页头右侧有：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">元素</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>添加供应商</strong></td>
+<td align="left">添加新的供应商</td>
+</tr>
+<tr>
+<td align="left"><strong>项目切换</strong></td>
+<td align="left">默认隐藏，需在设置里打开「显示项目切换」</td>
+</tr>
+<tr>
+<td align="left"><strong>⋯ 菜单</strong></td>
+<td align="left">查看会话、配置目录、安装与升级、在侧栏隐藏、查看此应用的用量</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>Hermes 页头还有「Web UI」按钮。OpenClaw 和 Hermes 在页头下有一排页签：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">应用</th>
+<th align="left">页签</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">OpenClaw</td>
+<td align="left">供应商、工作区、配置</td>
+</tr>
+<tr>
+<td align="left">Hermes</td>
+<td align="left">供应商、记忆</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>6.4 供应商卡片</h3>
+<p>从左到右：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">元素</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>拖拽手柄</strong></td>
+<td align="left">悬停时出现，拖动调整顺序</td>
+</tr>
+<tr>
+<td align="left"><strong>供应商图标</strong></td>
+<td align="left">品牌图标</td>
+</tr>
+<tr>
+<td align="left"><strong>供应商信息</strong></td>
+<td align="left">名称、备注或端点地址，点击可打开官网；可能有「官方」「需要路由」等标签</td>
+</tr>
+<tr>
+<td align="left"><strong>用量信息</strong></td>
+<td align="left">剩余额度或余额，多套餐时显示多行</td>
+</tr>
+<tr>
+<td align="left"><strong>状态 / 主操作</strong></td>
+<td align="left">当前生效的显示「使用中」（路由模式下是「路由中」）；其他卡片是一个播放按钮</td>
+</tr>
+<tr>
+<td align="left"><strong>编辑按钮</strong></td>
+<td align="left">编辑供应商配置</td>
+</tr>
+<tr>
+<td align="left"><strong>⋯ 更多</strong></td>
+<td align="left">复制、检测连通、配置用量查询、打开终端（仅 Claude Code）、删除</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>按钮在不同模式下的含义：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">当前模式</th>
+<th align="left">其他卡片的按钮</th>
+<th align="left">点下去</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">直连</td>
+<td align="left">「切换」</td>
+<td align="left">改配置文件，切到这一家</td>
+</tr>
+<tr>
+<td align="left">直连页但实际在路由/聚合</td>
+<td align="left">「回到直连并使用」</td>
+<td align="left">退出路由/聚合并使用这一家</td>
+</tr>
+<tr>
+<td align="left">路由</td>
+<td align="left">「路由到此」</td>
+<td align="left">只换路由目标，不改配置文件</td>
+</tr>
+<tr>
+<td align="left">聚合</td>
+<td align="left">「设为默认 / 添加」</td>
+<td align="left">设为默认供应商或加入聚合名单</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>不能删除的供应商：</strong></p>
+<ul>
+<li>切换式应用里<strong>正在使用</strong>的那一家（先切到别家）；</li>
+<li>聚合模式下的<strong>默认供应商</strong>（先把别家设为默认）；</li>
+<li>被 OpenClaw 默认模型引用的供应商；</li>
+<li>被 MiniMax Code 的 <code class="notranslate">defaultModel</code> / <code class="notranslate">defaultLightModel</code> 引用的供应商；</li>
+<li>Hermes 当前使用中的供应商、由 Hermes 自己管理的只读供应商；</li>
+<li>Pi 读取到自身状态之前，删除按钮不可用。</li>
+</ul>
+<h3>6.5 系统托盘</h3>
+<p>右键托盘图标：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">菜单项</th>
+<th align="left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>打开 CC Switch</strong></td>
+<td align="left">显示主窗口并聚焦</td>
+</tr>
+<tr>
+<td align="left"><strong>应用子菜单</strong></td>
+<td align="left">Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build 各一个，标题显示「应用名 · 模式 · 在用供应商 · 额度摘要」；子菜单里点供应商即可切换</td>
+</tr>
+<tr>
+<td align="left"><strong>项目</strong></td>
+<td align="left">切换项目（需开启「显示项目切换」）</td>
+</tr>
+<tr>
+<td align="left"><strong>轻量模式</strong></td>
+<td align="left">进入 / 退出仅托盘运行模式</td>
+</tr>
+<tr>
+<td align="left"><strong>打开官方网站</strong></td>
+<td align="left">浏览器打开 ccswitch.io</td>
+</tr>
+<tr>
+<td align="left"><strong>退出 CC Switch</strong></td>
+<td align="left">完全退出；有应用在用路由或聚合时会提示「路由服务会停止」</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>托盘子菜单的行为随当前模式变化：</strong></p>
+<ul>
+<li><strong>直连</strong>：点供应商即切换；需要路由的后面标「（需要路由）」，点它会打开应用页并弹提示；</li>
+<li><strong>路由</strong>：点供应商即换路由目标；官方订阅标「（官方订阅不经过路由）」，不能点；</li>
+<li><strong>路由 + 故障转移开启</strong>：只读，列出队列顺序，要调整请到应用页；</li>
+<li><strong>聚合</strong>：只列聚合名单里的供应商，点一家就是设为默认。</li>
+</ul>
+<blockquote>
+<p><strong>共存式应用不进托盘</strong>，请在主界面操作。</p>
+</blockquote>
+<h3>6.6 轻量模式</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">最小化到托盘</th>
+<th align="left">轻量模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">UI 进程</td>
+<td align="left">保留在内存中</td>
+<td align="left"><strong>完全销毁</strong></td>
+</tr>
+<tr>
+<td align="left">空闲资源占用</td>
+<td align="left">与正常运行相当</td>
+<td align="left">接近零</td>
+</tr>
+<tr>
+<td align="left">再次打开速度</td>
+<td align="left">瞬时</td>
+<td align="left">略慢（需要重建窗口）</td>
+</tr>
+<tr>
+<td align="left">托盘切换功能</td>
+<td align="left">可用</td>
+<td align="left">可用</td>
+</tr>
+<tr>
+<td align="left">深链接唤起</td>
+<td align="left">可用</td>
+<td align="left">可用（按需重建）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>轻量模式状态<strong>不持久</strong>：下次正常启动会回到普通模式。</p>
+</blockquote>
+<h3>6.7 快捷键</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">快捷键</th>
+<th align="left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">Cmd/Ctrl + ,</code></td>
+<td align="left">打开设置</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">Cmd/Ctrl + F</code></td>
+<td align="left">搜索供应商（在供应商页）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">Esc</code></td>
+<td align="left">关闭搜索；在设置页返回主界面</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>6.8 设置目录</h3>
+<p>设置单独占一屏，左侧栏换成设置目录，分 6 组：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">分组</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>通用</strong></td>
+<td align="left">外观、侧栏与页头、各应用的新版本、窗口与终端</td>
+</tr>
+<tr>
+<td align="left"><strong>应用配置</strong></td>
+<td align="left">各应用的配置目录覆盖、各应用自己的选项</td>
+</tr>
+<tr>
+<td align="left"><strong>本地路由</strong></td>
+<td align="left">服务、正在使用路由的应用、自动故障转移、整流器、全部退出路由</td>
+</tr>
+<tr>
+<td align="left"><strong>网络</strong></td>
+<td align="left">全局出站代理</td>
+</tr>
+<tr>
+<td align="left"><strong>数据</strong></td>
+<td align="left">存储位置、数据管理、备份与恢复、云同步、应用诊断日志</td>
+</tr>
+<tr>
+<td align="left"><strong>关于</strong></td>
+<td align="left">版本信息、检查更新、GitHub、官网、发行说明</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>开关类设置<strong>即时保存</strong>；路径类设置（配置目录）改完要点该块的「保存」。</p>
+</blockquote>
+<hr>
+<h2>7. 添加供应商</h2>
+<h3>7.1 打开添加页</h3>
+<ol>
+<li>左侧栏选中要添加的应用；</li>
+<li>点页头右侧的 <strong>添加供应商（＋）</strong>。</li>
+</ol>
+<p>添加页是整页界面，分两步：</p>
+<ol>
+<li><strong>选预设</strong>：挑一个预设，或选「自定义配置」；</li>
+<li><strong>填写</strong>：填 Key 等参数，点页脚「添加」。</li>
+</ol>
+<blockquote>
+<p>如果表单动过（输入文字、勾选开关、换选项），这时离开当前页会先弹「有未保存的修改」确认。</p>
+</blockquote>
+<h3>7.2 用预设添加（推荐新手）</h3>
+<p>预设是预先配置好的供应商模板，通常只需填 API Key。</p>
+<p><strong>第 1 步的布局：</strong></p>
+<ul>
+<li><strong>搜索框</strong>：常驻顶部，可搜名称、网址或常见叫法（<code class="notranslate">kimi</code>、<code class="notranslate">智谱</code>、<code class="notranslate">openrouter</code>）；<code class="notranslate">⌘F</code> / <code class="notranslate">Ctrl+F</code> 回到搜索框；</li>
+<li><strong>左侧分类</strong>：「全部」「账号登录」「模型厂商」「第三方平台」「云服务商」，OpenCode 另有「插件配置」；</li>
+<li><strong>右侧两列列表</strong>：按显示名排序，「自定义配置」固定在「全部」最上面。</li>
+</ul>
+<p><strong>分类说明：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>账号登录</strong></td>
+<td align="left">不用 API Key，用已有账号登录：Claude 官方、ChatGPT（Codex）、GitHub Copilot、xAI、Google 官方。<strong>除 Claude 以外都要经过路由</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>模型厂商</strong></td>
+<td align="left">厂商自己的 API 和编程套餐。同一家的国内站、海外站、不同套餐合并成一行，选中后在下一步用「套餐」「地区」「版本」切换</td>
+</tr>
+<tr>
+<td align="left"><strong>第三方平台</strong></td>
+<td align="left">聚合多家模型的平台，或转售官方模型的中转服务</td>
+</tr>
+<tr>
+<td align="left"><strong>云服务商</strong></td>
+<td align="left">用云厂商账号调用模型，如 AWS Bedrock</td>
+</tr>
+<tr>
+<td align="left"><strong>插件配置</strong></td>
+<td align="left">OpenCode 插件的模型分配配置</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li>在搜索框或左侧分类里找到供应商，点击它；</li>
+<li>名称和端点会自动填充；</li>
+<li>填写 <strong>API Key</strong>；</li>
+<li>（可选）填写备注；</li>
+<li>点页脚「添加」。</li>
+</ol>
+<p>找不到想要的厂商时，搜索无结果的提示里有「用自定义配置添加」按钮。</p>
+<p><strong>常见预设（部分）：</strong> 智谱 GLM、MiniMax、DeepSeek、Kimi、PackyCode、OpenRouter、SiliconFlow、火山方舟、阿里云百炼、腾讯云、百度千帆、AWS Bedrock、NVIDIA NIM……</p>
+<blockquote>
+<p>预设列表随版本更新，<strong>以应用内实际显示为准</strong>。</p>
+</blockquote>
+<h3>7.3 预设里要注意的三件事</h3>
+<p><strong>① 带「需要路由」徽章的预设</strong></p>
+<p>说明上游协议和客户端不一致，要开启本地路由才能用。直连切换过去客户端会无法使用它。</p>
+<p><strong>② 旧卡不会自动升级</strong></p>
+<p>供应商保存的是<strong>创建时的预设快照</strong>。DeepSeek、GLM、Kimi 等预设已陆续改为原生 Responses；旧卡片要直连，建议<strong>重新添加最新版预设</strong>。</p>
+<p>手动迁移时：把「上游格式」改为 Responses，并确认请求地址和模型映射与厂商的 Responses 端点匹配。</p>
+<p><strong>③ 同一家不同套餐可能用不同协议</strong></p>
+<p>例如 StepFun API 是 Responses，Step Plan 是 Chat Completions。以所选预设为准。</p>
+<h3>7.4 自定义配置</h3>
+<p>选择「自定义」后，需要手动填（或直接编辑 JSON / TOML）。</p>
+<p><strong>Claude Code：</strong></p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"ANTHROPIC_API_KEY"</span>: <span class="pl-s"><span class="pl-pds">"</span>your-api-key<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"ANTHROPIC_BASE_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>https://api.example.com<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">ANTHROPIC_API_KEY</code></td>
+<td align="left">是</td>
+<td align="left">API 密钥</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">ANTHROPIC_BASE_URL</code></td>
+<td align="left">否</td>
+<td align="left">自定义端点地址</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">ANTHROPIC_AUTH_TOKEN</code></td>
+<td align="left">否</td>
+<td align="left">替代 API_KEY 的认证方式</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>Codex：</strong></p>
+<div class="highlight highlight-source-toml"><pre class="notranslate"><span class="pl-smi">model_provider</span> = <span class="pl-s"><span class="pl-pds">"</span>custom<span class="pl-pds">"</span></span>
+<span class="pl-smi">model</span> = <span class="pl-s"><span class="pl-pds">"</span>gpt-5.6-sol<span class="pl-pds">"</span></span>
+<span class="pl-smi">model_reasoning_effort</span> = <span class="pl-s"><span class="pl-pds">"</span>high<span class="pl-pds">"</span></span>
+<span class="pl-smi">disable_response_storage</span> = <span class="pl-c1">true</span>
+
+[<span class="pl-en">model_providers</span>.<span class="pl-en">custom</span>]
+<span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>custom<span class="pl-pds">"</span></span>
+<span class="pl-smi">base_url</span> = <span class="pl-s"><span class="pl-pds">"</span>https://api.example.com/v1<span class="pl-pds">"</span></span>
+<span class="pl-smi">wire_api</span> = <span class="pl-s"><span class="pl-pds">"</span>responses<span class="pl-pds">"</span></span>
+<span class="pl-smi">requires_openai_auth</span> = <span class="pl-c1">true</span></pre></div>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">model_provider</code></td>
+<td align="left">是</td>
+<td align="left">模型提供商名称（需与 <code class="notranslate">[model_providers.xxx]</code> 匹配）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">model</code></td>
+<td align="left">是</td>
+<td align="left">使用的模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">model_reasoning_effort</code></td>
+<td align="left">否</td>
+<td align="left">推理强度：<code class="notranslate">low</code> / <code class="notranslate">medium</code> / <code class="notranslate">high</code> 等</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">disable_response_storage</code></td>
+<td align="left">否</td>
+<td align="left">是否禁用响应存储</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">base_url</code></td>
+<td align="left">是</td>
+<td align="left">API 端点地址</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">wire_api</code></td>
+<td align="left">否</td>
+<td align="left">固定为 <code class="notranslate">responses</code>；上游是其他格式时由「上游格式」和本地路由转换</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">requires_openai_auth</code></td>
+<td align="left">否</td>
+<td align="left">由预设设置，一般无需修改</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>Codex 的第三方 API Key 会写进 <code class="notranslate">config.toml</code> 的 <code class="notranslate">experimental_bearer_token</code>，<strong>不会</strong>写进 <code class="notranslate">~/.codex/auth.json</code>。</p>
+</blockquote>
+<p><strong>Gemini CLI：</strong></p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"GEMINI_API_KEY"</span>: <span class="pl-s"><span class="pl-pds">"</span>your-api-key<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"GOOGLE_GEMINI_BASE_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>https://api.example.com<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">GEMINI_API_KEY</code></td>
+<td align="left">是</td>
+<td align="left">API 密钥</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">GOOGLE_GEMINI_BASE_URL</code></td>
+<td align="left">否</td>
+<td align="left">自定义端点地址</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">GEMINI_MODEL</code></td>
+<td align="left">否</td>
+<td align="left">指定模型</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>用 Vertex AI 的供应商可以用 <code class="notranslate">GOOGLE_API_KEY</code> 或 <code class="notranslate">GOOGLE_GENAI_USE_VERTEXAI</code> 代替 <code class="notranslate">GEMINI_API_KEY</code>。</p>
+</blockquote>
+<h3>7.5 自动获取模型列表</h3>
+<ol>
+<li>确保已填 <strong>API Key</strong> 和 <strong>端点地址</strong>；</li>
+<li>点模型输入框旁的 <strong>获取模型列表</strong> 按钮（下载图标）；</li>
+<li>CC Switch 用你的 Key 调 OpenAI 兼容的 <code class="notranslate">/v1/models</code> 端点；</li>
+<li>从分组下拉菜单里选模型。</li>
+</ol>
+<p><strong>常见错误：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">错误</th>
+<th align="left">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">401 / 403</td>
+<td align="left">Key 不正确</td>
+</tr>
+<tr>
+<td align="left">404 / 405</td>
+<td align="left">供应商没有 <code class="notranslate">/v1/models</code> 端点，需手动填模型 ID</td>
+</tr>
+<tr>
+<td align="left">解析失败</td>
+<td align="left">返回内容不符合 OpenAI 兼容格式</td>
+</tr>
+<tr>
+<td align="left">超时</td>
+<td align="left">端点慢或网络问题</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>7.6 统一供应商：一份配置给三个工具</h3>
+<p>适用于支持多种 API 格式的中转服务。</p>
+<p><strong>创建：</strong></p>
+<ol>
+<li>在 Claude Code / Codex / Gemini CLI 的添加页里，选预设那一步的左侧分类最下面 <strong>「跨应用」→「统一供应商」</strong>；</li>
+<li>选一个预设类型；</li>
+<li>填名称、API Key、API 地址；</li>
+<li>勾选要同步的应用；</li>
+<li>保存。</li>
+</ol>
+<p><strong>同步机制：</strong></p>
+<ul>
+<li>修改统一供应商 → 所有关联应用同步更新；</li>
+<li>删除统一供应商 → 关联的应用配置也会删除；</li>
+<li>编辑时可以选「保存」（仅保存）或「保存并同步」（立即同步）；</li>
+<li>也可以手动点卡片上的「同步」按钮。</li>
+</ul>
+<h3>7.7 导入已有配置</h3>
+<p>CC Switch 的供应商导入有两条路，<strong>不要和 MCP 的「从应用导入」混淆</strong>：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">方式</th>
+<th align="left">入口</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>深度链接导入</strong></td>
+<td align="left">打开 <code class="notranslate">ccswitch://</code> 链接</td>
+<td align="left">单个供应商 / MCP / 提示词，来自他人分享或厂商按钮</td>
+</tr>
+<tr>
+<td align="left"><strong>数据库备份导入</strong></td>
+<td align="left">设置 → 数据 → 数据管理 → SQL 导入导出</td>
+<td align="left">整份配置批量恢复（会<strong>覆盖</strong>现有数据库）</td>
+</tr>
+<tr>
+<td align="left"><strong>从 Claude Code 导入</strong>（仅 Claude Desktop）</td>
+<td align="left">Claude Desktop 页空列表里的「将 Claude Code 中已有的供应商导入」</td>
+<td align="left">把 Claude Code 那边的供应商一键带到 Claude Desktop</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><strong>注意</strong>：CC Switch <strong>没有</strong>「从 Claude Code / Codex / OpenCode 自动扫描并导入全部供应商」的通用按钮。第一次启动时它只会把各工具<strong>当前正在使用的那份配置</strong>存成名为 <code class="notranslate">default</code> 的供应商；其余历史供应商需要手动添加，或用深度链接 / SQL 备份导入。</p>
+<p>MCP 页的「从应用导入」只针对 <strong>MCP 服务器</strong>，不涉及供应商。</p>
+</blockquote>
+<p><strong>数据库备份导入步骤：</strong></p>
+<ol>
+<li>设置 → 数据 → 数据管理；</li>
+<li>点「选择 SQL 文件」（<strong>只支持 CC Switch 自己导出的备份</strong>）；</li>
+<li>选文件；</li>
+<li>点「导入」；</li>
+<li>确认覆盖现有配置。</li>
+</ol>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 导入会覆盖现有数据库，<strong>建议先导出当前配置作为备份</strong>。</p>
+</blockquote>
+<h3>7.8 深度链接导入</h3>
+<p>厂商或朋友可以给你一个 <code class="notranslate">ccswitch://</code> 链接：</p>
+<pre class="notranslate"><code class="notranslate">ccswitch://v1/import?resource=provider&amp;app=claude&amp;name=My%20Provider&amp;endpoint=https%3A%2F%2Fapi.example.com&amp;apiKey=sk-xxx
+</code></pre>
+<p>打开后会弹出导入确认框，显示将添加的名称、地址、模型和 Key 去向；<strong>确认后才保存</strong>。</p>
+<p>详见 <a href="#20-%E6%B7%B1%E5%BA%A6%E9%93%BE%E6%8E%A5%E4%B8%8E%E9%85%8D%E7%BD%AE%E5%88%86%E4%BA%AB">20. 深度链接</a>。</p>
+<h3>7.9 高级选项</h3>
+<h4>上游格式（Claude）</h4>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">格式</th>
+<th align="left">说明</th>
+<th align="left">是否需要路由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Anthropic Messages（原生）</strong></td>
+<td align="left">原生 Anthropic API 格式，直连不转换</td>
+<td align="left">否</td>
+</tr>
+<tr>
+<td align="left"><strong>OpenAI Chat Completions</strong></td>
+<td align="left">由本地路由转换</td>
+<td align="left">是</td>
+</tr>
+<tr>
+<td align="left"><strong>OpenAI Responses API</strong></td>
+<td align="left">由本地路由转换</td>
+<td align="left">是</td>
+</tr>
+<tr>
+<td align="left"><strong>Gemini Native generateContent</strong></td>
+<td align="left">由本地路由转换</td>
+<td align="left">是</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h4>完整 URL 端点模式</h4>
+<p>默认情况下，CC Switch 把 <code class="notranslate">base_url</code> 当<strong>前缀</strong>，在后面拼 <code class="notranslate">/v1/chat/completions</code> 等固定路径。有些厂商要求非标准路径，这时打开请求地址旁的 <strong>「完整 URL」</strong> 开关，填完整端点。</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left"><code class="notranslate">base_url</code> 填写</th>
+<th align="left">实际请求目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">默认（前缀拼接）</td>
+<td align="left"><code class="notranslate">https://api.example.com</code></td>
+<td align="left"><code class="notranslate">https://api.example.com/v1/chat/completions</code></td>
+</tr>
+<tr>
+<td align="left"><strong>完整 URL 模式</strong></td>
+<td align="left"><code class="notranslate">https://api.example.com/custom/path/messages</code></td>
+<td align="left"><code class="notranslate">https://api.example.com/custom/path/messages</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>完整 URL 模式必须配合本地路由使用。</strong> 开启后卡片会显示「需要路由」。</p>
+</blockquote>
+<h4>Claude 快捷开关</h4>
+<p>添加 / 编辑 Claude 供应商时，JSON 编辑器上方有一组开关：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">开关</th>
+<th align="left">效果</th>
+<th align="left">作用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>隐藏 AI 署名</strong></td>
+<td align="left">清除提交/PR 的署名元数据和会话链接（<code class="notranslate">attribution</code>）</td>
+<td align="left">全局</td>
+</tr>
+<tr>
+<td align="left"><strong>启用 Tool Search</strong></td>
+<td align="left">设置 <code class="notranslate">env.ENABLE_TOOL_SEARCH = "true"</code></td>
+<td align="left">跟随供应商</td>
+</tr>
+<tr>
+<td align="left"><strong>禁用自动升级</strong></td>
+<td align="left">阻止 Claude Code 自动更新（<code class="notranslate">DISABLE_AUTOUPDATER=1</code>）</td>
+<td align="left">全局</td>
+</tr>
+<tr>
+<td align="left"><strong>禁用 Artifact 工具</strong></td>
+<td align="left">不把 Artifact 工具放进 tools 数组（部分第三方网关会因此返回 400）</td>
+<td align="left">跟随供应商</td>
+</tr>
+<tr>
+<td align="left"><strong>关闭 auto mode 服务端检查</strong></td>
+<td align="left">让 auto mode 直接用本机检查；新增第三方供应商时默认勾选，官方端点不要勾</td>
+<td align="left">跟随供应商</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<ul>
+<li><strong>全局</strong>：保存后写进 <code class="notranslate">~/.claude/settings.json</code>，对所有供应商生效；</li>
+<li><strong>跟随供应商</strong>：保存在这个供应商里，切到它时写入，切走时移除；</li>
+<li>取消勾选时，对应配置项会被<strong>完全移除</strong>。</li>
+</ul>
+<h4>Codex / Grok Build 的上游格式</h4>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Responses（原生）</strong></td>
+<td align="left">上游原生支持 Responses API，直接连接</td>
+</tr>
+<tr>
+<td align="left"><strong>Chat Completions（需开启路由）</strong></td>
+<td align="left">本地路由把 Responses 请求转成 Chat Completions，再把响应（含流式、推理、工具调用）转回</td>
+</tr>
+<tr>
+<td align="left"><strong>Anthropic Messages（需开启路由）</strong></td>
+<td align="left">上游只提供 Anthropic Messages，由本地路由转换</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h4>模型映射（仅 Codex）</h4>
+<p>Codex 非官方供应商的表单里有 <strong>模型映射</strong> 表：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">列</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">菜单显示名</td>
+<td align="left">在 <code class="notranslate">/model</code> 命令中显示的名称</td>
+</tr>
+<tr>
+<td align="left">实际请求模型</td>
+<td align="left">上游真实模型名，如 <code class="notranslate">deepseek-v4-flash</code></td>
+</tr>
+<tr>
+<td align="left">上下文窗口</td>
+<td align="left">（可选）模型的上下文长度</td>
+</tr>
+<tr>
+<td align="left">思考等级</td>
+<td align="left">（可选）该模型支持的思考等级</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<ul>
+<li>映射表会生成 Codex 的 <code class="notranslate">model_catalog_json</code>；</li>
+<li>表中条目按填写内容原样保存，是模型列表的<strong>唯一来源</strong>；</li>
+<li><strong>默认模型</strong>留空时，默认使用映射表第一行；</li>
+<li><strong>修改后需要重启 Codex</strong> 才能刷新模型列表。</li>
+</ul>
+<h4>思考能力</h4>
+<p>上游格式为 Chat Completions 时：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">开关</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>支持思考模式</strong></td>
+<td align="left">上游支持开启/关闭 thinking（Kimi、GLM、Qwen 等通常属于这一类）</td>
+</tr>
+<tr>
+<td align="left"><strong>支持思考等级</strong></td>
+<td align="left">上游支持 low / high / max 等深度控制；启用后会自动启用思考模式</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 如果供应商只支持「思考模式」，在 Codex 里调思考等级<strong>不会有任何效果</strong>——CC Switch 不会把等级透传给这类上游。</p>
+</blockquote>
+<h4>Codex 1M 上下文窗口</h4>
+<p>添加 Codex 供应商时的开关：</p>
+<ul>
+<li><strong>启用</strong>：设置 <code class="notranslate">model_context_window = 1000000</code>，并自动填 <code class="notranslate">model_auto_compact_token_limit = 900000</code>；</li>
+<li><strong>禁用</strong>：移除这两个字段。</li>
+</ul>
+<blockquote>
+<p>只在<strong>新增</strong>供应商时显示；编辑已有供应商时可通过高级配置直接调整。</p>
+</blockquote>
+<h4>自定义图标</h4>
+<p>点名称左侧的图标打开选择器：</p>
+<ul>
+<li><strong>内置图标</strong>：常见 AI 服务商和工具；</li>
+<li><strong>我的图标</strong>：自己上传（PNG / JPG / WebP / SVG，不超过 2 MB）；</li>
+<li>图片会缩成 96×96 的 PNG；</li>
+<li>点「清除图标」退回名称首字母。</li>
+</ul>
+<h4>端点测速</h4>
+<ol>
+<li>编辑供应商，点请求地址旁的「管理与测速」；</li>
+<li>添加多个端点 URL；</li>
+<li>点「测速」；</li>
+<li>选延迟最低的。</li>
+</ol>
+<p><strong>结果颜色：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">颜色</th>
+<th align="left">延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">🟢 绿色</td>
+<td align="left">&lt; 300ms</td>
+</tr>
+<tr>
+<td align="left">🟡 黄色</td>
+<td align="left">300–500ms</td>
+</tr>
+<tr>
+<td align="left">🟠 橙色</td>
+<td align="left">500–800ms</td>
+</tr>
+<tr>
+<td align="left">🔴 红色</td>
+<td align="left">≥ 800ms</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h4>备注与网站链接</h4>
+<ul>
+<li><strong>备注</strong>：账号用途（个人/工作）、套餐信息、到期时间；显示在卡片上，也支持搜索；</li>
+<li><strong>网站链接</strong>：官网或控制台地址，卡片上可直接打开。</li>
+</ul>
+<hr>
+<h2>8. 切换供应商</h2>
+<h3>8.1 主界面切换（直连模式）</h3>
+<ol>
+<li>点击目标供应商卡片上的 <strong>「切换」</strong>；</li>
+<li>CC Switch 更新配置文件；</li>
+<li>卡片按钮变成 <strong>「使用中」</strong>；</li>
+<li>按各应用的方式生效（见 <a href="#83-%E7%94%9F%E6%95%88%E6%96%B9%E5%BC%8F">8.3</a>）。</li>
+</ol>
+<h3>8.2 托盘快速切换</h3>
+<ol>
+<li>右键点击托盘图标；</li>
+<li>悬停到对应应用的子菜单；</li>
+<li>点击要切换到的供应商名称；</li>
+<li>托盘会短暂提示（如「已切换到 xxx，重启后生效」）。</li>
+</ol>
+<h3>8.3 生效方式</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">应用</th>
+<th align="left">生效方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Claude Code</strong></td>
+<td align="left">✅ <strong>即时生效</strong>（支持热重载，无需重启）</td>
+</tr>
+<tr>
+<td align="left"><strong>Claude Desktop</strong></td>
+<td align="left">需要<strong>完全退出并重新打开</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>Codex</strong></td>
+<td align="left">关闭并重新打开终端（桌面版要 ⌘Q 彻底退出）</td>
+</tr>
+<tr>
+<td align="left"><strong>Gemini CLI</strong></td>
+<td align="left">重启 Gemini CLI</td>
+</tr>
+<tr>
+<td align="left"><strong>Grok Build</strong></td>
+<td align="left">重启 Grok Build</td>
+</tr>
+<tr>
+<td align="left"><strong>OpenCode / OpenClaw</strong></td>
+<td align="left">关闭并重新打开终端</td>
+</tr>
+<tr>
+<td align="left"><strong>Hermes / Pi / MiniMax Code / Kimi Code</strong></td>
+<td align="left">供应商添加后写入配置；在工具里选择模型</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><strong>路由模式下</strong>：切换供应商会立即作用于后续请求；但如果切换改变了模型，Codex、Gemini CLI、Grok Build 仍可能需要重启。</p>
+<p><strong>聚合模式下</strong>：Claude Code 立即生效；Codex 需要彻底重启（见 <a href="#127-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E9%87%8D%E5%90%AF">12.7</a>）。</p>
+</blockquote>
+<h3>8.4 切换时配置文件改了什么</h3>
+<p>CC Switch 只替换<strong>关键字段</strong>：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">应用</th>
+<th align="left">文件</th>
+<th align="left">改什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left"><code class="notranslate">~/.claude/settings.json</code></td>
+<td align="left"><code class="notranslate">env</code> 里的 <code class="notranslate">ANTHROPIC_*</code>、<code class="notranslate">AWS_*</code>、<code class="notranslate">CLAUDE_CODE_USE_BEDROCK</code>，以及 <code class="notranslate">model</code>、<code class="notranslate">apiKeyHelper</code> 等</td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left"><code class="notranslate">~/.codex/config.toml</code></td>
+<td align="left"><code class="notranslate">model_provider</code>、<code class="notranslate">model</code>、推理档位、<code class="notranslate">[model_providers.custom]</code> 表</td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left"><code class="notranslate">~/.gemini/.env</code> + <code class="notranslate">settings.json</code></td>
+<td align="left"><code class="notranslate">.env</code> 里的 <code class="notranslate">GEMINI_API_KEY</code>、<code class="notranslate">GEMINI_MODEL</code>、<code class="notranslate">GOOGLE_*</code>；<code class="notranslate">settings.json</code> 里只改 <code class="notranslate">security.auth.selectedType</code> 和 <code class="notranslate">model.name</code></td>
+</tr>
+<tr>
+<td align="left">Grok Build</td>
+<td align="left"><code class="notranslate">~/.grok/config.toml</code></td>
+<td align="left"><code class="notranslate">[models]</code> 下的 <code class="notranslate">default</code> 和 CC Switch 写入的那张 <code class="notranslate">[model."&lt;名称&gt;"]</code> 表</td>
+</tr>
+<tr>
+<td align="left">Claude Desktop</td>
+<td align="left">3P profile 配置</td>
+<td align="left">直连写地址和 Key；模型映射指向本机路由</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>原样保留：</strong></p>
+<ul>
+<li>插件、Hook、权限、MCP；</li>
+<li>你自己加的环境变量；</li>
+<li>注释和排版；</li>
+<li><code class="notranslate">[mcp_servers]</code>、<code class="notranslate">[projects]</code>、你自己的其他供应商表。</li>
+</ul>
+<blockquote>
+<p><strong>第一次改写前会自动备份</strong>到 <code class="notranslate">~/.cc-switch/backups/live-first-write/</code>，每个文件只备份一次。</p>
+</blockquote>
+<h3>8.5 在工具里改了模型，切走再切回来怎么又变回去了？</h3>
+<p><strong>模型属于关键字段，归供应商所有。</strong></p>
+<ul>
+<li>在工具里换的模型（如 Claude Code 的 <code class="notranslate">/model</code>）会一直生效到下次切换；</li>
+<li>切换时，配置文件里的模型会换成目标供应商保存的那个；</li>
+<li>CC Switch <strong>不会</strong>把你在工具里换的模型存回原来的供应商。</li>
+</ul>
+<p>想长期用某个模型，请<strong>在 CC Switch 里编辑这个供应商</strong>。</p>
+<h3>8.6 共存式应用</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">应用</th>
+<th align="left">按钮</th>
+<th align="left">写入位置</th>
+<th align="left">额外操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">OpenCode</td>
+<td align="left">添加 / 移除</td>
+<td align="left"><code class="notranslate">~/.config/opencode/opencode.json</code></td>
+<td align="left">在工具里选模型</td>
+</tr>
+<tr>
+<td align="left">OpenClaw</td>
+<td align="left">添加 / 移除</td>
+<td align="left"><code class="notranslate">~/.openclaw/openclaw.json</code></td>
+<td align="left">卡片上「设为默认」设置默认模型</td>
+</tr>
+<tr>
+<td align="left">Hermes</td>
+<td align="left">添加 / 移除</td>
+<td align="left"><code class="notranslate">~/.hermes/config.yaml</code> 的 <code class="notranslate">custom_providers</code></td>
+<td align="left">卡片上「启用」设为当前供应商</td>
+</tr>
+<tr>
+<td align="left">Pi</td>
+<td align="left">启用 / 移除</td>
+<td align="left"><code class="notranslate">~/.pi/agent/models.json</code></td>
+<td align="left">在 Pi 里选模型</td>
+</tr>
+<tr>
+<td align="left">MiniMax Code</td>
+<td align="left">添加 / 移除</td>
+<td align="left"><code class="notranslate">~/.minimax/config.yaml</code> 的 <code class="notranslate">custom_provider</code></td>
+<td align="left">在 MiniMax Code 里选模型</td>
+</tr>
+<tr>
+<td align="left">Kimi Code</td>
+<td align="left">添加 / 移除</td>
+<td align="left"><code class="notranslate">~/.kimi-code/config.toml</code> 的 <code class="notranslate">providers</code>、<code class="notranslate">models</code></td>
+<td align="left">在 Kimi Code 的 <code class="notranslate">/model</code> 里选；也可用「切换」按钮</td>
+</tr>
+<tr>
+<td align="left">Oh My Pi</td>
+<td align="left">启用 / 移除</td>
+<td align="left"><code class="notranslate">~/.omp/agent/models.yml</code>（供应商）+ <code class="notranslate">~/.omp/agent/config.yml</code>（默认模型）</td>
+<td align="left">在工具里选模型</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>共存式应用<strong>不支持</strong>托盘切换和故障转移队列。</p>
+</blockquote>
+<h3>8.7 切换失败怎么办</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">原因</th>
+<th align="left">处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>配置文件被锁定</strong></td>
+<td align="left">关闭正在运行的 CLI 工具，再切换</td>
+</tr>
+<tr>
+<td align="left"><strong>权限不足</strong></td>
+<td align="left">检查配置目录的权限</td>
+</tr>
+<tr>
+<td align="left"><strong>配置格式错误</strong></td>
+<td align="left">编辑供应商，检查 JSON / TOML 格式</td>
+</tr>
+<tr>
+<td align="left"><strong>配置文件本身有语法错误</strong></td>
+<td align="left">CC Switch 会提示「无法解析 …（第 N 行第 M 列）… 为避免覆盖你的配置，本次没有写入任何文件」，按位置修好再切</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>9. 验证配置</h2>
+<h3>9.1 三步验证</h3>
+<ol>
+<li><strong>看卡片</strong>：目标供应商显示 <strong>「使用中」</strong>；</li>
+<li><strong>重启工具</strong>（除 Claude Code 外）；</li>
+<li><strong>发一句测试消息</strong>：</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Claude Code</span>
+claude
+<span class="pl-k">&gt;</span> 你好，请简单介绍一下自己
+
+<span class="pl-c"><span class="pl-c">#</span> Codex</span>
+codex
+<span class="pl-k">&gt;</span> 你好，请简单介绍一下自己
+
+<span class="pl-c"><span class="pl-c">#</span> Gemini CLI</span>
+gemini
+<span class="pl-k">&gt;</span> 你好，请简单介绍一下自己
+
+<span class="pl-c"><span class="pl-c">#</span> OpenCode</span>
+opencode
+<span class="pl-k">&gt;</span> 你好，请简单介绍一下自己</pre></div>
+<h3>9.2 更可靠的验证：看用量</h3>
+<p>打开左侧栏 <strong>用量统计</strong>：</p>
+<ul>
+<li>不开路由时，数据来自各工具的<strong>本地会话记录</strong>；</li>
+<li>开了路由时，还有<strong>逐条请求日志</strong>；</li>
+<li>如果能看到刚才那次对话的 Token，说明配置真的生效了。</li>
+</ul>
+<blockquote>
+<p>不要只问「你是什么模型」来判断——很多模型会答错自己的名字。</p>
+</blockquote>
+<h3>9.3 「检测连通」能证明什么</h3>
+<p><strong>只证明地址能连上。</strong></p>
+<ul>
+<li>它向供应商的 base URL 发一个轻量请求；</li>
+<li>收到任意 HTTP 响应（包括 401、403、404、5xx）都算「可达」；</li>
+<li><strong>不发送真实模型请求</strong>，也不验证 API Key 和模型名。</li>
+</ul>
+<blockquote>
+<p>「检测连通通过但请求失败」是正常现象，请检查 Key、模型名和上游格式。</p>
+</blockquote>
+<hr>
+<h2>10. 本地路由：让 Claude Code 用 GPT、让 Codex 用 Claude</h2>
+<h3>10.1 为什么需要</h3>
+<p>Claude Code 说的是 <strong>Anthropic Messages</strong> 协议（<code class="notranslate">/v1/messages</code>）；GPT 系模型的上游说的是 <strong>OpenAI Responses</strong> 协议。两种协议的请求体、流式事件和返回结构完全不同，直接把地址填进 Claude Code 配置里，上游收到它不认识的请求，只能失败。</p>
+<p>CC Switch 的做法：</p>
+<ol>
+<li>让 Claude Code 始终连<strong>本机路由</strong>，仍以 Anthropic Messages 发送；</li>
+<li>路由识别当前供应商是 Responses 格式后，把请求转成 Responses 发给上游；</li>
+<li>上游返回后，再把响应转回 Messages 形态给 Claude Code。</li>
+</ol>
+<p><strong>工具调用、图片、PDF、思考配置都在转换范围内。</strong></p>
+<h3>10.2 支持路由的应用</h3>
+<p><strong>Claude Code、Codex、Gemini CLI、Grok Build</strong>；Claude Desktop 的「模型映射」模式也经本地路由转发。</p>
+<h3>10.3 启动路由</h3>
+<p><strong>方式一：从应用页</strong></p>
+<ol>
+<li>左侧栏选中应用；</li>
+<li>点顶部 <strong>「路由」</strong> 标签（只是查看）；</li>
+<li>点 <strong>「开始路由」</strong>；</li>
+<li>在确认框里选择「路由到」哪家供应商；</li>
+<li>点「开始路由」确认。</li>
+</ol>
+<p>确认框会写明后果：会改写客户端配置里的地址和密钥，真实密钥留在 CC Switch 里，其他设置不动。</p>
+<p><strong>方式二：从设置页</strong></p>
+<p><strong>设置 → 本地路由 → 服务 → 启动</strong>。</p>
+<blockquote>
+<p>路由服务一般<strong>不需要手动启动</strong>：点「开始路由」时，服务没在运行会自动启动。</p>
+</blockquote>
+<h3>10.4 路由配置</h3>
+<p><strong>设置 → 本地路由 → 服务：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">配置项</th>
+<th align="left">说明</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>监听地址</strong></td>
+<td align="left">绑定的 IP，支持 IPv4、IPv6 和 <code class="notranslate">localhost</code></td>
+<td align="left"><code class="notranslate">127.0.0.1</code></td>
+</tr>
+<tr>
+<td align="left"><strong>监听端口</strong></td>
+<td align="left">1024–65535</td>
+<td align="left"><code class="notranslate">15721</code></td>
+</tr>
+<tr>
+<td align="left"><strong>记录请求用量</strong></td>
+<td align="left">把路由请求的用量与状态写入统计数据库</td>
+<td align="left">开启</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>修改后点 <strong>「保存并重启服务」</strong>。</p>
+<p><strong>监听地址选择：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">地址</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">127.0.0.1</code></td>
+<td align="left">仅本机可访问（推荐）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">0.0.0.0</code></td>
+<td align="left">允许局域网访问</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>连接地址</strong>：CC Switch 写进客户端配置的地址默认按监听地址推导（<code class="notranslate">0.0.0.0</code> 写成 <code class="notranslate">127.0.0.1</code>）。客户端无法通过本机回环访问时，在「连接地址」里填它能访问到的 IP 或主机名。</p>
+<blockquote>
+<p><strong>WSL2 场景</strong>：默认 NAT 模式下的 Claude Desktop 访问不到 Windows 的 <code class="notranslate">127.0.0.1</code>。把监听地址设为 <code class="notranslate">0.0.0.0</code>，连接地址填 WSL 能访问到的 Windows IP（如 <code class="notranslate">vEthernet (WSL)</code> 网卡的地址），并在 Windows 防火墙放行端口。</p>
+</blockquote>
+<h3>10.5 路由时配置文件变成什么样</h3>
+<p><strong>Claude Code：</strong></p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"env"</span>: {
+    <span class="pl-ent">"ANTHROPIC_BASE_URL"</span>: <span class="pl-s"><span class="pl-pds">"</span>http://127.0.0.1:15721<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+<p><strong>Codex：</strong></p>
+<div class="highlight highlight-source-toml"><pre class="notranslate">[<span class="pl-en">model_providers</span>.<span class="pl-en">custom</span>]
+<span class="pl-smi">base_url</span> = <span class="pl-s"><span class="pl-pds">"</span>http://127.0.0.1:15721/v1<span class="pl-pds">"</span></span></pre></div>
+<p><strong>Gemini CLI：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">GOOGLE_GEMINI_BASE_URL=http://127.0.0.1:15721</pre></div>
+<p><strong>Grok Build：</strong></p>
+<pre class="notranslate"><code class="notranslate">http://127.0.0.1:15721/grokbuild/v1
+</code></pre>
+<p><strong>Claude Desktop（模型映射）：</strong></p>
+<pre class="notranslate"><code class="notranslate">http://127.0.0.1:15721/claude-desktop
+</code></pre>
+<p><strong>共同点：</strong></p>
+<ul>
+<li>API Key 替换为占位符 <strong><code class="notranslate">PROXY_MANAGED</code></strong>；</li>
+<li>真实的供应商地址、Key 和模型都保存在 CC Switch 里；</li>
+<li>Claude Code 的模型名还会写成 <code class="notranslate">claude-sonnet-5</code> 之类的固定别名（<code class="notranslate">/model</code> 菜单里仍显示真实模型名）。</li>
+</ul>
+<h3>10.6 接口格式转换</h3>
+<p><strong>Claude Code / Claude Desktop 侧</strong>（客户端发 Anthropic Messages）：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">供应商上游格式</th>
+<th align="left">路由行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Anthropic Messages</td>
+<td align="left">透传（不转换）</td>
+</tr>
+<tr>
+<td align="left">OpenAI Chat Completions</td>
+<td align="left">转成 OpenAI Chat，响应反向转换</td>
+</tr>
+<tr>
+<td align="left">OpenAI Responses API</td>
+<td align="left">转成 OpenAI Responses，响应反向转换</td>
+</tr>
+<tr>
+<td align="left">Gemini Native generateContent</td>
+<td align="left">转成 Gemini 原生，响应反向转换</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>Codex / Grok Build 侧</strong>（客户端发 OpenAI Responses）：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">供应商上游格式</th>
+<th align="left">路由行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Responses（原生）</td>
+<td align="left">透传</td>
+</tr>
+<tr>
+<td align="left">Chat Completions</td>
+<td align="left">转成 Chat Completions，响应反向转换</td>
+</tr>
+<tr>
+<td align="left">Anthropic Messages</td>
+<td align="left">转成 Anthropic Messages，响应反向转换</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>10.7 停止路由</h3>
+<ul>
+<li><strong>单个应用</strong>：在应用页点 <strong>「回到直连」</strong>；</li>
+<li><strong>全部应用</strong>：<strong>设置 → 本地路由 → 全部回到直连</strong>，确认后所有应用写回直连配置，然后停止路由服务。</li>
+</ul>
+<blockquote>
+<p><strong>有应用在用路由时不能停止服务</strong>：「停止」按钮是灰的，会提示「还有应用在用路由服务，先让它们回到直连」。</p>
+<p>退出路由时，<strong>路由目标、故障转移队列和聚合名单都会保留</strong>。</p>
+</blockquote>
+<p><strong>退出后的处理：</strong></p>
+<ol>
+<li>把应用的配置文件写回直连供应商（进入路由前在用、卡片上标「直连」的那个）；</li>
+<li>保存请求日志；</li>
+<li>关闭连接。</li>
+</ol>
+<blockquote>
+<p>退出 CC Switch 时也会先写回直连，应用的模式保持不变，下次启动再重新接上；如果没能接上，应用会回到直连并给出提示。</p>
+</blockquote>
+<h3>10.8 实战：在 Claude Code 里用 GPT</h3>
+<h4>方式一：第三方 Responses 网关（API Key）</h4>
+<p><strong>准备工作：</strong></p>
+<ul>
+<li>CC Switch 3.17.0 及以上；</li>
+<li>已安装 Claude Code，并至少运行过一次；</li>
+<li>一个兼容 OpenAI Responses API 的端点 + Key（<strong>是 Responses，不是 Chat Completions</strong>）。</li>
+</ul>
+<p><strong>步骤：</strong></p>
+<ol>
+<li>左侧栏选 <strong>Claude Code</strong> → <strong>＋ 添加供应商</strong>；</li>
+<li>保持默认的 <strong>自定义配置</strong>；</li>
+<li>填写：
+<ul>
+<li><strong>供应商名称</strong>：随意，如 <code class="notranslate">GPT Gateway</code>；</li>
+<li><strong>API Key</strong>：网关 Key（真实 Key 只保存在 CC Switch 里）；</li>
+<li><strong>请求地址</strong>：网关根地址，如 <code class="notranslate">https://gpt-gateway.example.com</code>，<strong>不要以斜杠结尾</strong>；</li>
+</ul>
+</li>
+<li>展开 <strong>高级选项</strong>：
+<ul>
+<li><strong>API 格式</strong>：改成 <strong><code class="notranslate">OpenAI Responses API（需开启路由）</code></strong>；网关只提供 Chat Completions 时选 <code class="notranslate">OpenAI Chat Completions（需开启路由）</code>；</li>
+<li><strong>认证字段</strong>：保持默认的 <code class="notranslate">ANTHROPIC_AUTH_TOKEN（默认）</code>，路由会以 <code class="notranslate">Authorization: Bearer &lt;key&gt;</code> 发给上游；除非网关文档明确要求 <code class="notranslate">x-api-key</code>，否则不要改（改错典型表现是 401/403）；</li>
+<li><strong>模型映射</strong>：<strong>至少要填「默认兜底模型」</strong>（如 <code class="notranslate">gpt-5.6</code>，以网关文档为准）；更精细的做法是按行指定 Sonnet / Opus / Haiku；</li>
+<li><strong>声明支持 1M</strong>：仅当网关确实以 100 万 token 及以上窗口服务该模型时才勾选；</li>
+</ul>
+</li>
+<li>保存后，卡片上会出现 <strong>「需要路由」</strong> 标记。</li>
+</ol>
+<p><strong>开启路由：</strong></p>
+<ol>
+<li>点顶部 <strong>「路由」</strong> 标签 → <strong>「开始路由」</strong>；</li>
+<li>选择这家供应商；</li>
+<li>如果 Claude Code 正在运行，<strong>重开一个终端会话</strong>（live 配置是启动时读取的）。</li>
+</ol>
+<p><strong>验证：</strong></p>
+<ul>
+<li>新开会话，用 <code class="notranslate">/model</code> 查看模型菜单，应显示映射里的显示名；</li>
+<li>发一个小问题，看 <strong>设置 → 本地路由</strong> 里的「总请求数」增长；</li>
+<li>用量看板里按上游真实模型显示。</li>
+</ul>
+<h4>方式二：ChatGPT 订阅（Codex OAuth）</h4>
+<p><strong>准备工作：</strong> 一个 ChatGPT Plus / Pro 订阅账号。</p>
+<p><strong>步骤：</strong></p>
+<ol>
+<li>左侧栏选 <strong>Claude Code</strong> → <strong>＋ 添加供应商</strong>；</li>
+<li>在预设列表里选带 OpenAI 图标的 <strong><code class="notranslate">Codex</code></strong> 预设（它出现在 Claude Code 标签下是正确的）；</li>
+<li><strong>不需要 API Key，也不需要填地址</strong>——请求固定发往 ChatGPT 的 Codex 服务；</li>
+<li>点 <strong>「使用 ChatGPT 登录」</strong>：
+<ul>
+<li>这是<strong>设备码流程</strong>；</li>
+<li>CC Switch 会自动打开浏览器并把验证码复制到剪贴板；</li>
+<li>在浏览器页面粘贴验证码完成授权；</li>
+<li>应用内显示「等待授权中...」；</li>
+</ul>
+</li>
+<li>登录成功后，「认证状态」显示已登录账号（邮箱）；</li>
+<li>支持多账号：可「添加其他账号」「设为默认」，或在这个供应商上指定使用某个账号。</li>
+</ol>
+<p><strong>预填的模型档位：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">角色</th>
+<th align="left">默认模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">主模型</td>
+<td align="left"><code class="notranslate">gpt-5.6-sol</code></td>
+</tr>
+<tr>
+<td align="left">Sonnet</td>
+<td align="left"><code class="notranslate">gpt-5.6-sol</code></td>
+</tr>
+<tr>
+<td align="left">Opus</td>
+<td align="left"><code class="notranslate">gpt-5.6-sol</code></td>
+</tr>
+<tr>
+<td align="left">Haiku</td>
+<td align="left"><code class="notranslate">gpt-5.6-luna</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>预设还会把 <code class="notranslate">CLAUDE_CODE_MAX_CONTEXT_TOKENS</code> 和 <code class="notranslate">CLAUDE_CODE_AUTO_COMPACT_WINDOW</code> 设为 <code class="notranslate">372000</code>。</p>
+<p><strong>FAST 模式</strong>：可选开关，开启后请求携带 <code class="notranslate">service_tier="priority"</code> 换取更低延迟，但会按更高速率消耗 ChatGPT 配额，<strong>默认保持关闭</strong>。</p>
+<p><strong>凭据位置</strong>：<code class="notranslate">~/.cc-switch/codex_oauth_auth.json</code>（<strong>不是</strong> <code class="notranslate">~/.codex/</code>），与 Codex CLI 自己的登录互不影响；Token 会在到期前自动刷新。</p>
+<p><strong>能力边界与已知限制：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">项</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>提示缓存</strong></td>
+<td align="left">路由会为每个会话注入稳定的 <code class="notranslate">prompt_cache_key</code>，长对话不会每轮全价重发</td>
+</tr>
+<tr>
+<td align="left"><strong>思考</strong></td>
+<td align="left">Claude Code 的思考开关与等级会折算成 GPT 的 <code class="notranslate">reasoning.effort</code>（low/medium/high）；推理内容以加密形态跨轮完整回放</td>
+</tr>
+<tr>
+<td align="left"><strong>工具与多模态</strong></td>
+<td align="left">多轮工具调用、图片与 PDF 输入都被完整转换</td>
+</tr>
+<tr>
+<td align="left"><strong>上下文窗口</strong></td>
+<td align="left">Claude Code 对路由供应商按默认 <strong>200K</strong> 窗口做自动压缩；超出 200K 的部分当前不会被用到。方式二上游上限是 372K、够不到 1M，<strong>不要勾 1M</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>输出上限</strong></td>
+<td align="left">方式二由 ChatGPT 服务端控制（<code class="notranslate">max_tokens</code> 不会下发）；方式一原样透传</td>
+</tr>
+<tr>
+<td align="left"><strong>联网搜索</strong></td>
+<td align="left">取决于上游是否支持托管 <code class="notranslate">web_search</code> 工具</td>
+</tr>
+<tr>
+<td align="left"><strong>用量金额</strong></td>
+<td align="left">Token 计数准确，美元金额是按公开 API 价折算的<strong>估算</strong>，仅供参考</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>10.9 实战：在 Codex 里用 Claude</h3>
+<p>反向同理：</p>
+<ol>
+<li>Codex 添加供应商，<strong>上游格式</strong> 选 <strong>Anthropic Messages（需开启路由）</strong>；</li>
+<li>开启路由并选它；</li>
+<li>重启 Codex。</li>
+</ol>
+<p>详见官方攻略 <code class="notranslate">docs/guides/codex-claude-routing-guide-zh.md</code>。</p>
+<h3>10.10 整流器</h3>
+<p><strong>设置 → 本地路由 → 整流器</strong>：自动修复部分上游不兼容的请求，例如：</p>
+<ul>
+<li>Thinking 签名不兼容时移除相关内容后重试；</li>
+<li>上游不支持图片时降级。</li>
+</ul>
+<hr>
+<h2>11. 故障转移与熔断</h2>
+<h3>11.1 前提条件</h3>
+<ol>
+<li>✅ 应用已进入<strong>路由模式</strong>（聚合模式不做故障转移）；</li>
+<li>✅ 在「路由」标签里打开<strong>故障转移开关</strong>；</li>
+<li>✅ 队列里有供应商。</li>
+</ol>
+<blockquote>
+<p>故障转移只支持 <strong>Claude Code、Codex、Gemini CLI、Grok Build</strong> 四个应用。官方账号不进队列（它用客户端自己的登录，不能和别家轮换）。</p>
+</blockquote>
+<h3>11.2 开启</h3>
+<ol>
+<li>应用页切到 <strong>「路由」</strong> 标签，确认已处于路由模式；</li>
+<li>打开标签栏右侧带「故障转移」提示的开关（两条交叉的箭头图标）；</li>
+<li>首次开启会弹确认框，点「我已了解，继续启用」。</li>
+</ol>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">状态</th>
+<th align="left">行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">关闭</td>
+<td align="left">只路由到选定的一家供应商，不自动切换</td>
+</tr>
+<tr>
+<td align="left">开启</td>
+<td align="left">立即切换到队列 P1，并在请求失败时自动切换到下一个</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>11.3 管理队列</h3>
+<ul>
+<li><strong>队列 · 按优先级</strong>：请求先发给第一位（P1），连续失败时自动换下一位；</li>
+<li><strong>不在队列</strong>：还没加入的供应商。</li>
+</ul>
+<p><strong>操作：</strong></p>
+<ul>
+<li>添加：在「不在队列」里点卡片上的 <strong>「加入队列」</strong>；</li>
+<li>调整顺序：卡片上的上移、下移按钮，或直接拖动；</li>
+<li>移除：点队列里卡片上的 <strong>「移出队列」</strong>。</li>
+</ul>
+<blockquote>
+<p>队列顺序与首页供应商列表的顺序一致。</p>
+</blockquote>
+<h3>11.4 熔断器默认参数</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">配置</th>
+<th align="left">说明</th>
+<th align="center">通用默认</th>
+<th align="center">Claude 默认</th>
+<th align="left">范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>失败阈值</strong></td>
+<td align="left">连续失败多少次触发熔断</td>
+<td align="center">4</td>
+<td align="center">8</td>
+<td align="left">1–20</td>
+</tr>
+<tr>
+<td align="left"><strong>恢复成功阈值</strong></td>
+<td align="left">半开状态下成功多少次后关闭熔断器</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="left">1–10</td>
+</tr>
+<tr>
+<td align="left"><strong>恢复等待时间</strong></td>
+<td align="left">熔断后多久尝试恢复（秒）</td>
+<td align="center">60</td>
+<td align="center">90</td>
+<td align="left">0–300</td>
+</tr>
+<tr>
+<td align="left"><strong>错误率阈值</strong></td>
+<td align="left">错误率超过此值时打开熔断器</td>
+<td align="center">60%</td>
+<td align="center">70%</td>
+<td align="left">0–100%</td>
+</tr>
+<tr>
+<td align="left"><strong>最小请求数</strong></td>
+<td align="left">计算错误率前的最小请求数</td>
+<td align="center">10</td>
+<td align="center">15</td>
+<td align="left">5–100</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>Claude 由于请求耗时较长，默认配置更宽松。</p>
+</blockquote>
+<h3>11.5 超时与重试</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">配置</th>
+<th align="left">说明</th>
+<th align="center">通用默认</th>
+<th align="center">Claude 默认</th>
+<th align="left">范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>流式首字节超时</strong></td>
+<td align="left">等待首个数据块的最大时间（秒）</td>
+<td align="center">60</td>
+<td align="center">90</td>
+<td align="left">1–120</td>
+</tr>
+<tr>
+<td align="left"><strong>流式静默超时</strong></td>
+<td align="left">数据块之间的最大间隔（秒）</td>
+<td align="center">120</td>
+<td align="center">180</td>
+<td align="left">60–600（0 禁用）</td>
+</tr>
+<tr>
+<td align="left"><strong>非流式超时</strong></td>
+<td align="left">非流式请求的总超时（秒）</td>
+<td align="center">600</td>
+<td align="center">600</td>
+<td align="left">60–1200</td>
+</tr>
+<tr>
+<td align="left"><strong>最大重试次数</strong></td>
+<td align="left">请求失败时的重试次数</td>
+<td align="center">3</td>
+<td align="center">6</td>
+<td align="left">0–10</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>Gemini 的默认最大重试次数为 <strong>5</strong>。</p>
+</blockquote>
+<h3>11.6 熔断状态</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">状态</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>关闭</strong></td>
+<td align="left">正常，允许请求</td>
+</tr>
+<tr>
+<td align="left"><strong>开启</strong></td>
+<td align="left">熔断，跳过此供应商</td>
+</tr>
+<tr>
+<td align="left"><strong>半开</strong></td>
+<td align="left">尝试恢复，发送试探请求</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>状态流转：<code class="notranslate">关闭 →（失败次数 ≥ 阈值）→ 开启 →（熔断时长到期）→ 半开 →（试探成功 ≥ 恢复阈值）→ 关闭</code>；半开试探失败则回到开启。</p>
+<h3>11.7 健康状态徽章</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">徽章</th>
+<th align="left">状态</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">🟢</td>
+<td align="left">正常</td>
+<td align="left">连续失败 0 次</td>
+</tr>
+<tr>
+<td align="left">🟡</td>
+<td align="left">降级</td>
+<td align="left">有失败但未触发熔断</td>
+</tr>
+<tr>
+<td align="left">🔴</td>
+<td align="left">熔断</td>
+<td align="left">已触发熔断，暂时跳过</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>11.8 队列配置建议</h3>
+<ol>
+<li><strong>主供应商</strong>：最稳定、最快的；</li>
+<li><strong>第一备用</strong>：次优；</li>
+<li><strong>第二备用</strong>：保底。</li>
+</ol>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">失败阈值</th>
+<th align="left">熔断时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">高可用要求</td>
+<td align="left">2</td>
+<td align="left">30 秒</td>
+</tr>
+<tr>
+<td align="left">一般场景</td>
+<td align="left">3</td>
+<td align="left">60 秒</td>
+</tr>
+<tr>
+<td align="left">容忍偶发失败</td>
+<td align="left">5</td>
+<td align="left">120 秒</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>12. 聚合模式</h2>
+<h3>12.1 它是什么</h3>
+<p>把<strong>多家供应商的模型放进 Claude Code 或 Codex 的同一个模型列表</strong>。在客户端的 <code class="notranslate">/model</code> 里选哪个模型，请求就发给哪一家，不用回 CC Switch 切换供应商。</p>
+<p><strong>只支持 Claude Code 和 Codex</strong>，两个应用的名单要分别配置。</p>
+<h3>12.2 与路由的区别</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">路由</th>
+<th align="left">聚合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">同一时间使用的供应商</td>
+<td align="left">一家（或按故障转移队列轮换）</td>
+<td align="left">多家，按所选模型分发</td>
+</tr>
+<tr>
+<td align="left">故障转移</td>
+<td align="left">支持</td>
+<td align="left"><strong>不支持</strong></td>
+</tr>
+<tr>
+<td align="left">切换供应商的方式</td>
+<td align="left">在 CC Switch 里切换</td>
+<td align="left">在客户端 <code class="notranslate">/model</code> 里选模型</td>
+</tr>
+<tr>
+<td align="left">适用应用</td>
+<td align="left">Claude Code / Codex / Gemini CLI / Grok Build</td>
+<td align="left">仅 Claude Code / Codex</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>两者都经过本机路由服务，都需要 CC Switch 保持运行。一个应用同一时间只能是三种模式之一。</p>
+</blockquote>
+<h3>12.3 进入聚合模式</h3>
+<ol>
+<li>左侧栏选 Claude Code 或 Codex → 点顶部 <strong>「聚合」</strong> 标签（只是查看）；</li>
+<li>配好各家的模型列表，把需要的供应商加入聚合名单；</li>
+<li>确认默认供应商；</li>
+<li>点 <strong>「切换到聚合模式」</strong>；</li>
+<li>在确认框里查看默认供应商和将出现在 <code class="notranslate">/model</code> 里的模型，确认。</li>
+</ol>
+<p>切换后页面显示「聚合生效中 · 默认」，以及默认供应商和另外几家共多少个模型。</p>
+<h3>12.4 添加和移除供应商</h3>
+<ul>
+<li><strong>添加</strong>：在「可添加」列表里点卡片上的 <strong>「添加」</strong>，这家的模型就会出现在客户端的模型列表里；</li>
+<li><strong>移除</strong>：在「已添加」列表里点 <strong>「移除」</strong>。</li>
+</ul>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>默认供应商不能移除</strong>，请先把别家设为默认。</p>
+</blockquote>
+<h3>12.5 设置每家的模型</h3>
+<p><strong>配置模型列表和把供应商加入聚合名单是两个步骤</strong>：保存供应商后，还要在「可添加」区域点「添加」。</p>
+<h4>获取模型列表</h4>
+<ol>
+<li>填好 API 地址、密钥或完成账号配置；</li>
+<li>点 <strong>「获取模型列表」</strong>；</li>
+<li>搜索并勾选需要的模型；</li>
+<li>点 <strong>「添加所选模型」</strong> 批量加入。</li>
+</ol>
+<blockquote>
+<p>不必把返回的全部模型都加入，只留常用的几个即可。</p>
+</blockquote>
+<h4>自动补全模型信息</h4>
+<p>加入列表后，CC Switch 会自动从 <strong>models.dev</strong> 获取模型资料，补全可匹配到的：</p>
+<ul>
+<li>上下文窗口；</li>
+<li>思考等级；</li>
+<li>文字 / 图片输入能力。</li>
+</ul>
+<blockquote>
+<p>自动补全只填写空缺项，保留已有参数，并提示信息来源。不同供应商部署的同名模型可能有不同能力，<strong>以当前供应商实际支持的参数为准</strong>。</p>
+</blockquote>
+<h4>手动添加模型</h4>
+<p>供应商未开放模型列表接口、列表暂未包含新模型、或需要自定义别名时，点 <strong>「手动添加」</strong>，填供应商实际支持的模型 ID。</p>
+<h4>默认模型</h4>
+<ul>
+<li>配置的模型会出现在客户端的模型选择器里；</li>
+<li><strong>★</strong> 表示这家供应商的默认模型；</li>
+<li>Claude Code 中它位于列表第一项，供默认供应商的启动和后台任务使用；</li>
+<li>Codex 使用配置中指定的默认模型。</li>
+</ul>
+<h3>12.6 默认供应商与 <code class="notranslate">ccs-</code> 前缀</h3>
+<p><strong>默认供应商</strong>承接所有不带前缀的请求。</p>
+<ul>
+<li>在供应商卡片上点 <strong>「设为默认」</strong> 更换；</li>
+<li>使用 Codex 官方账号时，可以把 <strong>OpenAI Official 设为默认供应商</strong>，再添加其他供应商；</li>
+<li><strong>OpenAI Official 只能作为默认供应商</strong>，不能作为普通聚合成员加入。</li>
+</ul>
+<p><strong><code class="notranslate">ccs-</code> 前缀：</strong></p>
+<ul>
+<li>除默认供应商外，其他已添加的供应商，模型会以 <strong><code class="notranslate">ccs-</code> 前缀</strong>出现在 <code class="notranslate">/model</code> 里；</li>
+<li>选择带 <code class="notranslate">ccs-</code> 前缀的模型 → 请求发给对应那一家；</li>
+<li>选择不带前缀的 → 请求发给默认供应商。</li>
+</ul>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>聚合模式暂不支持 Claude 官方订阅。</strong> 需要使用该订阅时，请回到直连模式，在 Claude Code 中通过官方登录流程使用。</p>
+</blockquote>
+<h3>12.7 什么时候需要重启</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">应用</th>
+<th align="left">聚合模型列表变化后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Claude Code</strong></td>
+<td align="left"><strong>立即生效</strong>（需要 2.1.243 或更新版本）</td>
+</tr>
+<tr>
+<td align="left"><strong>Codex</strong></td>
+<td align="left"><strong>需要彻底重启</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>Codex 的重启方式：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">使用方式</th>
+<th align="left">操作方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Codex CLI</strong></td>
+<td align="left">只关掉终端重开 <code class="notranslate">codex</code> <strong>不够</strong>——所有终端里的 <code class="notranslate">codex</code> 共用一个后台守护进程。点 CC Switch 页面顶部提示里的 <strong>「重启 Codex 守护进程」</strong>（会中断正在运行的任务）</td>
+</tr>
+<tr>
+<td align="left"><strong>Codex 桌面版</strong></td>
+<td align="left">彻底退出再重开。macOS 按 <code class="notranslate">⌘Q</code>，只关窗口不行</td>
+</tr>
+<tr>
+<td align="left"><strong>编辑器插件</strong></td>
+<td align="left">重开编辑器窗口</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>在已经加载好的模型列表里选择另一个模型，<strong>不需要</strong>每次重启。</p>
+</blockquote>
+<h3>12.8 Codex 子 agent 用另一个模型</h3>
+<p>聚合生效后，在聚合页签右上角点齿轮打开 <strong>「聚合设置」</strong>：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">设置</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>子代理模型</strong></td>
+<td align="left">从聚合里已发布的模型中选一个；选「跟随主模型」恢复默认</td>
+</tr>
+<tr>
+<td align="left"><strong>子代理推理强度</strong></td>
+<td align="left">只列所选模型支持的档位；选「模型默认」时用该模型自己的默认档</td>
+</tr>
+<tr>
+<td align="left"><strong>写在哪里</strong></td>
+<td align="left"><code class="notranslate">~/.codex/config.toml</code> 的 <code class="notranslate">[agents]</code>（<code class="notranslate">default_subagent_model</code>、<code class="notranslate">default_subagent_reasoning_effort</code>）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<ul>
+<li><strong>不用重启 Codex</strong>：新开的对话就会用上，已经开着的对话仍按原设置；</li>
+<li><strong>这是本机设置</strong>，不跟供应商走；</li>
+<li><strong>模型不在聚合里了</strong>：不写这两项，子 agent 暂时跟随主模型；加回来后自动恢复；</li>
+<li><strong>跨供应商</strong>：子 agent 和主 agent 不在同一家时，必须打开「聚合模式下子 agent 用经典工具」（默认已打开）。</li>
+</ul>
+<h3>12.9 Codex 子 agent 读不到任务</h3>
+<p><strong>症状：</strong></p>
+<ul>
+<li><code class="notranslate">Encrypted function output content could not be decrypted</code></li>
+<li><code class="notranslate">stream disconnected before completion</code></li>
+<li><code class="notranslate">unreadable_encrypted_agent_task</code></li>
+</ul>
+<p><strong>原因：</strong> Codex 新版的子 agent 工具会让主 agent 那家供应商加密任务，换一家就解不开。</p>
+<p><strong>解决：</strong></p>
+<ol>
+<li>在聚合页签的「聚合设置」里重新打开 <strong>「聚合模式下子 agent 用经典工具」</strong>（默认打开）；</li>
+<li><strong>重启 Codex</strong>。</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ul>
+<li><strong>有代价</strong>：没有 <code class="notranslate">followup_task</code>、<code class="notranslate">interrupt_agent</code> 等新版功能；</li>
+<li><strong>只影响聚合模式</strong>；</li>
+<li><strong>开了不生效</strong>：如果 <code class="notranslate">~/.codex/config.toml</code> 的 <code class="notranslate">[features]</code> 里有 <code class="notranslate">multi_agent_v2 = true</code>，它的优先级高于这个开关，需要先删掉。</li>
+</ul>
+<h3>12.10 Codex 自动审批用另一个模型</h3>
+<p>Codex 开了自动审批（<code class="notranslate">approvals_reviewer = "auto_review"</code>）时，可以在「聚合设置」里选 <strong>「自动审批模型」</strong>：</p>
+<ul>
+<li><strong>默认</strong>：默认那家是官方时用官方的 Auto Review（<code class="notranslate">codex-auto-review</code>）；是第三方时由主模型自己审批；</li>
+<li><strong>能选什么</strong>：聚合里已发布的模型（默认那家自己的除外）；</li>
+<li><strong>写在哪里</strong>：<code class="notranslate">cc-switch-model-catalog.json</code> 每一行的 <code class="notranslate">auto_review_model_override</code>；</li>
+<li><strong>改完要重启 Codex</strong>；</li>
+<li><strong>选听指令的模型</strong>：审批结果要按约定的 JSON 返回，经 Chat / Anthropic 格式转换的模型只靠提示词约束，回答不合格式会算作审批失败。</li>
+</ul>
+<h3>12.11 官方额度用完后第三方也发不出去</h3>
+<p><strong>症状：</strong> 官方 5 小时额度用完后，Codex 锁住发送键，或模型选择器只剩「Luna Reserve」。</p>
+<p><strong>原因：</strong> 这是 Codex 客户端自己的限制——只要本机有 ChatGPT 官方登录，它就自己查询额度，发现用完就在请求发出前换掉模型，请求到不了 CC Switch。</p>
+<p><strong>绕开：</strong></p>
+<ol>
+<li>在应用页顶部切到 <strong>「直连」</strong>；</li>
+<li>确认 <strong>设置 → 应用配置 → Codex</strong> 里的 <strong>「非接管切换时保留官方登录」是关闭的</strong>（默认关闭）；</li>
+<li>切换到一家第三方供应商（CC Switch 会把官方登录暂时收起来）；</li>
+<li>彻底重启 Codex，新开会话。</li>
+</ol>
+<p><strong>恢复：</strong> 官方额度恢复后切回「聚合」，再重启一次 Codex，收起来的官方登录会自动还回去。</p>
+<blockquote>
+<p>代价：期间只能用这一家第三方的模型。</p>
+</blockquote>
+<h3>12.12 聚合的限制</h3>
+<ul>
+<li><strong>不做故障转移</strong>：队列和设置会保留，回到路由模式后恢复；</li>
+<li><strong>Codex 的 OpenAI Official 只能作默认供应商</strong>；</li>
+<li><strong>暂不支持 Claude 官方订阅</strong>；</li>
+<li><strong>默认供应商不能移除</strong>；</li>
+<li><strong>需要 CC Switch 保持运行</strong>；</li>
+<li><strong>回到路由模式时，聚合的模型会从 <code class="notranslate">/model</code> 撤下</strong>（名单保留），已选中的聚合模型需要改回普通模型；</li>
+<li><strong>同一会话里换模型后，新模型要重新建立提示词缓存，第一轮费用会高一些</strong>。</li>
+</ul>
+<hr>
+<hr>
+<blockquote>
+<p><strong>本文篇幅较长，GitHub Issue 单篇上限 65536 字符，因此分为两篇：</strong></p>
+<ul>
+<li>第 1 篇（本篇）：第 0–12 章 —— 概念、安装、供应商、切换、验证、本地路由、故障转移、聚合</li>
+<li>第 2 篇：第 13–27 章 + 附录 —— Claude Desktop、Claude 多账号、授权中心、MCP/Skills、用量、数据备份、FAQ、排障、卸载、术语、附录</li>
+</ul>
+</blockquote></div>
+<div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://ivanlee99.github.io/">Youngs羊示</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("11/25/2024"!=""){
+    var startSite=new Date("11/25/2024");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","IVANLEE99/IVANLEE99.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
