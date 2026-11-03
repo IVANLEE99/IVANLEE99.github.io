@@ -1,0 +1,3601 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekBSZ.js'></script>
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="> **一句话：** magpie 是一个跑在你电脑上的本地应用 + 本地网关，让你所有的 AI 编程 Agent（Claude Code、Codex、Gemini CLI、OpenCode……）共用一套模型配置——任意 Agent 用任意模型，额度用完自动换账号。">
+<meta property="og:title" content="magpie 新手上手文档">
+<meta property="og:description" content="> **一句话：** magpie 是一个跑在你电脑上的本地应用 + 本地网关，让你所有的 AI 编程 Agent（Claude Code、Codex、Gemini CLI、OpenCode……）共用一套模型配置——任意 Agent 用任意模型，额度用完自动换账号。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ivanlee99.github.io//post/65.html">
+<meta property="og:image" content="">
+<title>magpie 新手上手文档</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">magpie 新手上手文档</h1>
+<div class="title-right">
+    <a href="https://ivanlee99.github.io/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/IVANLEE99/IVANLEE99.github.io/issues/65" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><blockquote>
+<p><strong>一句话：</strong> magpie 是一个跑在你电脑上的本地应用 + 本地网关，让你所有的 AI 编程 Agent（Claude Code、Codex、Gemini CLI、OpenCode……）共用一套模型配置——任意 Agent 用任意模型，额度用完自动换账号。</p>
+</blockquote>
+<hr>
+<h2>关于本文</h2>
+<ul>
+<li><strong>适用对象</strong>：第一次接触 magpie、想把自己的 Claude Code / Codex / Gemini CLI / OpenCode 接上不同模型的人。</li>
+<li><strong>资料依据</strong>：官方中文 README、官方中文《快速上手》、官方英文参考文档（<code class="notranslate">docs/reference.md</code>）、官方中文 Docker / 远程 magpie / 本地脱敏 / 隐私文档。</li>
+<li><strong>时效说明</strong>：magpie 迭代很快，界面文案、模型 ID、命令参数都可能变化。本文写作时间为 <strong>2026 年 11 月</strong>；遇到对不上的地方，以应用内界面、<code class="notranslate">magpie help</code> 和官方文档为准。</li>
+<li><strong>模型名说明</strong>：文中的 <code class="notranslate">deepseek/deepseek-v4-pro</code>、<code class="notranslate">moonshot/kimi-k2.5</code> 等只是示例，实际可选模型以你添加 provider 后 <code class="notranslate">magpie models</code> 的输出为准。</li>
+</ul>
+<p><strong>官方资料：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">资料</th>
+<th align="left">地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">官网 / 下载</td>
+<td align="left"><a href="https://usemagpie.ai/zh/" rel="nofollow">https://usemagpie.ai/zh/</a></td>
+</tr>
+<tr>
+<td align="left">中文快速上手</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/start" rel="nofollow">https://usemagpie.ai/docs/zh/start</a></td>
+</tr>
+<tr>
+<td align="left">完整参考（英文）</td>
+<td align="left"><a href="https://github.com/yetone/magpie/blob/main/docs/reference.md">https://github.com/yetone/magpie/blob/main/docs/reference.md</a></td>
+</tr>
+<tr>
+<td align="left">中文 README</td>
+<td align="left"><a href="https://github.com/yetone/magpie/blob/main/README.zh-CN.md">https://github.com/yetone/magpie/blob/main/README.zh-CN.md</a></td>
+</tr>
+<tr>
+<td align="left">Discord 社区</td>
+<td align="left"><a href="https://discord.gg/vGSnD3ZKQF" rel="nofollow">https://discord.gg/vGSnD3ZKQF</a></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>目录</h2>
+<ul>
+<li><a href="#0-10-%E5%88%86%E9%92%9F%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84">0. 10 分钟最短路径</a></li>
+<li><a href="#1-magpie-%E6%98%AF%E4%BB%80%E4%B9%88">1. magpie 是什么</a></li>
+<li><a href="#2-%E4%BA%94%E4%B8%AA%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">2. 五个核心概念</a></li>
+<li><a href="#3-%E5%AE%89%E8%A3%85%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87">3. 安装前的准备</a></li>
+<li><a href="#4-%E5%AE%89%E8%A3%85-magpie">4. 安装 magpie</a></li>
+<li><a href="#5-%E7%AC%AC%E4%B8%80%E6%AD%A5%E6%B7%BB%E5%8A%A0-provider%E6%A8%A1%E5%9E%8B%E6%9D%A5%E6%BA%90">5. 第一步：添加 Provider（模型来源）</a></li>
+<li><a href="#6-%E7%AC%AC%E4%BA%8C%E6%AD%A5%E7%BB%99%E6%AF%8F%E4%B8%AA-agent-%E9%80%89%E6%A8%A1%E5%9E%8B">6. 第二步：给每个 Agent 选模型</a></li>
+<li><a href="#7-%E7%AC%AC%E4%B8%89%E6%AD%A5%E9%AA%8C%E8%AF%81%E7%9C%9F%E7%9A%84%E8%B7%91%E9%80%9A%E4%BA%86">7. 第三步：验证真的跑通了</a></li>
+<li><a href="#8-%E6%96%B9%E6%A1%88profile%E4%B8%80%E9%94%AE%E5%88%87%E6%8D%A2%E6%95%B4%E5%A5%97%E9%85%8D%E7%BD%AE">8. 方案（Profile）：一键切换整套配置</a></li>
+<li><a href="#9-%E5%8F%AF%E9%80%89%E8%B7%AF%E7%94%B1%E7%BB%84%E4%B8%8E%E8%87%AA%E5%8A%A8%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB">9. 可选：路由组与自动故障转移</a></li>
+<li><a href="#10-%E7%94%A8%E9%87%8F%E8%8A%B1%E8%B4%B9%E4%B8%8E%E9%A2%9D%E5%BA%A6">10. 用量、花费与额度</a></li>
+<li><a href="#11-%E9%9A%90%E7%A7%81%E4%B8%8E%E6%9C%AC%E5%9C%B0%E8%84%B1%E6%95%8F">11. 隐私与本地脱敏</a></li>
+<li><a href="#12-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5">12. 命令行速查</a></li>
+<li><a href="#13-%E6%96%87%E4%BB%B6%E6%97%A5%E5%BF%97%E4%B8%8E%E9%85%8D%E7%BD%AE%E7%9B%AE%E5%BD%95">13. 文件、日志与配置目录</a></li>
+<li><a href="#14-%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD%E6%8C%89%E9%9C%80%E9%98%85%E8%AF%BB">14. 进阶功能（按需阅读）</a></li>
+<li><a href="#15-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-faq">15. 常见问题 FAQ</a></li>
+<li><a href="#16-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E6%89%8B%E5%86%8C">16. 故障排查手册</a></li>
+<li><a href="#17-%E5%8D%B8%E8%BD%BD%E4%B8%8E%E6%81%A2%E5%A4%8D%E5%8E%9F%E6%A0%B7">17. 卸载与恢复原样</a></li>
+<li><a href="#18-%E6%9C%AF%E8%AF%AD%E8%A1%A8">18. 术语表</a></li>
+<li><a href="#19-%E5%AE%98%E6%96%B9%E9%93%BE%E6%8E%A5%E6%B1%87%E6%80%BB">19. 官方链接汇总</a></li>
+<li><a href="#%E9%99%84%E5%BD%95-a%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B8%85%E5%8D%95">附录 A：常用命令清单</a></li>
+<li><a href="#%E9%99%84%E5%BD%95-b%E4%B8%89%E5%A5%97%E6%9C%80%E5%B0%8F%E5%8F%AF%E7%94%A8%E9%85%8D%E7%BD%AE">附录 B：三套最小可用配置</a></li>
+<li><a href="#%E9%99%84%E5%BD%95-c%E4%B8%8A%E7%BA%BF%E5%89%8D%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95">附录 C：上线前检查清单</a></li>
+</ul>
+<hr>
+<h2>0. 10 分钟最短路径</h2>
+<p>如果你不想先读概念，照着做即可。这里给两条路线，选一条。</p>
+<h3>路线 A：我有一家厂商的 API Key（以 DeepSeek 为例）</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 1. 安装（macOS / Linux）</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh
+
+<span class="pl-c"><span class="pl-c">#</span> 2. 添加 provider（把 sk-… 换成你的 key）</span>
+magpie provider add deepseek sk-…
+
+<span class="pl-c"><span class="pl-c">#</span> 3. 让 Claude Code 用 DeepSeek</span>
+magpie claude deepseek/deepseek-v4-pro
+
+<span class="pl-c"><span class="pl-c">#</span> 4. 验证</span>
+magpie ls
+magpie provider <span class="pl-c1">test</span> deepseek</pre></div>
+<p>然后<strong>关掉旧的 Claude Code 会话，重新开一个终端</strong>运行 <code class="notranslate">claude</code>。Agent 只在启动时读配置，旧会话不会变。</p>
+<h3>路线 B：我想用已登录的订阅（以 Claude 订阅为例）</h3>
+<ol>
+<li>打开 magpie 应用。</li>
+<li>左侧点 <strong>供应商（Providers）</strong> → <strong>＋ 添加供应商</strong>。</li>
+<li>点 <strong>Claude</strong> 卡片，在浏览器里完成 Anthropic 登录。</li>
+<li>左侧点 <strong>Agent</strong> → 找到 <strong>Claude Code</strong> 那一行 → 点它当前的模型。</li>
+<li>在列表里选 <code class="notranslate">claude/…</code> 下的模型（例如 <code class="notranslate">claude/claude-opus-5-5</code>）。</li>
+<li>重开一个 Claude Code 会话。</li>
+</ol>
+<h3>最短验收</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie ls          <span class="pl-c"><span class="pl-c">#</span> 看每个 Agent 当前用的模型</span>
+magpie providers   <span class="pl-c"><span class="pl-c">#</span> 看你添加的 provider</span>
+magpie usage today    <span class="pl-c"><span class="pl-c">#</span> 用一次之后，看请求有没有经过网关</span></pre></div>
+<p>只要 <code class="notranslate">magpie usage</code> 里出现了刚才那次对话的 token，就说明请求确实走了 magpie。</p>
+<blockquote>
+<p><strong>注意</strong>：如果你只用一个 Agent、只用它自家的订阅而且够用，magpie 对你不是必需的。它的价值在"多 Agent / 多 provider / 多账号"。</p>
+</blockquote>
+<hr>
+<h2>1. magpie 是什么</h2>
+<h3>1.1 它解决的问题</h3>
+<p>没有 magpie 时，每个 Agent 都把模型写在自己的配置文件里，格式各不相同：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">Agent</th>
+<th align="left">配置文件</th>
+<th align="left">格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left"><code class="notranslate">~/.claude/settings.json</code></td>
+<td align="left">JSON，靠环境变量</td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left"><code class="notranslate">~/.codex/config.toml</code></td>
+<td align="left">TOML</td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left"><code class="notranslate">~/.gemini/settings.json</code> + <code class="notranslate">.env</code></td>
+<td align="left">JSON + env</td>
+</tr>
+<tr>
+<td align="left">OpenCode</td>
+<td align="left"><code class="notranslate">~/.config/opencode/opencode.json(c)</code></td>
+<td align="left">JSON</td>
+</tr>
+<tr>
+<td align="left">Crush</td>
+<td align="left"><code class="notranslate">~/.config/crush/crush.json</code></td>
+<td align="left">JSON</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>于是你面对这些麻烦：</p>
+<ul>
+<li>想在 Claude Code 里用 Kimi，得手动改 <code class="notranslate">ANTHROPIC_BASE_URL</code> 和 token；</li>
+<li>想在 Codex 里用 DeepSeek，得手动写 <code class="notranslate">[model_providers.*]</code>；</li>
+<li>买了 ChatGPT 订阅，却只能在 Codex 里用；</li>
+<li>一个账号额度用完了，要手动去另一个账号切换；</li>
+<li>想知道这个月各个 Agent 花了多少钱，只能分别去各家后台看。</li>
+</ul>
+<p>magpie 把这些收进<strong>一个应用 + 一个本地网关</strong>：</p>
+<ul>
+<li><strong>任意 Agent 用任意模型</strong>，在一张表里选。</li>
+<li><strong>一个 provider 处处能用</strong>：API Key、本地模型、你登录着的 Claude / ChatGPT / Copilot / Gemini / Grok 订阅。</li>
+<li><strong>额度用完自动接上</strong>：同一个服务商的下一个账号、路由组里的下一个模型。</li>
+<li><strong>密钥不出你的电脑</strong>：请求直接发给你选的供应商，不经过 magpie 的服务器。</li>
+<li><strong>统一用量</strong>：token、缓存命中、花费、额度，按 Agent 和模型统计。</li>
+</ul>
+<h3>1.2 它是怎么工作的</h3>
+<p>magpie 启动时会在本机开一个网关，默认地址：</p>
+<pre class="notranslate"><code class="notranslate">http://127.0.0.1:3425
+</code></pre>
+<p>你的 Agent 本来要发给自己厂商的请求，被 magpie 写进配置后改为发到这个本地网关。网关再把请求转给你选的 provider——中间会做协议转换、路由、重试、统计。</p>
+<pre class="notranslate"><code class="notranslate">┌────────────────┐
+│  Claude Code   │──┐
+├────────────────┤  │
+│  Codex         │──┤    HTTP / SSE
+├────────────────┤  ├──────────────►  127.0.0.1:3425  ──────────────►  你的供应商
+│  Gemini CLI    │──┤                   magpie 网关                        ├─ 订阅账号
+├────────────────┤  │                   · 协议转换                          ├─ API Key 厂商
+│  OpenCode      │──┤                   · 路由 / 故障转移                   ├─ 本地模型
+├────────────────┤  │                   · 用量统计                          └─ 自定义地址
+│  其他 Agent    │──┘                   · 可选脱敏
+└────────────────┘
+</code></pre>
+<p>网关同时支持四种 API，并在它们之间互相转换：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">API</th>
+<th align="left">典型 Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">OpenAI Chat Completions</td>
+<td align="left">大多数 OpenAI 兼容工具</td>
+</tr>
+<tr>
+<td align="left">OpenAI Responses</td>
+<td align="left">Codex</td>
+</tr>
+<tr>
+<td align="left">Anthropic Messages</td>
+<td align="left">Claude Code</td>
+</tr>
+<tr>
+<td align="left">Google Gemini</td>
+<td align="left">Gemini CLI</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>流式输出、工具调用、推理（reasoning）都支持。所以 <strong>Agent 用哪种 API 不重要</strong>，magpie 会把它转成目标模型能听懂的格式。</p>
+<h3>1.3 支持哪些 Agent</h3>
+<p>magpie 只显示<strong>你电脑上已经安装或配置过</strong>的 Agent。常见的有：</p>
+<p>Claude Code、Claude Desktop、Codex、Gemini CLI、Antigravity CLI、OpenCode、OpenChamber、MiMo Code、DevEco Code、Pi、oh-my-pi、StepCode、MothX、Goose、Cursor CLI、Cursor Private Inference、Zed、VS Code Chat、VS Code Insiders、VSCodium Chat、JetBrains Air、Copilot（JetBrains）、Copilot CLI、Crush、DeepSeek Harness、Command Code、Kimi Code、Qwen Code、MiniMax Code、Droid、Cline、Qoder、Qoder CN、Grok Build、Grok App、ZCode、WorkBuddy、CodeBuddy、Raycast、OpenClaw、AstrBot……</p>
+<p>完整列表见官方 README。对于"不在列表里、但能填 base URL"的工具，也可以直接用网关地址接入（见 <a href="#74-%E9%9D%9E-magpie-%E7%AE%A1%E7%90%86%E7%9A%84%E5%B7%A5%E5%85%B7%E6%80%8E%E4%B9%88%E6%8E%A5">7.4</a>）。</p>
+<h3>1.4 支持哪些平台</h3>
+<ul>
+<li><strong>macOS</strong>：菜单栏应用 + 窗口，已签名并公证，自动更新。</li>
+<li><strong>Windows</strong>：窗口 + 托盘，暂未签名（首次运行 SmartScreen 可能提示）。</li>
+<li><strong>Linux</strong>：桌面版（GTK 3 + WebKitGTK 4.1）或终端版（TUI + Web + CLI）。</li>
+<li><strong>Docker</strong>：<code class="notranslate">ghcr.io/yetone/magpie</code>，适合服务器 / NAS。</li>
+<li><strong>Termux</strong>：Android 终端版。</li>
+</ul>
+<h3>1.5 它不是什么</h3>
+<ul>
+<li><strong>不是模型提供商</strong>：它不卖 token，也不转发到自己的服务器。你的请求直接去你配的供应商。</li>
+<li><strong>不是 Agent</strong>：它不会替你写代码，只负责"把模型接到 Agent 上"。</li>
+<li><strong>不是必须常驻的云服务</strong>：但通过 magpie 用的模型需要网关在运行；关掉窗口后它还在菜单栏/托盘。</li>
+<li><strong>不会改你的其他配置</strong>：只改它需要的那几个键，注释、顺序、缩进都保留，写入是原子的。</li>
+</ul>
+<hr>
+<h2>2. 五个核心概念</h2>
+<p>先记住这五个词，后面所有操作都围绕它们。</p>
+<h3>2.1 Provider（供应商）</h3>
+<p><strong>模型从哪里来。</strong> 四类：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">例子</th>
+<th align="left">需要什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">订阅登录</td>
+<td align="left">Claude Pro/Max、ChatGPT Plus/Pro、Copilot、Gemini Code Assist、Antigravity</td>
+<td align="left">在 magpie 里点卡片登录</td>
+</tr>
+<tr>
+<td align="left">厂商预设 + API Key</td>
+<td align="left">Anthropic、OpenAI、DeepSeek、Kimi、智谱 GLM、MiniMax、Qwen、Mistral、Groq、xAI、OpenRouter……</td>
+<td align="left">粘贴 key</td>
+</tr>
+<tr>
+<td align="left">本地模型</td>
+<td align="left">Ollama、LM Studio</td>
+<td align="left">本机服务在跑，无需 key</td>
+</tr>
+<tr>
+<td align="left">自定义兼容地址</td>
+<td align="left">中转站、自建网关、另一台电脑上的 magpie</td>
+<td align="left">OpenAI 兼容 <code class="notranslate">/v1</code> 或 Anthropic 兼容根地址</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>每个模型都写作：</p>
+<pre class="notranslate"><code class="notranslate">provider/model
+</code></pre>
+<p>例如：</p>
+<pre class="notranslate"><code class="notranslate">deepseek/deepseek-v4-pro
+moonshot/kimi-k2.5
+claude/claude-opus-5-5
+codex/gpt-5.5
+</code></pre>
+<h3>2.2 Agent（智能体）</h3>
+<p><strong>使用模型的工具。</strong> Claude Code、Codex、Gemini CLI、OpenCode 等，每个在 <strong>Agent</strong> 页占一行，显示它当前用的模型。</p>
+<p>magpie 对每个 Agent 做两件事：</p>
+<ol>
+<li>在它的配置里写入一个指向本地网关的 provider；</li>
+<li>把它的模型设置改成 <code class="notranslate">provider/model</code>。</li>
+</ol>
+<p>改完后，Agent 以为自己在调用原来的厂商，实际上请求发到了 <code class="notranslate">127.0.0.1:3425</code>。</p>
+<h3>2.3 Gateway（网关）</h3>
+<p><strong>本地地址 <code class="notranslate">127.0.0.1:3425</code>。</strong> 它做四件事：</p>
+<ul>
+<li>接收 Agent 的请求；</li>
+<li>按模型名找到对应 provider；</li>
+<li>在需要时转换 API 格式；</li>
+<li>转发、重试、记录用量。</li>
+</ul>
+<p>网关默认只监听本机回环地址，所以其他电脑访问不到。要让局域网里的其他电脑用，需要打开"局域网共享"并给每台电脑发网关密钥（见 <a href="#143-%E8%BF%9C%E7%A8%8B-magpie%E5%8F%A6%E4%B8%80%E5%8F%B0%E7%94%B5%E8%84%91%E7%94%A8%E5%90%8C%E4%B8%80%E5%A5%97%E6%A8%A1%E5%9E%8B">14.3</a>）。</p>
+<h3>2.4 Routing group（路由组）</h3>
+<p><strong>把多个模型/账号合成一个，给 Agent 当做一个模型来选。</strong> 名字写作：</p>
+<pre class="notranslate"><code class="notranslate">group/&lt;id&gt;
+</code></pre>
+<p>例如 <code class="notranslate">group/daily-coding</code>。当第一个模型额度用完、被限流或出错时，自动换下一个。</p>
+<p>路由组是<strong>可选的</strong>。只有一个 provider、一个账号时，你不需要它。</p>
+<h3>2.5 Profile（方案）</h3>
+<p><strong>所有 Agent 配置的一份命名快照。</strong> 例如：</p>
+<ul>
+<li><code class="notranslate">省钱</code>：全部 Agent 用便宜模型；</li>
+<li><code class="notranslate">专注</code>：Claude Code 用 Opus，Codex 用 GPT；</li>
+<li><code class="notranslate">公司网络</code>：全部走公司允许的 provider。</li>
+</ul>
+<p>点一下就能整套切换。</p>
+<h3>2.6 概念关系图</h3>
+<pre class="notranslate"><code class="notranslate">Provider ──提供──► Model（provider/model）──被选用──► Agent
+   │                    │
+   │                    └──可组合──► Routing group（group/&lt;id&gt;）──被选用──► Agent
+   │
+   └──账号/密钥可多个──► 自动故障转移
+
+Profile = 所有 Agent 当前模型选择的一份快照
+Gateway = 所有请求的必经之路（127.0.0.1:3425）
+</code></pre>
+<hr>
+<h2>3. 安装前的准备</h2>
+<h3>3.1 确认你的 Agent 已经装好</h3>
+<p>桌面版 magpie 不会替你安装 Agent，它只配置<strong>已经存在</strong>的 Agent（Docker 里的 Claude 订阅是例外：需要时会按需下载 Claude Code）。先确认你要用的命令能跑：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">claude --version
+codex --version
+gemini --version
+opencode --version</pre></div>
+<p>装好并至少登录过一次，magpie 才能发现它。</p>
+<h3>3.2 备份现有配置（强烈建议）</h3>
+<p>magpie 的写入是原子的、只动它需要的键，但第一次上手仍建议先备份：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> macOS / Linux</span>
+cp <span class="pl-k">~</span>/.claude/settings.json <span class="pl-k">~</span>/.claude/settings.json.bak <span class="pl-k">2&gt;</span>/dev/null
+cp <span class="pl-k">~</span>/.codex/config.toml <span class="pl-k">~</span>/.codex/config.toml.bak <span class="pl-k">2&gt;</span>/dev/null
+cp <span class="pl-k">~</span>/.config/opencode/opencode.json <span class="pl-k">~</span>/.config/opencode/opencode.json.bak <span class="pl-k">2&gt;</span>/dev/null</pre></div>
+<p>Windows 对应的文件在：</p>
+<pre class="notranslate"><code class="notranslate">%USERPROFILE%\.claude\settings.json
+%USERPROFILE%\.codex\config.toml
+%APPDATA%\opencode\opencode.json
+</code></pre>
+<blockquote>
+<p>即使不备份，也可以用 <code class="notranslate">magpie &lt;agent&gt; default</code> 让 magpie 删除自己写入的内容并恢复被替换的值（例如你原来的 <code class="notranslate">ANTHROPIC_BASE_URL</code>）。</p>
+</blockquote>
+<h3>3.3 检查网络与代理</h3>
+<ul>
+<li><strong>安装 / 更新</strong>要从 GitHub 下载发布文件。连不上时用 <code class="notranslate">--proxy</code> 或 <code class="notranslate">--mirror</code>（见 <a href="#44-%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%82%E6%95%B0">4.4</a>）。</li>
+<li><strong>调用云端模型</strong>需要能访问对应厂商。</li>
+<li><strong>本地模型</strong>（Ollama / LM Studio）不需要外网。</li>
+<li><strong>代理软件</strong>（Surge、Clash、mihomo 等）如果开了系统代理、TUN 或增强模式，可能把发往 <code class="notranslate">127.0.0.1:3425</code> 的请求也接走，导致 Agent 报 502 而 magpie 的路由页什么都没有。解决办法见 <a href="#162-agent-%E6%8A%A5-502%E4%BD%86%E8%B7%AF%E7%94%B1%E9%A1%B5%E4%BB%80%E4%B9%88%E9%83%BD%E6%B2%A1%E6%9C%89">16.2</a>。</li>
+</ul>
+<h3>3.4 磁盘与权限</h3>
+<ul>
+<li>应用本身不大；如果你要启用<strong>本地脱敏模型</strong>，会额外下载约 <strong>39 MB</strong>（AstrLink Guard，默认）或约 <strong>1.6 GB</strong>（OpenAI Privacy Filter，可选）。</li>
+<li>Docker 方式需要一个数据卷挂载到 <code class="notranslate">/config</code>。</li>
+<li>配置目录 <code class="notranslate">~/.config/magpie</code> 里的 <code class="notranslate">providers.json</code>、<code class="notranslate">logins.json</code> 等是 <code class="notranslate">0600</code>（只有你自己可读）。</li>
+<li>Linux 安装脚本在缺 WebKitGTK 4.1 时可能用 <code class="notranslate">sudo</code> 调包管理器安装依赖，会提示你输入密码。</li>
+</ul>
+<h3>3.5 先决定：你要用哪种方式</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">你的情况</th>
+<th align="left">推荐方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">日常在 Mac/Windows 桌面用</td>
+<td align="left">桌面应用</td>
+</tr>
+<tr>
+<td align="left">只在终端里工作</td>
+<td align="left"><code class="notranslate">magpie tui</code> 或 <code class="notranslate">magpie web</code></td>
+</tr>
+<tr>
+<td align="left">服务器 / NAS，给多台电脑提供模型</td>
+<td align="left">Docker（见 <a href="#144-docker-%E4%B8%8E-nas">14.4</a>）</td>
+</tr>
+<tr>
+<td align="left">想从源码构建 / 参与开发</td>
+<td align="left"><code class="notranslate">go install</code> 或 <code class="notranslate">make build</code>（见 <a href="#46-%E4%BB%8E%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85">4.6</a>）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>4. 安装 magpie</h2>
+<h3>4.1 macOS</h3>
+<ol>
+<li>打开 <a href="https://usemagpie.ai/zh/" rel="nofollow">https://usemagpie.ai/zh/</a>，下载 macOS 版。</li>
+<li>按官网提示安装（Mac 版已签名并公证）。</li>
+<li>首次启动后，菜单栏会出现 magpie 图标，同时打开主窗口。</li>
+<li>关掉窗口不会退出，它仍在菜单栏运行；需要完全退出时用菜单里的退出。</li>
+</ol>
+<p>也可以用安装脚本：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh</pre></div>
+<p>macOS 版会自动更新：应用在后台下载新版本，重启或退出时安装；菜单里有 <strong>Restart to Update</strong>。</p>
+<h3>4.2 Windows</h3>
+<ol>
+<li>从官网下载 Windows 版并安装。</li>
+<li>目前 Windows 构建<strong>尚未签名</strong>，首次运行 SmartScreen 可能提示，选择"更多信息 → 仍要运行"。</li>
+<li>安装后出现在托盘；可以在设置里开启登录时自动启动（<code class="notranslate">magpie autostart on</code>）。</li>
+<li>Windows 上的 magpie 也能配置 <strong>WSL 发行版里的 Agent</strong>，会话和用量一样统计。</li>
+</ol>
+<h3>4.3 Linux</h3>
+<p>一条命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh</pre></div>
+<p>脚本会自动判断装哪种版本：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">情况</th>
+<th align="left">装什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">有桌面，且已装 GTK 3 + WebKitGTK 4.1</td>
+<td align="left">桌面版（窗口、托盘、应用菜单）</td>
+</tr>
+<tr>
+<td align="left">有桌面，但缺 WebKitGTK 4.1</td>
+<td align="left">先用系统包管理器（apt / dnf / pacman / zypper）通过 <code class="notranslate">sudo</code> 装依赖，再装桌面版</td>
+</tr>
+<tr>
+<td align="left">没有桌面、没有终端、没有 sudo、发行版不认识</td>
+<td align="left">终端版（<code class="notranslate">magpie tui</code>、<code class="notranslate">magpie web</code>、CLI），并告诉你该装哪个包</td>
+</tr>
+<tr>
+<td align="left">Alpine（musl）</td>
+<td align="left">总是终端版</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>想自己选：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 强制桌面版（即使库现在装不上）</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --gui
+
+<span class="pl-c"><span class="pl-c">#</span> 强制终端版，不装任何系统包</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --tui</pre></div>
+<p><code class="notranslate">MAGPIE_CLI=1</code> 等价于 <code class="notranslate">--tui</code>。</p>
+<p>Debian / Ubuntu 上缺库时通常是：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo apt install libwebkit2gtk-4.1-0</pre></div>
+<p>Fedora：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo dnf install webkit2gtk4.1</pre></div>
+<p>装好库后再跑一次安装脚本，就会换成桌面版。</p>
+<p><strong>Termux（Android）：</strong> 安装脚本会把 Android 终端版放进 <code class="notranslate">$PREFIX/bin</code>；用 <code class="notranslate">magpie web</code> 或 <code class="notranslate">magpie tui</code> 打开界面；<code class="notranslate">magpie autostart on</code> 需要安装 Termux:Boot。</p>
+<h3>4.4 安装脚本参数</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">参数 / 环境变量</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">--gui</code></td>
+<td align="left">强制安装桌面版</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">--tui</code></td>
+<td align="left">强制安装终端版，不装系统包</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">--proxy &lt;url&gt;</code></td>
+<td align="left">安装时走代理（http、https、socks5、socks5h）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">--mirror &lt;前缀&gt;</code></td>
+<td align="left">从你指定的 GitHub 下载镜像取发布文件</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">--uninstall</code></td>
+<td align="left">卸载脚本安装的内容，保留 <code class="notranslate">~/.config/magpie</code> 里的设置</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">--purge</code></td>
+<td align="left">连同设置、provider、用量一起删除，并断开已连接的 Agent</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_CLI=1</code></td>
+<td align="left">同 <code class="notranslate">--tui</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_PROXY</code></td>
+<td align="left">同 <code class="notranslate">--proxy</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_MIRROR</code></td>
+<td align="left">同 <code class="notranslate">--mirror</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">HTTPS_PROXY</code> / <code class="notranslate">ALL_PROXY</code></td>
+<td align="left">标准代理环境变量，同样生效</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>示例：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 墙内 / 公司网络</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --proxy http://127.0.0.1:7890
+
+<span class="pl-c"><span class="pl-c">#</span> 用镜像</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --mirror https://mirror.example/
+
+<span class="pl-c"><span class="pl-c">#</span> 卸载但保留设置</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --uninstall
+
+<span class="pl-c"><span class="pl-c">#</span> 彻底删除</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --uninstall --purge</pre></div>
+<blockquote>
+<p>用镜像时，每个文件的 SHA-256 仍然来自 usemagpie.ai，不是镜像；被镜像改过的文件会被拒绝安装。</p>
+</blockquote>
+<h3>4.5 Docker（先看一眼，细节在第 14 章）</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker run -d --name magpie --restart unless-stopped \
+  -p 127.0.0.1:3425:3425 -p 127.0.0.1:3430:3430 \
+  -e MAGPIE_WEB_KEY=<span class="pl-s"><span class="pl-pds">$(</span>openssl rand -hex 16<span class="pl-pds">)</span></span> \
+  -v magpie-config:/config \
+  ghcr.io/yetone/magpie:latest web --addr 0.0.0.0:3430 --no-open</pre></div>
+<ul>
+<li><code class="notranslate">3425</code>：Agent 调用的网关。</li>
+<li><code class="notranslate">3430</code>：浏览器管理界面。</li>
+<li><code class="notranslate">/config</code>：所有数据（provider、key、登录、插件、用量）。</li>
+<li>容器外的请求必须带<strong>网关密钥</strong>，否则 401。</li>
+</ul>
+<p>完整步骤、Compose、NAS 配置见 <a href="#144-docker-%E4%B8%8E-nas">14.4</a>。</p>
+<h3>4.6 从源码安装</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">go install github.com/yetone/magpie@latest</pre></div>
+<p>或者：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git clone https://github.com/yetone/magpie.git
+<span class="pl-c1">cd</span> magpie
+
+make build      <span class="pl-c"><span class="pl-c">#</span> 当前平台的桌面版（需要 cgo + 平台 webview）</span>
+make app        <span class="pl-c"><span class="pl-c">#</span> macOS：magpie.app，菜单栏应用，无 Dock 图标</span>
+make cli        <span class="pl-c"><span class="pl-c">#</span> 纯终端版，不需要 cgo，可交叉编译</span>
+make release    <span class="pl-c"><span class="pl-c">#</span> dist/：本机原生应用 + 各平台 CLI</span></pre></div>
+<p>Linux 构建桌面版需要 <code class="notranslate">libgtk-3-dev</code> 和 <code class="notranslate">libwebkit2gtk-4.1-dev</code>；Termux 用 <code class="notranslate">-tags nogui</code>，然后用 <code class="notranslate">magpie web</code> 或 <code class="notranslate">magpie tui</code>。</p>
+<h3>4.7 第一次启动</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">方式</th>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">桌面应用</td>
+<td align="left">打开 magpie</td>
+<td align="left">窗口 + 菜单栏图标</td>
+</tr>
+<tr>
+<td align="left">只要菜单栏</td>
+<td align="left"><code class="notranslate">magpie tray</code></td>
+<td align="left">适合放进登录项</td>
+</tr>
+<tr>
+<td align="left">终端界面</td>
+<td align="left"><code class="notranslate">magpie tui</code></td>
+<td align="left">全功能，键盘操作</td>
+</tr>
+<tr>
+<td align="left">浏览器界面</td>
+<td align="left"><code class="notranslate">magpie web</code></td>
+<td align="left">适合 WSL / SSH 服务器</td>
+</tr>
+<tr>
+<td align="left">只要网关</td>
+<td align="left"><code class="notranslate">magpie serve</code></td>
+<td align="left">无窗口，供 Agent 调用</td>
+</tr>
+<tr>
+<td align="left">后台服务</td>
+<td align="left"><code class="notranslate">magpie daemon install</code></td>
+<td align="left">systemd / launchd，登录时自启；Linux 上无人登录也要运行需 <code class="notranslate">sudo loginctl enable-linger $USER</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>第一次启动后，应用会：</p>
+<ol>
+<li>扫描本机已安装的 Agent；</li>
+<li>在 <code class="notranslate">127.0.0.1:3425</code> 启动网关；</li>
+<li>显示主窗口。</li>
+</ol>
+<h3>4.8 界面导览</h3>
+<p>主窗口通常有这些标签页（不同版本可能多出"会话""资源库"等）：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">标签</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>供应商 / Providers</strong></td>
+<td align="left">添加、编辑、测试 provider；看谁在用哪些模型</td>
+</tr>
+<tr>
+<td align="left"><strong>Agent</strong></td>
+<td align="left">每个 Agent 一行，点模型即可切换</td>
+</tr>
+<tr>
+<td align="left"><strong>路由 / Routing</strong></td>
+<td align="left">路由组、规则、实时决策</td>
+</tr>
+<tr>
+<td align="left"><strong>用量 / Usage</strong></td>
+<td align="left">token、花费、缓存、额度、上下文</td>
+</tr>
+<tr>
+<td align="left"><strong>网关 / Gateway</strong></td>
+<td align="left">网关地址、网关密钥、接入示例</td>
+</tr>
+<tr>
+<td align="left"><strong>插件 / Plugins</strong></td>
+<td align="left">登录插件、网关中间件</td>
+</tr>
+<tr>
+<td align="left"><strong>设置 / Settings</strong></td>
+<td align="left">隐私、网络与共享、同步、可观测性等</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>菜单栏面板（托盘）可以快速看：</p>
+<ul>
+<li>当前各 Agent 用的模型；</li>
+<li>各订阅剩余额度；</li>
+<li>当前方案（Profile）；</li>
+<li>快速切换模型。</li>
+</ul>
+<p><strong>TUI 键盘操作：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">键</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">↑</code> <code class="notranslate">↓</code></td>
+<td align="left">选择 Agent</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">←</code> <code class="notranslate">→</code></td>
+<td align="left">选择字段（模型、推理强度等）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">↵</code></td>
+<td align="left">打开选择器</td>
+</tr>
+<tr>
+<td align="left">输入</td>
+<td align="left">筛选；回车接受自定义值</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">s</code></td>
+<td align="left">把当前配置保存为方案</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">p</code></td>
+<td align="left">应用 / 删除方案（<code class="notranslate">ctrl+d</code> 删除）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">S</code></td>
+<td align="left">同步模型目录</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">q</code></td>
+<td align="left">退出</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>5. 第一步：添加 Provider（模型来源）</h2>
+<p>打开 <strong>供应商</strong> 标签页，点 <strong>＋ 添加供应商</strong>。你会看到四类入口：订阅、厂商预设、本机、自定义 URL。</p>
+<h3>5.1 订阅登录（无需 API Key）</h3>
+<p>magpie 支持直接登录你已有的订阅，把它当成 provider 给所有 Agent 用。</p>
+<p><strong>支持直接点卡片登录的：</strong></p>
+<ul>
+<li>Claude（Pro、Max、Team）</li>
+<li>ChatGPT（Plus、Pro、Business）</li>
+<li>GitHub Copilot</li>
+<li>Gemini（Code Assist）</li>
+<li>Antigravity</li>
+</ul>
+<p><strong>通过插件页添加的：</strong></p>
+<ul>
+<li>Cursor</li>
+<li>Grok（SuperGrok）</li>
+<li>Devin</li>
+<li>以及任何 OpenCode 登录插件 / pi 包</li>
+</ul>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li>供应商 → ＋ 添加供应商；</li>
+<li>点对应卡片；</li>
+<li>浏览器会打开厂商自己的登录页；</li>
+<li>完成登录后，账号立刻出现在 magpie 里。</li>
+</ol>
+<p>Copilot 会给你一个验证码，需要在 GitHub 页面上输入。</p>
+<p><strong>几个要点：</strong></p>
+<ul>
+<li><strong>多个账号</strong>：再点一次同一张卡片，就能再加一个账号；它们都列在这个 provider 下面，点一下切换用哪个。</li>
+<li><strong>已经登录过</strong>：本机上已经登录的 Agent 也会作为 provider 出现，显示为 <strong>已登录 …</strong>。</li>
+<li><strong>模型前缀</strong>：订阅里的模型在其他 Agent 的选择列表里写作：</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">claude/…
+codex/…
+copilot/…
+antigravity/…
+</code></pre>
+<p>例如想在 Codex 或 Claude Code 里用 Antigravity 的 Claude / Gemini 模型：先在 magpie 里登录 Antigravity，再在 Agent 那一行选 <code class="notranslate">antigravity/…</code> 模型即可。</p>
+<blockquote>
+<p><strong>两个重要提醒（官方明确写出）：</strong></p>
+<ol>
+<li><strong>Antigravity</strong>：Google 可能封禁在 Antigravity 之外使用的 Antigravity 账号，请用"丢了也不心疼"的账号。</li>
+<li><strong>Claude 订阅</strong>：请求通过本机安装的 Claude Code 运行，所以请保留 Claude Code，不要卸载。</li>
+</ol>
+</blockquote>
+<p><strong>订阅是怎么被发现的？</strong></p>
+<p>magpie 会读取智能体的登录信息（Claude Code 和 Codex 的文件、钥匙串）来找到它们登录的订阅。不想让它读取，可以：</p>
+<ul>
+<li>设置 → 隐私 → 关闭"订阅账号"；或</li>
+<li><code class="notranslate">magpie accounts discovery off</code>（<code class="notranslate">on</code> 重新开启）；或</li>
+<li>本次运行临时关闭：<code class="notranslate">MAGPIE_NO_ACCOUNTS=1</code>。</li>
+</ul>
+<p>API Key 类型的 provider 不受影响。</p>
+<h3>5.2 厂商预设 + API Key</h3>
+<p>适合你已经有某家厂商 API Key 的情况。</p>
+<p><strong>支持的预设（部分）：</strong></p>
+<p>Anthropic、OpenAI、Google Gemini、Amazon Bedrock（runtime 与 Mantle）、DeepSeek、Kimi、智谱 GLM、MiniMax、阶跃星辰、LongCat、通义千问、百度千帆、腾讯云、华为云 MaaS、火山方舟、Mistral、Groq、Nous Portal、xAI、OpenRouter、Together、Fireworks、硅基流动、NVIDIA NIM、魔搭、Ollama、LM Studio……</p>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li>供应商 → ＋ 添加供应商；</li>
+<li>选择厂商预设；</li>
+<li>点"获取密钥 ↗"会打开厂商的密钥页面；</li>
+<li>粘贴 key，保存；</li>
+<li>magpie 会向厂商询问它提供哪些模型，并列出来；</li>
+<li>展开 provider 那一行，可以选择给 Agent 暴露哪些模型；</li>
+<li>点 <strong>测试</strong> 发一个最小请求，确认 key 可用。</li>
+</ol>
+<p><strong>命令行等价操作：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie presets                       <span class="pl-c"><span class="pl-c">#</span> 查看内置预设</span>
+magpie provider add deepseek sk-…    <span class="pl-c"><span class="pl-c">#</span> 预设只需要 key</span>
+magpie providers                     <span class="pl-c"><span class="pl-c">#</span> 查看你的 provider</span>
+magpie provider <span class="pl-c1">test</span> deepseek        <span class="pl-c"><span class="pl-c">#</span> 测试</span>
+magpie provider models deepseek      <span class="pl-c"><span class="pl-c">#</span> 重新拉取模型列表</span></pre></div>
+<blockquote>
+<p><strong>Key 存在哪？</strong> <code class="notranslate">~/.config/magpie/providers.json</code>，权限 <code class="notranslate">0600</code>，只有你自己可读。magpie <strong>从不读取 shell 环境变量里的 key</strong>：你添加什么，它就用什么。</p>
+</blockquote>
+<h3>5.3 本地模型（Ollama / LM Studio）</h3>
+<p>无需 API Key，也不需要联网。</p>
+<ol>
+<li>先在本地把 Ollama 或 LM Studio 跑起来，并拉取至少一个模型；</li>
+<li>供应商 → ＋ 添加供应商 → 选 <strong>本机</strong> 下的 Ollama 或 LM Studio；</li>
+<li>magpie 会读取本地服务提供的模型列表；</li>
+<li>在 Agent 那一行选 <code class="notranslate">ollama/…</code> 或 <code class="notranslate">lmstudio/…</code> 模型。</li>
+</ol>
+<p><strong>命令行：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie provider add ollama
+<span class="pl-c"><span class="pl-c">#</span> LM Studio 在界面里选择；CLI 的 provider id 以 magpie presets 的输出为准</span></pre></div>
+<blockquote>
+<p>本地模型默认走本机回环地址，不需要网关密钥；如果 provider 请求失败，先确认本地服务端口和模型名。</p>
+</blockquote>
+<h3>5.4 自定义兼容地址（中转站 / 自建网关 / 远程 magpie）</h3>
+<p>其他接口都走这里。你需要准备：</p>
+<ul>
+<li><strong>名称</strong>：随便起，会变成模型前缀的一部分；</li>
+<li><strong>OpenAI 兼容地址</strong>：以 <code class="notranslate">/v1</code> 结尾；</li>
+<li><strong>Anthropic 兼容地址</strong>：根地址，即 <code class="notranslate">ANTHROPIC_BASE_URL</code> 的值（不带 <code class="notranslate">/v1</code>）；</li>
+<li>两者可以只填一个，也可以都填；</li>
+<li><strong>密钥</strong>；</li>
+<li>可选：要暴露的模型 ID 列表。</li>
+</ul>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li>供应商 → ＋ 添加供应商 → 选择 <strong>自定义</strong>；</li>
+<li>填名称、地址、密钥；</li>
+<li>如果服务商支持多种 API，就都填上；每个 Agent 用它原生的那种，其余由 magpie 转换；</li>
+<li>保存后 magpie 会拉取模型列表；也可以手动填 <code class="notranslate">models=</code>。</li>
+</ol>
+<p><strong>命令行：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie provider add <span class="pl-s"><span class="pl-pds">"</span>My Relay<span class="pl-pds">"</span></span> \
+  url=https://relay.example.com/v1 \
+  key=sk-… \
+  models=gpt-5.5,claude-sonnet-5</pre></div>
+<blockquote>
+<p><strong>地址安全要求（官方）：</strong> Base URL 必须是 https；只有本机或局域网地址才允许明文 http。</p>
+</blockquote>
+<p><strong>给供应商的怪名字起别名：</strong></p>
+<p>有些中转站用自己的 id 提供模型，比如 <code class="notranslate">deepseek-v4.1-flash-1017</code>、<code class="notranslate">grok-4.6@500k</code>。你可以给它起一个干净的 id：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie model id relay/grok-4.6@500k grok-4.6
+magpie model ids
+magpie model id relay/grok-4.6 --reset</pre></div>
+<p>之后 magpie 列出、路由、合并 <code class="notranslate">auto/grok-4.6</code> 组、限制网关密钥、记录用量，都用 <code class="notranslate">grok-4.6</code>；向供应商请求时仍然发 <code class="notranslate">grok-4.6@500k</code>。</p>
+<h3>5.5 导入已有配置</h3>
+<p>如果你之前在 Claude Code、Codex、CC Switch、Alma 里配过 provider，不用重新填。</p>
+<p><strong>应用内：</strong></p>
+<ul>
+<li><strong>供应商</strong> 页顶部的 <strong>导入…</strong> 会读取：
+<ul>
+<li>Claude Code 的 <code class="notranslate">settings.json</code></li>
+<li>Codex 的 <code class="notranslate">config.toml</code></li>
+<li>OpenCode 的 <code class="notranslate">auth.json</code>（打开导入对话框时读取）</li>
+<li>CC Switch、Alma 等本地配置</li>
+</ul>
+</li>
+<li>它<strong>不会修改</strong>这些文件，只是复制进来；</li>
+<li>勾选你要的，确认后才添加。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>导入的 provider 是一份<strong>拷贝</strong>；之后在 Agent 里的改动不会再同步过来。</li>
+<li>指向 magpie 自己的条目、只写 <code class="notranslate">env_key</code> 的条目会被跳过。</li>
+<li>OpenCode 的登录（Claude Pro/Max、Copilot 等）会被列出但跳过——订阅请在 magpie 里重新登录。</li>
+</ul>
+<p><strong>厂商的一键导入链接：</strong> 有些厂商或中转站会给你一个 <code class="notranslate">magpie://import?...</code> 链接。打开后 magpie 会显示将要添加的名称、地址、模型和 key 去向，确认后才保存；<code class="notranslate">magpie import &lt;link&gt;</code> 在终端做同样的事。</p>
+<h3>5.6 一个 provider 下放多个账号 / 密钥</h3>
+<p>展开 provider 那一行，勾选要用的每个账号或密钥。然后设置：</p>
+<ul>
+<li><strong>路由</strong>：请求怎么分给它们（智能、按顺序、用完再换、轮流、用量少优先、到期前用完、按权重、速度优先）；</li>
+<li><strong>备用</strong>：这个 provider 额度用完、被限流或不可用时，改用哪些模型。</li>
+</ul>
+<p>只有一个账号时，可以跳过。</p>
+<h3>5.7 验证 provider 是否可用</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie providers
+magpie models
+magpie provider <span class="pl-c1">test</span> deepseek</pre></div>
+<p>或者在应用里：</p>
+<ul>
+<li>供应商页 → 展开 provider → <strong>测试</strong>；</li>
+<li>成功会显示延迟；</li>
+<li>失败时先检查 key、base URL、余额、代理。</li>
+</ul>
+<h3>5.8 关于密钥安全</h3>
+<ul>
+<li>Key 保存在本机 <code class="notranslate">providers.json</code>（<code class="notranslate">0600</code>）。</li>
+<li>请求直接发给你选的供应商，不经过 magpie 的服务器。</li>
+<li>备份时默认包含 key；不想备份 key 用 <code class="notranslate">magpie backup --no-keys</code>。</li>
+<li>用第三方中转站时，你的 prompt 和 key 都会经过中转站——只选你信任的。</li>
+<li>可以在 <strong>设置 → 隐私</strong> 打开本地脱敏，让 key、密码、邮箱在离开电脑前被替换（见第 11 章）。</li>
+</ul>
+<hr>
+<h2>6. 第二步：给每个 Agent 选模型</h2>
+<h3>6.1 操作步骤</h3>
+<ol>
+<li>左侧点 <strong>Agent</strong>；</li>
+<li>找到你要改的 Agent（例如 <strong>Claude Code</strong>）；</li>
+<li>点它当前模型那一格；</li>
+<li>弹出可搜索的模型列表；</li>
+<li>输入关键词筛选，或直接输入列表里没有的模型 ID；</li>
+<li>选中后，magpie 立刻改写该 Agent 的配置文件。</li>
+</ol>
+<p><strong>列表分组：</strong></p>
+<ul>
+<li>Agent 自带的模型；</li>
+<li>你的路由组；</li>
+<li>你添加的每个 provider 的模型。</li>
+</ul>
+<h3>6.2 模型命名规则</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">形式</th>
+<th align="left">含义</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">provider/model</code></td>
+<td align="left">某个 provider 的某个模型</td>
+<td align="left"><code class="notranslate">deepseek/deepseek-v4-pro</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">group/&lt;id&gt;</code></td>
+<td align="left">路由组</td>
+<td align="left"><code class="notranslate">group/daily-coding</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">auto/&lt;model&gt;</code></td>
+<td align="left">自动合并的同名模型组</td>
+<td align="left"><code class="notranslate">auto/claude-opus-4.6</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">office/…</code></td>
+<td align="left">远程 magpie 提供的模型</td>
+<td align="left"><code class="notranslate">office/deepseek/deepseek-v4-pro</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>在 Agent 的选择器里，订阅模型的写法是：</p>
+<pre class="notranslate"><code class="notranslate">claude/…
+codex/…
+copilot/…
+antigravity/…
+</code></pre>
+<h3>6.3 推理强度与快速模式</h3>
+<p><strong>推理强度（effort）：</strong></p>
+<ul>
+<li>Agent 有这个选项时（Codex 的"推理强度"、Pi 的"思考"），列表下方会出现滑块；</li>
+<li>选好后会写进该 Agent 的配置。</li>
+</ul>
+<p><strong>快速模式（Fast）：</strong></p>
+<ul>
+<li>有快速模式的模型，在列表里那一行的星标旁有一个闪电按钮；</li>
+<li>包括：ChatGPT（Codex）账号的 GPT 模型、OpenAI Key 的 GPT 和 o 系列、有快速版本的 Cursor 模型、Anthropic Key 的 Claude Opus，以及插件或另一个 magpie 说明支持 priority 的模型；</li>
+<li>点一下，这个 Agent 发给这个模型的每个请求都会用服务商的快速模式；</li>
+<li><strong>更快，但价格更高</strong>；</li>
+<li>不管 Agent 用哪种 API，都会加上 <code class="notranslate">service_tier: "priority"</code>；Claude 则是 <code class="notranslate">speed: "fast"</code>；</li>
+<li>ChatGPT 账号提供 Ultrafast 时，再点一下是 Ultrafast，再点一下恢复普通速度；</li>
+<li>每个 Agent 分开设置；</li>
+<li>路由组里每个成员那一行也有同样的开关。</li>
+</ul>
+<p><strong>Claude Code 的分档模型：</strong></p>
+<p>Claude Code 通过 magpie 使用模型时，<code class="notranslate">opus</code>、<code class="notranslate">sonnet</code>、<code class="notranslate">haiku</code> 各档还可以单独指定模型，默认跟随主模型。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie claude haiku deepseek/deepseek-v4-flash   <span class="pl-c"><span class="pl-c">#</span> 只把 haiku 档换成 DeepSeek</span>
+magpie claude haiku <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>                            <span class="pl-c"><span class="pl-c">#</span> 恢复跟随主模型</span></pre></div>
+<h3>6.4 magpie 改了哪些文件</h3>
+<p>这是新手最关心的部分。magpie <strong>只改它需要的键</strong>，保留注释、顺序、缩进，写入是原子的。</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">Agent</th>
+<th align="left">写入位置</th>
+<th align="left">写入内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left"><code class="notranslate">~/.claude/settings.json</code></td>
+<td align="left"><code class="notranslate">env</code> 里的 <code class="notranslate">ANTHROPIC_BASE_URL</code>、<code class="notranslate">ANTHROPIC_AUTH_TOKEN</code> 和模型变量</td>
+</tr>
+<tr>
+<td align="left">Codex</td>
+<td align="left"><code class="notranslate">~/.codex/config.toml</code></td>
+<td align="left">一个 <code class="notranslate">[model_providers.magpie]</code> 表和模型；模型列表写在 <code class="notranslate">magpie-models.json</code>。你的 ChatGPT 登录不受影响</td>
+</tr>
+<tr>
+<td align="left">OpenCode、MiMo Code、DevEco Code、Pi、Crush</td>
+<td align="left">各自配置文件</td>
+<td align="left">一个 <code class="notranslate">magpie</code> provider 条目，以及 <code class="notranslate">magpie/provider/model</code></td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left"><code class="notranslate">~/.gemini/settings.json</code> + <code class="notranslate">.env</code></td>
+<td align="left"><code class="notranslate">GOOGLE_GEMINI_BASE_URL</code> 指向网关、API 密钥认证、模型</td>
+</tr>
+<tr>
+<td align="left">AtomCode</td>
+<td align="left"><code class="notranslate">~/.atomcode/config.toml</code></td>
+<td align="left">一个 <code class="notranslate">magpie</code> provider 账号，以及每个模型各自的条目</td>
+</tr>
+<tr>
+<td align="left">Snow CLI</td>
+<td align="left"><code class="notranslate">~/.snow/profiles/magpie.json</code></td>
+<td align="left">一个 <code class="notranslate">magpie</code> 配置文件，并设为当前配置</td>
+</tr>
+<tr>
+<td align="left">QwenPaw</td>
+<td align="left"><code class="notranslate">~/.qwenpaw.secret/providers/custom/magpie.json</code> + 每个 agent 的 <code class="notranslate">agent.json</code></td>
+<td align="left"><code class="notranslate">magpie</code> provider + <code class="notranslate">active_model</code>；首次连接后需重启 QwenPaw</td>
+</tr>
+<tr>
+<td align="left">Claude Desktop</td>
+<td align="left"><code class="notranslate">~/Library/Application Support/Claude*</code> 等</td>
+<td align="left">第三方网关模式；需重启 Desktop</td>
+</tr>
+<tr>
+<td align="left">VS Code Chat</td>
+<td align="left"><code class="notranslate">Code/User/settings.json</code> + <code class="notranslate">chatLanguageModels.json</code></td>
+<td align="left"><code class="notranslate">magpie</code> Custom Endpoint 组；VS Code 1.122+</td>
+</tr>
+<tr>
+<td align="left">Cursor CLI</td>
+<td align="left"><code class="notranslate">~/.cursor/cli-config.json</code></td>
+<td align="left">模型</td>
+</tr>
+<tr>
+<td align="left">Copilot CLI</td>
+<td align="left"><code class="notranslate">~/.copilot/settings.json</code></td>
+<td align="left">模型</td>
+</tr>
+<tr>
+<td align="left">Zed</td>
+<td align="left"><code class="notranslate">~/.config/zed/settings.json</code></td>
+<td align="left">一个 <code class="notranslate">magpie</code> OpenAI 兼容 provider</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>更完整的 Agent / 文件 / 字段对照见官方英文参考文档的 <strong>Agents</strong> 表。</p>
+</blockquote>
+<h3>6.5 什么时候生效</h3>
+<p><strong>Agent 在启动时读取配置。</strong> 所以：</p>
+<ul>
+<li>已经在运行的会话，保持它启动时的模型；</li>
+<li>改完要<strong>开一个新会话</strong>；</li>
+<li><strong>Codex</strong> 还要重启 Codex 应用和已经打开的 <code class="notranslate">codex</code> 会话（它在启动时生成模型列表）；</li>
+<li>Claude Desktop 需要重启；</li>
+<li>Paseo、编辑器插件等前端启动的是同一个 CLI，读的是同一份配置，所以从下一个会话起也会用上新模型。</li>
+</ul>
+<h3>6.6 用命令行设置</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie ls                                  <span class="pl-c"><span class="pl-c">#</span> 列出每个 Agent 及当前设置</span>
+magpie claude deepseek/deepseek-v4-pro     <span class="pl-c"><span class="pl-c">#</span> Claude Code 用 DeepSeek</span>
+magpie codex moonshot/kimi-k2.5            <span class="pl-c"><span class="pl-c">#</span> Codex 用 Kimi</span>
+magpie opencode anthropic/claude-sonnet-5  <span class="pl-c"><span class="pl-c">#</span> OpenCode 用 Claude</span>
+magpie codex effort high                   <span class="pl-c"><span class="pl-c">#</span> 设置推理强度</span>
+magpie codex default                       <span class="pl-c"><span class="pl-c">#</span> 恢复 Codex 自己的默认值</span></pre></div>
+<p>Agent 名字支持前缀：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie cc deepseek/deepseek-v4-pro    <span class="pl-c"><span class="pl-c">#</span> cc = Claude Code</span>
+magpie oc anthropic/claude-sonnet-5   <span class="pl-c"><span class="pl-c">#</span> oc = OpenCode</span>
+magpie gem …                          <span class="pl-c"><span class="pl-c">#</span> gem = Gemini CLI</span></pre></div>
+<h3>6.7 恢复某个 Agent 的原样</h3>
+<p>两种方式：</p>
+<ol>
+<li>在模型选择器里选 Agent <strong>自带的模型</strong>；</li>
+<li>运行：</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie claude default
+magpie codex default</pre></div>
+<p>magpie 会删掉它写入的内容，并恢复被它替换掉的值（例如你原来的 <code class="notranslate">ANTHROPIC_BASE_URL</code>）。</p>
+<h3>6.8 几个 Agent 的特别说明</h3>
+<p><strong>Claude Code</strong></p>
+<ul>
+<li>通过 <code class="notranslate">~/.claude/settings.json</code> 的 <code class="notranslate">env</code> 接入；</li>
+<li>使用 Claude 订阅时，请求通过本机 Claude Code 运行，所以不要卸载 Claude Code；</li>
+<li>可以单独设置 opus / sonnet / haiku / fable 档。</li>
+</ul>
+<p><strong>Codex</strong></p>
+<ul>
+<li>通过 <code class="notranslate">~/.codex/config.toml</code> 的 <code class="notranslate">[model_providers.magpie]</code> 接入；</li>
+<li>你的 ChatGPT 登录不受影响；</li>
+<li>切换模型后要重启 Codex 应用。</li>
+</ul>
+<p><strong>Gemini CLI</strong></p>
+<ul>
+<li>通过 <code class="notranslate">GOOGLE_GEMINI_BASE_URL</code> 指向网关；</li>
+<li>使用 API Key 认证。</li>
+</ul>
+<p><strong>OpenCode / MiMo Code / DevEco Code / Pi / Crush</strong></p>
+<ul>
+<li>写入一个名为 <code class="notranslate">magpie</code> 的 provider；</li>
+<li>模型写作 <code class="notranslate">magpie/provider/model</code>。</li>
+</ul>
+<p><strong>VS Code / Cursor / Zed 等</strong></p>
+<ul>
+<li>magpie 会写一个自定义 endpoint / provider；</li>
+<li>具体入口在各自设置里，重启编辑器或重新加载窗口后生效。</li>
+</ul>
+<hr>
+<h2>7. 第三步：验证真的跑通了</h2>
+<p>不要只看"配置写进去了"，要确认请求真的经过网关并拿到回复。</p>
+<h3>7.1 三条命令</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 1. 看 Agent 当前设置</span>
+magpie ls
+
+<span class="pl-c"><span class="pl-c">#</span> 2. 看 provider 是否可用</span>
+magpie provider <span class="pl-c1">test</span> deepseek
+
+<span class="pl-c"><span class="pl-c">#</span> 3. 用一次之后看用量</span>
+magpie usage today</pre></div>
+<p><code class="notranslate">magpie ls</code> 应该能看到目标 Agent 和它的 <code class="notranslate">provider/model</code>。输出类似下面这样（<strong>示意，实际格式以你的版本为准</strong>）：</p>
+<pre class="notranslate"><code class="notranslate">Claude Code   deepseek/deepseek-v4-pro   …
+Codex         moonshot/kimi-k2.5         …
+</code></pre>
+<h3>7.2 在 Agent 里验证</h3>
+<ol>
+<li>关掉旧会话；</li>
+<li>新开一个终端；</li>
+<li>运行 Agent（例如 <code class="notranslate">claude</code>）；</li>
+<li>随便问一句；</li>
+<li>回到 magpie 的 <strong>用量</strong> 页，或运行 <code class="notranslate">magpie usage today</code>，确认 token 数增加。</li>
+</ol>
+<blockquote>
+<p>不要只问"你是什么模型"来判断——很多模型会答错自己的名字。<strong>看用量页/网关请求记录</strong>才可靠。</p>
+</blockquote>
+<h3>7.3 看网关与日志</h3>
+<ul>
+<li><strong>网关页</strong>：最近调用、请求状态、延迟；</li>
+<li><strong>路由页</strong>：每个请求由哪个 provider / 账号回答、为什么；</li>
+<li><strong>日志</strong>：</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie log          <span class="pl-c"><span class="pl-c">#</span> 日志路径</span>
+magpie log -n 200   <span class="pl-c"><span class="pl-c">#</span> 最后 200 行</span>
+magpie log -f       <span class="pl-c"><span class="pl-c">#</span> 持续跟随</span></pre></div>
+<p>日志会记录 provider 拒绝请求、重试、插件启动失败等；<strong>不会</strong>记录你的密钥、提示词或回复。</p>
+<h3>7.4 非 magpie 管理的工具怎么接</h3>
+<p>任何能填 base URL 的工具都可以直接用网关：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-k">export</span> OPENAI_BASE_URL=http://127.0.0.1:3425/v1
+<span class="pl-k">export</span> OPENAI_API_KEY=magpie
+
+<span class="pl-k">export</span> ANTHROPIC_BASE_URL=http://127.0.0.1:3425
+<span class="pl-k">export</span> ANTHROPIC_API_KEY=magpie
+
+<span class="pl-k">export</span> GOOGLE_GEMINI_BASE_URL=http://127.0.0.1:3425
+<span class="pl-k">export</span> GEMINI_API_KEY=magpie</pre></div>
+<blockquote>
+<p>这些环境变量<strong>只用于 magpie 不管理的工具</strong>。对 magpie 列表里的 Agent，不需要手动 export——magpie 会把地址和令牌直接写进它们的配置文件。</p>
+</blockquote>
+<p><strong>网关提供的路由：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">路径</th>
+<th align="left">API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">/v1/chat/completions</code></td>
+<td align="left">OpenAI Chat Completions</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/v1/responses</code></td>
+<td align="left">OpenAI Responses（HTTP / SSE / WebSocket）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/v1/messages</code></td>
+<td align="left">Anthropic Messages</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/v1/messages/count_tokens</code></td>
+<td align="left">Anthropic token 计数</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/v1beta/models/{model}:generateContent</code></td>
+<td align="left">Google Gemini</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/v1/models</code>、<code class="notranslate">/v1beta/models</code></td>
+<td align="left">模型目录</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>7.5 验收清单</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">检查项</th>
+<th align="left">期望结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie ls</code></td>
+<td align="left">目标 Agent 显示你选的 <code class="notranslate">provider/model</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie models</code></td>
+<td align="left">列表里包含该模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider test &lt;id&gt;</code></td>
+<td align="left">返回成功和延迟</td>
+</tr>
+<tr>
+<td align="left">新开 Agent 会话</td>
+<td align="left">能正常对话</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie usage today</code></td>
+<td align="left">出现这次请求的 token</td>
+</tr>
+<tr>
+<td align="left">网关页</td>
+<td align="left">能看到这次请求</td>
+</tr>
+<tr>
+<td align="left">日志</td>
+<td align="left">没有持续报错</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>全部通过，第一步配置就完成了。</p>
+<hr>
+<h2>8. 方案（Profile）：一键切换整套配置</h2>
+<h3>8.1 它是什么</h3>
+<p>方案是<strong>所有 Agent 配置的一份命名快照</strong>。比如：</p>
+<ul>
+<li><code class="notranslate">省钱</code>：Claude Code 用 DeepSeek，Codex 用便宜的模型；</li>
+<li><code class="notranslate">专注</code>：Claude Code 用 Opus，Codex 用 GPT；</li>
+<li><code class="notranslate">公司</code>：全部走公司允许的 provider。</li>
+</ul>
+<p>每个 Agent 还可以有自己的常用模型短名单，方案也会一并保存。</p>
+<h3>8.2 在应用里使用</h3>
+<ol>
+<li>把所有 Agent 的模型调好；</li>
+<li>到 <strong>Agent</strong> 页底部，点 <strong>＋ 保存当前</strong>；</li>
+<li>起个名字，例如 <code class="notranslate">work</code>；</li>
+<li>之后点这个方案的 chip，就能一键全部切回；</li>
+<li>正在使用的方案带 ✓；</li>
+<li>手动改过设置后，✓ 会消失。</li>
+</ol>
+<p>菜单栏面板的 <strong>方案</strong> 按钮也会显示当前方案名。</p>
+<h3>8.3 用命令行</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie save work      <span class="pl-c"><span class="pl-c">#</span> 保存当前配置为 work</span>
+magpie use work       <span class="pl-c"><span class="pl-c">#</span> 应用 work</span>
+magpie profiles       <span class="pl-c"><span class="pl-c">#</span> 列出所有方案</span>
+magpie rm work        <span class="pl-c"><span class="pl-c">#</span> 删除</span></pre></div>
+<h3>8.4 适合的场景</h3>
+<ul>
+<li>白天用强模型、晚上用便宜模型；</li>
+<li>公司网络只允许某些 provider；</li>
+<li>不同项目用不同模型组合；</li>
+<li>给同一台电脑的不同使用者准备不同配置。</li>
+</ul>
+<blockquote>
+<p>方案保存的是<strong>Agent 的模型选择</strong>，不是 provider 和 key；换电脑时 provider 需要另行同步（见 14.5 备份与同步）。</p>
+</blockquote>
+<hr>
+<h2>9. 可选：路由组与自动故障转移</h2>
+<blockquote>
+<p><strong>什么时候需要？</strong> 只有一个 provider、一个账号时，可以跳过整章。等你有了多个账号、多个 key，或者同一个模型在多个 provider 上都有时，再回来看。</p>
+</blockquote>
+<h3>9.1 路由组是什么</h3>
+<p>路由组是<strong>几个模型（来自一个或多个 provider）</strong>，Agent 把它当作一个模型来选：</p>
+<pre class="notranslate"><code class="notranslate">group/&lt;id&gt;
+</code></pre>
+<p>例如：</p>
+<pre class="notranslate"><code class="notranslate">group/daily-coding
+</code></pre>
+<p>网关会把请求分摊到每个成员的账号和 key 上；一个失败时换下一个。</p>
+<h3>9.2 自动组：不用手动建</h3>
+<p>只要两个 provider 提供<strong>同名模型</strong>，magpie 就会自动把它们组成一个路由组：</p>
+<pre class="notranslate"><code class="notranslate">auto/&lt;模型 id&gt;
+</code></pre>
+<p>例如：</p>
+<ul>
+<li>Claude 订阅和 Copilot 都有 Claude Opus → <code class="notranslate">auto/claude-opus-4.6</code></li>
+<li>DeepSeek 官方 API 和 OpenRouter 都有 DeepSeek → <code class="notranslate">auto/deepseek-…</code></li>
+</ul>
+<p>名字按各家不同的写法匹配（<code class="notranslate">deepseek/deepseek-chat</code> 和 <code class="notranslate">deepseek-chat</code> 算同一个）。</p>
+<p>给 Agent 选这个组，请求就会分摊到这些 provider 上。不想要的可以隐藏：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie group rm auto/claude-opus-4.6</pre></div>
+<h3>9.3 手动建组</h3>
+<p><strong>应用内：</strong></p>
+<ol>
+<li>打开 <strong>路由</strong> 标签页；</li>
+<li>点 <strong>新建组</strong>；</li>
+<li>起名，添加模型，选路由方式；</li>
+<li>保存。</li>
+</ol>
+<p><strong>命令行：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie group add <span class="pl-s"><span class="pl-pds">"</span>Opus anywhere<span class="pl-pds">"</span></span> \
+  models=claude/claude-opus-5-5,copilot/claude-opus-5.5 \
+  routing=smart
+
+magpie claude group/opus-anywhere</pre></div>
+<h3>9.4 路由模式</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">谁排在前面</th>
+<th align="left">适合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong><code class="notranslate">smart</code></strong>（默认）</td>
+<td align="left">在还有余量的订阅里，额度最先重置的排第一；重置时浪费最少</td>
+<td align="left">大多数情况</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">order</code></strong></td>
+<td align="left">先用第一个模型，它答不了再换下一个</td>
+<td align="left">主备关系明确</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">drain</code></strong>（用完再换）</td>
+<td align="left">一个账号/key 用到额度用完，再换下一个；前面的恢复了也不切回去</td>
+<td align="left">想把某个账号彻底用完</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">rotate</code></strong></td>
+<td align="left">会话的每一轮交给下一个成员</td>
+<td align="left">均摊负载</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">usage</code></strong></td>
+<td align="left">剩余额度最多的排第一</td>
+<td align="left">避免某个账号先耗尽</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">pace</code></strong></td>
+<td align="left">每周剩余额度 ÷ 距重置的小时数，最高的排第一</td>
+<td align="left">让周额度在重置前用得最均匀</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">weight</code></strong></td>
+<td align="left">按权重分配请求（1–1000），均匀穿插</td>
+<td align="left">主账号多用、备用少用</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">fast</code></strong>（速度优先）</td>
+<td align="left">最近回答最快的成员先用（首字时间 + 输出速度）</td>
+<td align="left">多通道比速度</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">cheap</code></strong>（最便宜优先）</td>
+<td align="left">此刻每百万 token 价格最低的成员先用</td>
+<td align="left">成本敏感</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><code class="notranslate">cheap</code> 只适用于路由组；价格来自你设的价格或标价，再乘 provider 的价格倍率和分时倍率。</p>
+</blockquote>
+<h3>9.5 会话保持（stays）</h3>
+<p>决定一个对话在回答它的账号/key 上留多久：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong><code class="notranslate">auto</code></strong>（默认）</td>
+<td align="left">一轮之内总是保持；跨轮则在厂商缓存还值得保留时保持</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">session</code></strong></td>
+<td align="left">整个会话，只要它还能回答</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">turn</code></strong></td>
+<td align="left">Agent 回传工具结果时不换；你再次发言时重新决定</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">off</code></strong></td>
+<td align="left">每个请求都重新路由</td>
+</tr>
+<tr>
+<td align="left"><strong><code class="notranslate">strict</code></strong></td>
+<td align="left">绝不换到别的账号/key，即使超过用量上限；错误直接交给 Agent</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p>只要厂商的提示词缓存还值得保留，对话就留在回答它的那个账号上。这是默认行为，不要轻易改成 <code class="notranslate">off</code>，否则缓存命中率会下降、花费会上升。</p>
+</blockquote>
+<h3>9.6 规则：把某类对话交给指定模型</h3>
+<p>路由组的 <strong>规则</strong> 可以把符合条件的一轮对话交给组里指定的模型。条件包括：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">条件</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">tokens ≥ N</code></td>
+<td align="left">对话够长</td>
+</tr>
+<tr>
+<td align="left">带图片</td>
+<td align="left">请求里包含图片</td>
+</tr>
+<tr>
+<td align="left">要求推理</td>
+<td align="left">开启，或不低于某个强度</td>
+</tr>
+<tr>
+<td align="left">来自某些 Agent</td>
+<td align="left">例如只在 Claude Code 里生效</td>
+</tr>
+<tr>
+<td align="left">意图</td>
+<td align="left">用几个词描述用户想做什么，由一个小模型判断</td>
+</tr>
+<tr>
+<td align="left">正在压缩上下文</td>
+<td align="left">Claude Code 的 <code class="notranslate">/compact</code>、自动压缩等</td>
+</tr>
+<tr>
+<td align="left">在某个文件夹（项目）里</td>
+<td align="left">Agent 的工作目录匹配</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>推理强度：</strong> 规则还可以设定它的模型用什么推理强度（规则的 ⋯ 菜单 → <strong>设定推理强度</strong>，或 CLI <code class="notranslate">use-effort=low</code>）。不管 Agent 要求什么，该模型都按这个强度发送；magpie 不知道档位的模型、以及排在后面做备用的模型，按 Agent 的要求发送。</p>
+<p><strong>规则的行为：</strong></p>
+<ul>
+<li>每条规则的条件要<strong>同时满足</strong>；</li>
+<li>每次你发新消息时从上往下检查；</li>
+<li>第一条命中的规则把它的模型排在最前，其余成员排在后面做故障转移；</li>
+<li>没有命中任何规则的一轮，照组本来的方式路由；</li>
+<li>规则只在<strong>一轮开始时</strong>决定；Agent 回传工具结果的过程中不会半途换模型（除非这一轮涨到超过所在模型的上下文）。</li>
+</ul>
+<p><strong>意图路由：</strong></p>
+<ul>
+<li>每一轮开始时，magpie 会问一次组里指定的意图判断模型：用户这条消息属于哪个可能命中的意图；</li>
+<li>建议选小而快、不带推理的模型；</li>
+<li>只发送这一条消息，不包括整段对话；</li>
+<li>出错、超过超时时间（默认 8 秒）或给不出答案时，意图条件不命中；</li>
+<li>调用会计入用量。</li>
+</ul>
+<p><strong>压缩上下文：</strong></p>
+<ul>
+<li>命中后，让更便宜、更快的模型来写总结；</li>
+<li>对话本身仍留在原来的模型上。</li>
+</ul>
+<p><strong>时段和星期：</strong></p>
+<ul>
+<li>规则可以只在某些时段、某几天生效，按这台电脑的时钟；</li>
+<li>可以把某段时间的对话"先发给"别的模型；</li>
+<li>也可以<strong>暂停</strong>某个模型：规则生效期间，这个模型移出分组——不排第一、不做备用、也不会因为会话粘性被留住；时段过了自动回来。</li>
+</ul>
+<p><strong>文件夹：</strong></p>
+<ul>
+<li><code class="notranslate">~/work/acme</code> 包括 <code class="notranslate">~/work/acme/web</code>，不包括 <code class="notranslate">~/work/acme-old</code>；</li>
+<li>以 Agent 在请求里告诉模型的工作目录为准；</li>
+<li>不说明工作目录的 Agent 不会命中任何按文件夹的规则；</li>
+<li>macOS 和 Windows 上不区分大小写；<code class="notranslate">C:\work</code> 也就是 WSL 里的 <code class="notranslate">/mnt/c/work</code>。</li>
+</ul>
+<p><strong>命令行示例：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 长对话优先发给 OpenRouter</span>
+magpie group rule add opus-anywhere use=openrouter/anthropic/claude-opus-5.5 tokens=150k
+
+<span class="pl-c"><span class="pl-c">#</span> 简单问题交给便宜的模型</span>
+magpie group rule add opus-anywhere use=copilot/claude-opus-5.5 intent=<span class="pl-s"><span class="pl-pds">"</span>一个简单问题<span class="pl-pds">"</span></span> classifier=groq/llama-3.1-8b-instant
+
+<span class="pl-c"><span class="pl-c">#</span> /compact 的总结交给便宜的模型</span>
+magpie group rule add opus-anywhere use=deepseek/deepseek-v4-flash compact
+
+<span class="pl-c"><span class="pl-c">#</span> 这些项目里的对话先发给 Kimi</span>
+magpie group rule add opus-anywhere use=kimi/kimi-k2.6 folders=<span class="pl-k">~</span>/oss,<span class="pl-s"><span class="pl-pds">"</span>~/My Project<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 这段时间不用 Copilot</span>
+magpie group rule add opus-anywhere pause=copilot/claude-opus-5.5 time=14:00-18:00 days=mon-fri
+
+<span class="pl-c"><span class="pl-c">#</span> 只留给某个文件夹</span>
+magpie group rule add opus-anywhere pause=claude/claude-opus-5-5 except-folders=<span class="pl-k">~</span>/big-task
+
+<span class="pl-c"><span class="pl-c">#</span> 查看规则</span>
+magpie group rule opus-anywhere</pre></div>
+<h3>9.7 路由组里放路由组（嵌套）</h3>
+<ul>
+<li>成员也可以是另一个路由组；</li>
+<li>在"添加模型"的 <strong>路由组</strong> 分类里选它，或用 <code class="notranslate">models+=group/&lt;id&gt;</code>；</li>
+<li>子组占据它在顺序里的位置，在自己的模型之间按自己的路由方式和规则分配；</li>
+<li><strong>不会无限递归</strong>：一个组不能包含它自己（直接或间接）；最多嵌套 <strong>8 层</strong>；</li>
+<li>一个组被别的组包含时不能删除，要先从那个组里移除它；</li>
+<li>每一层按自己的路由；外层不会伸进子组内部去混合排序；</li>
+<li>子组里的模型全部失败时，由外层组的下一个成员接手。</li>
+</ul>
+<h3>9.8 常见配置示例</h3>
+<p><strong>例 1：两个 ChatGPT 账号，自动切换</strong></p>
+<ol>
+<li>供应商 → ChatGPT → 再点一次卡片，登录第二个账号；</li>
+<li>展开 ChatGPT 那一行，勾选两个账号；</li>
+<li>路由选 <code class="notranslate">smart</code>（默认）；</li>
+<li>Agent 正常选 <code class="notranslate">codex/…</code> 模型即可。</li>
+</ol>
+<p><strong>例 2：Claude 订阅 + Copilot 都有 Opus</strong></p>
+<ul>
+<li>magpie 会自动生成 <code class="notranslate">auto/claude-opus-…</code>；</li>
+<li>给 Agent 选这个组；</li>
+<li>请求会在两个来源之间分摊，额度用完自动换。</li>
+</ul>
+<p><strong>例 3：省钱优先</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie group add <span class="pl-s"><span class="pl-pds">"</span>Cheap first<span class="pl-pds">"</span></span> \
+  models=deepseek/deepseek-v4-flash,kimi/kimi-k2.5 \
+  routing=order</pre></div>
+<p><strong>例 4：长对话用强模型，短对话用便宜模型</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie group add <span class="pl-s"><span class="pl-pds">"</span>Daily<span class="pl-pds">"</span></span> models=deepseek/deepseek-v4-flash,claude/claude-opus-5-5 routing=order
+magpie group rule add daily use=claude/claude-opus-5-5 tokens=150k</pre></div>
+<p><strong>例 5：工作时间不用贵的账号</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie group rule add daily pause=claude/claude-opus-5-5 time=09:00-18:00 days=mon-fri</pre></div>
+<h3>9.9 验证路由</h3>
+<ul>
+<li><strong>路由</strong> 标签页实时显示每个请求由谁回答、为什么；</li>
+<li><strong>用量</strong> 页按 provider / 账号统计；</li>
+<li><code class="notranslate">magpie groups</code> 列出你建的组和自动发现的组；</li>
+<li><code class="notranslate">magpie group &lt;id&gt;</code> 查看某个组的成员和顺序。</li>
+</ul>
+<hr>
+<h2>10. 用量、花费与额度</h2>
+<h3>10.1 用量页</h3>
+<p><strong>用量</strong> 标签页按 Agent 和模型统计每次经过网关的调用：</p>
+<ul>
+<li>token 数；</li>
+<li>缓存读写；</li>
+<li>推理 token；</li>
+<li>调用次数；</li>
+<li>估算花费（美元或人民币）；</li>
+<li>可选 <strong>今天 / 7 天 / 30 天 / 全部</strong>。</li>
+</ul>
+<p>顶部是各订阅已用的额度和重置时间。</p>
+<blockquote>
+<p><strong>只统计经过 magpie 的请求。</strong> Agent 直接发给自己厂商的请求不经过网关，不会计入。</p>
+</blockquote>
+<h3>10.2 上下文分析</h3>
+<p><strong>用量 → 上下文</strong> 标签页显示每个 Agent 的提示词里装了什么：</p>
+<ul>
+<li>系统提示词；</li>
+<li>工具定义（一个 MCP 服务器的工具算一项）；</li>
+<li>指令文件与 skills；</li>
+<li>工具读入的文件；</li>
+<li>工具的其他输出；</li>
+<li>对话。</li>
+</ul>
+<p>每项占模型上下文窗口的百分比。每个 Agent 还有一个百分制得分（缓存命中、起步轻重、上下文增长速度、失败率）和"起步轻""MCP 偏重"之类的标签。</p>
+<blockquote>
+<p>原文只为<strong>最近 10 次请求</strong>留在内存里，magpie 退出就没了；存下来的只有名称，不保存提示词文字，也不会发往任何地方。</p>
+</blockquote>
+<h3>10.3 额度</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie quota                  <span class="pl-c"><span class="pl-c">#</span> 每个套餐还剩多少</span>
+magpie quota refresh codex    <span class="pl-c"><span class="pl-c">#</span> 现在重新读取 Codex 的额度卡片（最多每 30 秒一次）</span>
+magpie quota <span class="pl-c1">wait</span> codex       <span class="pl-c"><span class="pl-c">#</span> 阻塞，直到某个 Codex 账号恢复额度</span></pre></div>
+<p>额度卡片包括：</p>
+<ul>
+<li>每个 key、套餐和账号的余额；</li>
+<li>额度窗口（5 小时 / 周 / 月）；</li>
+<li>重置时间；</li>
+<li>窗口还剩很多就要重置时提醒你。</li>
+</ul>
+<h3>10.4 会话</h3>
+<p><strong>用量 → 会话</strong> 显示每个 Agent 对话的花费和标题，可以一键在终端里重新打开。</p>
+<h3>10.5 命令行用量</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie usage                  <span class="pl-c"><span class="pl-c">#</span> 默认</span>
+magpie usage today
+magpie usage 7d
+magpie usage 30d
+magpie usage all
+magpie usage --last 24h
+magpie usage --days 1.5
+magpie usage --csv</pre></div>
+<p>CSV 适合导入表格做自己的统计。</p>
+<h3>10.6 价格</h3>
+<ul>
+<li>默认按官方价格计算；</li>
+<li>任何模型都可以自定义价格；</li>
+<li>每个 provider 可以设置价格倍率；</li>
+<li>部分 provider 有分时倍率（例如 DeepSeek 高峰时段双倍计价）；</li>
+<li>两台电脑通过远程 magpie 共享时，计价在共享端完成，结果一致。</li>
+</ul>
+<hr>
+<h2>11. 隐私与本地脱敏</h2>
+<h3>11.1 先分清两件事</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">说明</th>
+<th align="left">默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>请求本身</strong></td>
+<td align="left">你的 prompt / 回复只发给你选的供应商，不经过 magpie 的服务器</td>
+<td align="left">始终</td>
+</tr>
+<tr>
+<td align="left"><strong>本地脱敏</strong></td>
+<td align="left">在请求离开电脑前，把密钥、密码、邮箱等换成占位符</td>
+<td align="left"><strong>关闭</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<blockquote>
+<p><strong>只覆盖经过 magpie 的请求。</strong> 接入 magpie 的 Agent 通过网关发请求，不管由哪个供应商或账号回答都会脱敏；绕过 magpie、直接请求厂商的 Agent 不在范围内。</p>
+</blockquote>
+<h3>11.2 打开本地脱敏</h3>
+<p><strong>设置 → 隐私</strong>：</p>
+<ol>
+<li>在"要遮什么"下，把 <strong>脱敏密钥</strong> 设为开启：API Key、私钥、Token、密码；</li>
+<li>按需开启 <strong>脱敏个人信息</strong>：邮箱、手机号、身份证号、银行卡号等；</li>
+<li>在 <strong>脱敏词</strong> 里填不想让厂商看到的人名、项目代号、主机名，用逗号分隔；</li>
+<li>需要时打开"脱敏词不区分大小写"；</li>
+<li>magpie 不认识的密钥（比如你自己网关的 key）加到 <strong>自定义脱敏规则</strong>：填开头或正则；</li>
+<li>用 <strong>试一试</strong> 粘贴一段文字，看厂商实际会收到什么。</li>
+</ol>
+<p>改动从下一个请求开始生效，不用重启，Agent 也不用改。</p>
+<blockquote>
+<p>实际做脱敏的是内置插件 <strong>隐私遮盖</strong>（<code class="notranslate">redact</code>）。只要设置里要求了任何脱敏，它就是开着的。</p>
+</blockquote>
+<h3>11.3 效果示例</h3>
+<p>开启"脱敏密钥"和"脱敏个人信息"，并在脱敏词里填 <code class="notranslate">Nightjar</code>。</p>
+<p>Agent 发出：</p>
+<pre class="notranslate"><code class="notranslate">Deploy Nightjar with OPENAI_API_KEY=sk-proj-8fK2mQx7Lp4Rt9Vw3Yz6Ab1Cd, then mail li.wei@acme-corp.cn or call 13800138000.
+</code></pre>
+<p>厂商收到：</p>
+<pre class="notranslate"><code class="notranslate">Deploy {{TERM_5hmsrhdc}} with OPENAI_API_KEY={{API_KEY_srhjgvja}}, then mail {{EMAIL_eh5um6mb}} or call {{PHONE_uf7iy2qq}}.
+</code></pre>
+<p>模型回复里的占位符会换回原值——流式文本和工具调用参数里都算，所以 Agent 执行的命令里是真 key。</p>
+<p>同一个值每次得到同一个占位符，所以对话上下文、提示词缓存和 thinking 签名都不受影响。原值<strong>只保存在内存里</strong>；磁盘上的记录只留每个值的类型、长度和开头几个字符。</p>
+<h3>11.4 能遮什么</h3>
+<p><strong>脱敏密钥：</strong></p>
+<ul>
+<li>私钥块（<code class="notranslate">-----BEGIN … PRIVATE KEY-----</code>）；</li>
+<li>按格式识别的 API Key：<code class="notranslate">sk-…</code>（OpenAI、Anthropic、OpenRouter）、<code class="notranslate">ghp_</code> / <code class="notranslate">github_pat_</code>、<code class="notranslate">glpat-</code>、<code class="notranslate">AIza…</code>、<code class="notranslate">xox…-</code>、<code class="notranslate">sk_live_</code>、<code class="notranslate">AKIA</code> / <code class="notranslate">ASIA</code>、<code class="notranslate">hf_</code>、<code class="notranslate">gsk_</code>、<code class="notranslate">xai-</code>、<code class="notranslate">npm_</code>、<code class="notranslate">pypi-</code>、<code class="notranslate">dop_v1_</code>、<code class="notranslate">SG.</code>，以及 <code class="notranslate">oc_sk_…</code> 这类中转站 key；</li>
+<li>JWT；</li>
+<li><code class="notranslate">user:password@host</code> 里的密码；</li>
+<li><code class="notranslate">.env</code> 和配置文件里以密钥命名的字段值：<code class="notranslate">DB_PASSWORD=…</code>、<code class="notranslate">api_key: …</code>、<code class="notranslate">client_secret</code>、<code class="notranslate">token</code>、<code class="notranslate">credential</code>；</li>
+<li>你的自定义规则。</li>
+</ul>
+<p><strong>脱敏个人信息：</strong></p>
+<ul>
+<li>邮箱；</li>
+<li>中国大陆手机号（11 位编号不算：<code class="notranslate">order_id</code> 下或"订单号"后面的照原样发）；</li>
+<li>校验位对得上的身份证号和银行卡号；</li>
+<li>默认也开着：美国社会安全号、护照号、IBAN、生日、MAC 地址、序列号；</li>
+<li>默认关闭、需要手动打开：主目录用户名、<code class="notranslate">user@host</code>、公网 IP、云存储桶。</li>
+</ul>
+<h3>11.5 不能遮什么</h3>
+<p>官方明确列出的限制：</p>
+<ul>
+<li><strong>思考内容保持厂商原样</strong>：带签名的 thinking 块、Gemini 的 thoughts、Responses 的加密推理，签名要对得上，里面只会替换请求其他地方已经遮掉的值。</li>
+<li><strong>ID 和工具定义原样发送</strong>：模型 ID、消息和调用 ID、UUID、工具名、MCP 服务名、工具 schema（其中的描述文字会脱敏）。</li>
+<li><strong>图片和文件数据原样发送</strong>：截图里的文字不会被遮。</li>
+<li><strong>模型只看到占位符</strong>：它无法读懂或推理被遮掉的值，只能原样传递。需要模型读的值放进 <strong>从不脱敏</strong>。</li>
+<li><strong>规则按格式匹配</strong>：其他国家格式的电话号码、自由文本里的人名，需要本地模型、脱敏词或自定义规则。</li>
+</ul>
+<h3>11.6 失败时的行为</h3>
+<ul>
+<li>脱敏已打开却运行不了（插件被手动关掉、本地模型没响应）→ 请求返回 <strong>503</strong>，说明什么都没发出；</li>
+<li><strong>绝不会</strong>退回成不脱敏直接发送；</li>
+<li>默认打开的本地模型没响应时，只用规则脱敏。</li>
+</ul>
+<h3>11.7 用本地模型查找</h3>
+<p>在 <strong>怎么找</strong> 下面：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">模型</th>
+<th align="left">大小</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>AstrLink Guard</strong>（默认）</td>
+<td align="left">约 39 MB</td>
+<td align="left">中英文，代码里很少误判，Mac 上用神经网络引擎运行</td>
+</tr>
+<tr>
+<td align="left"><strong>OpenAI Privacy Filter</strong></td>
+<td align="left">约 1.6 GB</td>
+<td align="left">可用 GPU，代码里会遮盖更多普通值</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<ul>
+<li>除非你关掉，它默认打开；</li>
+<li>第一个要脱敏的请求开始下载，下载完成前只用规则脱敏；</li>
+<li>需要先打开"脱敏密钥"或"脱敏个人信息"；</li>
+<li>置信度阈值：Privacy Filter 默认 0.5，AstrLink Guard 默认 0.8（发布者的值）。</li>
+</ul>
+<h3>11.8 按 provider 跳过</h3>
+<p>可以给某个 provider 打开 <strong>请求不脱敏</strong>，它的请求就原样发出：</p>
+<ul>
+<li>本机或局域网的模型（Ollama、LM Studio）；</li>
+<li>你选择的其他 provider（订阅和插件提供的也可以）；</li>
+<li>命令行：<code class="notranslate">magpie provider set ollama unmasked=yes</code>。</li>
+</ul>
+<blockquote>
+<p>对不在本地的 provider 打开时，编辑器会提示：请求会不脱敏地发给它的服务商。</p>
+</blockquote>
+<h3>11.9 确认生效</h3>
+<ul>
+<li><strong>事前</strong>：设置 → 隐私 → <strong>试一试</strong>；</li>
+<li><strong>每个请求</strong>：网关页的最近调用和路由日志里，被脱敏的请求带盾牌徽标和数字；悬停看类型，点开看记录；</li>
+<li><strong>一段时间</strong>：<strong>观测 → 脱敏</strong>（隐私页的"脱敏记录"也能进）按类型、Agent、provider 显示 7 天或 30 天里遮掉的值，以及每个请求在厂商眼里的原文。</li>
+</ul>
+<p>记录保存在 <code class="notranslate">~/.config/magpie/masking</code>，保留 30 天：Agent、provider、模型，以及每个占位符的类型、长度和开头几个字符，<strong>从不保存原值</strong>。</p>
+<h3>11.10 遥测：magpie 自己会发什么</h3>
+<p>正式版 magpie 每天向 PostHog 发送一次"它在用"的事件：</p>
+<ul>
+<li>本机随机生成的 ID（32 位十六进制，与你和这台电脑无关）；</li>
+<li>magpie 版本、<code class="notranslate">kind</code>（<code class="notranslate">app</code> 或 <code class="notranslate">serve</code>）、系统、架构；</li>
+<li>用了几个 agent、provider、模型、路由组（关掉"分享我用的"后不发）；</li>
+<li>每个 agent / provider / 模型各一个事件，只用 magpie 自己的 ID；你自己添加的 provider 只记作 <code class="notranslate">custom</code>。</li>
+</ul>
+<p><strong>不发送</strong>：名称、Base URL、账号、密钥、提示词、回复、用量。</p>
+<p><strong>怎么关：</strong></p>
+<ul>
+<li>设置 → 隐私 → <strong>计入用户数</strong>；</li>
+<li>或 <code class="notranslate">settings.json</code> 里 <code class="notranslate">"noStats": true</code>；</li>
+<li>或环境变量 <code class="notranslate">DO_NOT_TRACK=1</code> / <code class="notranslate">MAGPIE_NO_STATS=1</code>（除空、<code class="notranslate">0</code>、<code class="notranslate">false</code> 外的任何值）；</li>
+<li>只关"分享我用的 agent、provider 和模型"：<code class="notranslate">"noUsageStats": true</code>；</li>
+<li>关自动更新：设置 → 关于 → 自动更新，或 <code class="notranslate">"noAutoUpdate": true</code>。</li>
+</ul>
+<blockquote>
+<p>从源码构建的版本从不发送。</p>
+</blockquote>
+<h3>11.11 请求存档</h3>
+<p><strong>用量页请求列表上方的"请求存档"开关默认关闭。</strong> 打开后，每次经过网关的调用的请求头和正文会存到 magpie 文件夹里的 <code class="notranslate">request-archive</code>：</p>
+<ul>
+<li>一次调用一个文件；</li>
+<li>只有你的用户能读；</li>
+<li>密钥按 S3 存档同样的方式遮掉；</li>
+<li>最多占 1 GiB（<code class="notranslate">settings.json</code> 里的 <code class="notranslate">requestArchiveLocalMB</code>），超过后先删最早的；</li>
+<li>随时可以删。</li>
+</ul>
+<hr>
+<h2>12. 命令行速查</h2>
+<p><code class="notranslate">magpie help</code> 列出全部命令。<code class="notranslate">magpie tui</code> 是终端里的完整界面。</p>
+<h3>12.1 查看状态</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie ls</code></td>
+<td align="left">列出找到的每个 Agent 及其设置</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie providers</code></td>
+<td align="left">你的 provider：地址、密钥、模型、谁在用</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie models</code></td>
+<td align="left">Agent 能选的所有模型，写作 <code class="notranslate">provider/model</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie presets</code></td>
+<td align="left">magpie 内置的厂商预设</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie quota</code></td>
+<td align="left">每个套餐还剩多少</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie usage 7d</code></td>
+<td align="left">按 Agent 和模型统计 token 与费用</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie settings</code></td>
+<td align="left">所有设置及其值（<code class="notranslate">--json</code> 也可）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie log</code></td>
+<td align="left">日志路径；<code class="notranslate">-n 200</code> 最后 200 行；<code class="notranslate">-f</code> 跟随</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>12.2 Provider 管理</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie provider add deepseek sk-…</code></td>
+<td align="left">用 key 添加预设</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider add ollama</code></td>
+<td align="left">添加本地 provider</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider add "My Relay" url=… key=… models=…</code></td>
+<td align="left">添加自定义 provider</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider test deepseek</code></td>
+<td align="left">每个 API 发一个最小请求，带延迟</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider models deepseek</code></td>
+<td align="left">重新拉取模型列表</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider models deepseek +model -model</code></td>
+<td align="left">增加/移除暴露的模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider refresh deepseek</code></td>
+<td align="left">重新拉取并丢弃已不存在的选择</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider key deepseek sk-…</code></td>
+<td align="left">替换 key</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie provider rm deepseek</code></td>
+<td align="left">删除</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie providers</code></td>
+<td align="left">查看全部</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>12.3 Agent 管理</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie claude deepseek/deepseek-v4-pro</code></td>
+<td align="left">设置 Claude Code 的模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie codex moonshot/kimi-k2.5</code></td>
+<td align="left">设置 Codex 的模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie opencode anthropic/claude-sonnet-5</code></td>
+<td align="left">设置 OpenCode 的模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie codex effort high</code></td>
+<td align="left">设置推理强度</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie codex effort</code></td>
+<td align="left">查看当前字段</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie claude haiku deepseek/deepseek-v4-flash</code></td>
+<td align="left">单独设置某档</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie claude haiku ""</code></td>
+<td align="left">恢复跟随主模型</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie &lt;agent&gt; default</code></td>
+<td align="left">恢复 Agent 自己的默认值，移除 magpie 的接入</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>Agent 名字支持前缀：<code class="notranslate">cc</code>、<code class="notranslate">oc</code>、<code class="notranslate">gem</code> 等。</p>
+<h3>12.4 方案</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie save work</code></td>
+<td align="left">保存当前配置为方案</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie use work</code></td>
+<td align="left">应用方案</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie profiles</code></td>
+<td align="left">列出方案</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie rm work</code></td>
+<td align="left">删除方案</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>12.5 路由组</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie groups</code></td>
+<td align="left">列出你建的组和自动发现的组</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group add "名字" models=… routing=…</code></td>
+<td align="left">新建组</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group set &lt;id&gt; models+=…</code></td>
+<td align="left">增加成员</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group set &lt;id&gt; routing=weight weight=…</code></td>
+<td align="left">设置路由和权重</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group rm &lt;id&gt;</code></td>
+<td align="left">删除；自动组是隐藏，可恢复</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group restore &lt;id&gt;</code></td>
+<td align="left">恢复自动组</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group copy &lt;id&gt; "新名字"</code></td>
+<td align="left">复制</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group rule add &lt;id&gt; use=… tokens=…</code></td>
+<td align="left">添加规则</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie group rule &lt;id&gt;</code></td>
+<td align="left">查看规则</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie claude group/&lt;id&gt;</code></td>
+<td align="left">让 Agent 使用组</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>12.6 账号与网关</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie accounts add codex</code></td>
+<td align="left">再登录一个 Claude 或 ChatGPT 订阅</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie accounts switch claude next</code></td>
+<td align="left">切到下一个还有额度的账号</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie accounts discovery off</code></td>
+<td align="left">不读取智能体登录信息；<code class="notranslate">on</code> 恢复</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie gateway-key add "Laptop"</code></td>
+<td align="left">给其他电脑生成网关密钥</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie gateway-key limit …</code></td>
+<td align="left">给密钥设限额</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie gateway-key models …</code></td>
+<td align="left">给密钥限定可用模型</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>12.7 运行方式</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie</code></td>
+<td align="left">打开应用：窗口 + 菜单栏图标</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie tray</code></td>
+<td align="left">只启动菜单栏图标</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie tui</code></td>
+<td align="left">终端里的完整界面</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie web</code></td>
+<td align="left">浏览器界面（WSL / SSH 服务器）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie serve</code></td>
+<td align="left">只运行网关</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie daemon install</code></td>
+<td align="left">装成后台服务（systemd / launchd）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie daemon status</code></td>
+<td align="left">运行状态、pid、文件、日志、网关是否应答</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie daemon restart</code></td>
+<td align="left">更新后重启</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie daemon stop</code> / <code class="notranslate">start</code></td>
+<td align="left">停止 / 启动</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie daemon uninstall</code></td>
+<td align="left">卸载服务</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie autostart on</code></td>
+<td align="left">登录时自动打开（Windows）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie healthcheck</code></td>
+<td align="left">网关能应答时退出码 0</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>12.8 工具与维护</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">magpie tools</code></td>
+<td align="left">列出 MCP 工具及参数</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie tool generate_image "…" -o hero.png</code></td>
+<td align="left">直接调用生图工具</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie tool analyze_image ./shot.png --prompt "…"</code></td>
+<td align="left">识图</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie tool web_search "…"</code></td>
+<td align="left">联网搜索</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie settings get/set/reset …</code></td>
+<td align="left">读写设置</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie sync</code></td>
+<td align="left">刷新 models.dev 目录和模型列表</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie backup</code></td>
+<td align="left">备份（加密，询问口令）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie restore &lt;file&gt;</code></td>
+<td align="left">恢复</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie update</code></td>
+<td align="left">更新</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie update channel stable</code></td>
+<td align="left">切到稳定版通道</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie update mirror &lt;前缀&gt;</code></td>
+<td align="left">设置更新镜像；<code class="notranslate">off</code> 取消</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie uninstall</code></td>
+<td align="left">断开所有 Agent 并删除 magpie 数据</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie webdav on …</code></td>
+<td align="left">WebDAV 同步</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie s3 on …</code></td>
+<td align="left">S3 同步</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie github on …</code></td>
+<td align="left">GitHub 同步</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>13. 文件、日志与配置目录</h2>
+<h3>13.1 配置目录</h3>
+<p>magpie 的文件夹是：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">系统</th>
+<th align="left">路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">macOS</td>
+<td align="left"><code class="notranslate">~/.config/magpie</code></td>
+</tr>
+<tr>
+<td align="left">Linux</td>
+<td align="left"><code class="notranslate">~/.config/magpie</code>（尊重 <code class="notranslate">$XDG_CONFIG_HOME</code>）</td>
+</tr>
+<tr>
+<td align="left">Windows</td>
+<td align="left"><code class="notranslate">%USERPROFILE%\.config\magpie</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>设置 <code class="notranslate">$XDG_CONFIG_HOME</code> 时是 <code class="notranslate">$XDG_CONFIG_HOME/magpie</code>。</p>
+<h3>13.2 目录里有什么</h3>
+<p><strong>你设置的：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">settings.json</code></td>
+<td align="left">设置</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">providers.json</code></td>
+<td align="left">provider 和 key（<code class="notranslate">0600</code>）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">profiles.json</code></td>
+<td align="left">方案</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">library.json</code>、<code class="notranslate">library/</code></td>
+<td align="left">资料库：指令、skills、MCP servers、hooks</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">plugins.json</code>、<code class="notranslate">plugins/</code></td>
+<td align="left">插件及其包</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">plugins.yml</code></td>
+<td align="left">内置插件开关和配置</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">caller-keys.json</code></td>
+<td align="left">给其他调用方生成的网关密钥（<code class="notranslate">0600</code>）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>账号与登录：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">logins.json</code></td>
+<td align="left">通过 magpie 登录的订阅账号（<code class="notranslate">0600</code>）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">plugin-auth.json</code></td>
+<td align="left">插件的登录（<code class="notranslate">0600</code>）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">mcp-signins.json</code></td>
+<td align="left">MCP server 的登录（<code class="notranslate">0600</code>）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">cli-identity.json</code></td>
+<td align="left">Agent 自己的 CLI 最后报告是谁登录</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">redact.key</code></td>
+<td align="left">脱敏占位符背后的密钥</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>magpie 写进 Agent 的内容：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">stash.json</code></td>
+<td align="left">被 magpie 替换的值，切回时恢复</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">applied.json</code></td>
+<td align="left">magpie 最后给每个 Agent 设置的内容和时间</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">migrations.json</code></td>
+<td align="left">订阅迁移到插件的情况</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>网关与用量：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">usage.jsonl</code></td>
+<td align="left">每个请求一行，用量页的数字</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">routing/</code></td>
+<td align="left">每天的请求路由记录（<code class="notranslate">&lt;date&gt;.jsonl</code>）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">affinity.json</code></td>
+<td align="left">哪个 key/账号回答过哪个对话</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">served.json</code></td>
+<td align="left">账号和 key 最后回答的时间</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">quotas.json</code></td>
+<td align="left">账号最后报告的额度</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">quota-history.json</code>、<code class="notranslate">balance-history.json</code></td>
+<td align="left">额度和余额的历史</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">usage-alerts.json</code></td>
+<td align="left">已经显示过的用量提醒</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">client-shapes.json</code></td>
+<td align="left">网关最后放行的各客户端请求头</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">gateway-sessions-hidden.json</code></td>
+<td align="left">你删除的网关会话</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>缓存目录 <code class="notranslate">~/.cache/magpie</code>：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">bun/&lt;version&gt;/magpie-bun</code></td>
+<td align="left">插件运行的 Bun</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">models.json</code></td>
+<td align="left">models.dev 目录</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">models/&lt;provider&gt;.json</code></td>
+<td align="left">从厂商拉取的模型列表</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">partner-counts.json</code></td>
+<td align="left">未发送的合作伙伴计数（最多 14 天）</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>13.3 日志</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">系统</th>
+<th align="left">应用日志</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">macOS</td>
+<td align="left"><code class="notranslate">~/Library/Logs/magpie/app.log</code></td>
+</tr>
+<tr>
+<td align="left">Windows</td>
+<td align="left"><code class="notranslate">%LOCALAPPDATA%\magpie\logs\app.log</code></td>
+</tr>
+<tr>
+<td align="left">Linux</td>
+<td align="left"><code class="notranslate">~/.local/state/magpie/app.log</code>（尊重 <code class="notranslate">$XDG_STATE_HOME</code>）</td>
+</tr>
+<tr>
+<td align="left">便携版</td>
+<td align="left">数据文件夹的 <code class="notranslate">logs/</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>服务模式的日志：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">系统</th>
+<th align="left">位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">macOS</td>
+<td align="left"><code class="notranslate">~/Library/Logs/magpie/serve.log</code></td>
+</tr>
+<tr>
+<td align="left">Linux</td>
+<td align="left"><code class="notranslate">journalctl --user -u magpie</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>日志满 5 MiB 后变成 <code class="notranslate">app.old.log</code>，最多保留两个文件。日志不含密钥、提示词或回复；看起来像密钥的内容也会被遮掉。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie log          <span class="pl-c"><span class="pl-c">#</span> 打印路径</span>
+magpie log -n 200   <span class="pl-c"><span class="pl-c">#</span> 最后 200 行</span>
+magpie log -f       <span class="pl-c"><span class="pl-c">#</span> 持续跟随</span></pre></div>
+<hr>
+<h2>14. 进阶功能（按需阅读）</h2>
+<h3>14.1 插件</h3>
+<p>插件负责登录某个服务、替它发请求。magpie 把插件变成一个 provider，所有 Agent 都能用，多账号、故障切换、用量统计也都有。</p>
+<p><strong>安装插件：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie plugin add opencode-gemini-auth   <span class="pl-c"><span class="pl-c">#</span> npm 上的 OpenCode 插件</span>
+magpie plugin add pi-antigravity         <span class="pl-c"><span class="pl-c">#</span> pi 包</span>
+magpie plugin login google-plugin        <span class="pl-c"><span class="pl-c">#</span> 走插件自己的登录流程</span></pre></div>
+<p>插件运行在 Bun 上，第一次需要时自动下载。</p>
+<p><strong>插件能做什么：</strong></p>
+<ul>
+<li>登录（API key、浏览器、设备码）；</li>
+<li>列出模型；</li>
+<li>发送请求；</li>
+<li>续期登录；</li>
+<li>每日签到；</li>
+<li>报告套餐用量。</li>
+</ul>
+<p><strong>网关中间件：</strong></p>
+<p>插件也可以是一段 JavaScript，能看到每个 Agent 发出和收到的内容：</p>
+<ul>
+<li><code class="notranslate">onRequest</code>：改写或拒绝请求；</li>
+<li><code class="notranslate">onEvent</code>：看到每个流式事件；</li>
+<li><code class="notranslate">onResponse</code>：看到完整回复；</li>
+<li>钩子抛错或超时，请求原样放行。</li>
+</ul>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// alias.middleware.js</span>
+<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">onRequest</span><span class="pl-kos">(</span><span class="pl-s1">body</span><span class="pl-kos">,</span> <span class="pl-s1">ctx</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">body</span><span class="pl-kos">.</span><span class="pl-c1">model</span> <span class="pl-c1">===</span> <span class="pl-s">"fast"</span><span class="pl-kos">)</span> <span class="pl-k">return</span> <span class="pl-kos">{</span> ...<span class="pl-s1">body</span><span class="pl-kos">,</span> <span class="pl-c1">model</span>: <span class="pl-s">"deepseek/deepseek-chat"</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie plugin add ./alias.middleware.js</pre></div>
+<p><strong>现成的中间件：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">包</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">param-override</code></td>
+<td align="left">按条件设置、删除、移动或改写请求字段，或拒绝请求</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">model-map</code></td>
+<td align="left">把模型换个名字发出去，回复里仍是原来请求的名字</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">system-prompt</code></td>
+<td align="left">给所有请求，或某些 Agent、某些模型加上系统提示词</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">word-guard</code></td>
+<td align="left">敏感词过滤：在用户发送的内容和回复里拒绝或屏蔽</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">think-tags</code></td>
+<td align="left">去掉 <code class="notranslate">&lt;think&gt;…&lt;/think&gt;</code>，或把 <code class="notranslate">reasoning_content</code> 放进回复</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie plugin add @magpie-community/middleware-model-map
+magpie plugin options model-map <span class="pl-s"><span class="pl-pds">'</span>{"mapping": {"fast": "deepseek/deepseek-chat"}}<span class="pl-pds">'</span></span></pre></div>
+<h3>14.2 MCP、搜索与生图</h3>
+<p><strong>任何模型都能联网搜索：</strong></p>
+<ul>
+<li>不能搜索的模型，由 magpie 代为搜索；</li>
+<li>用能搜索的 provider 或搜索 API：Tavily、Brave、Exa、Firecrawl、You.com、DeepSeek、火山引擎豆包搜索、腾讯云元宝搜索、SearXNG；</li>
+<li>按你拖好的顺序调用；</li>
+<li>每个都能单独关闭而不删除密钥；</li>
+<li>一个 API 可以填多个密钥，默认轮流使用（<code class="notranslate">pick=order</code> 则按顺序），最近被拒的密钥最后才用。</li>
+</ul>
+<p><strong>给 Agent 挂 MCP：</strong></p>
+<ul>
+<li>任何 Agent 都能把同一个搜索挂成 MCP server；</li>
+<li>提供 <code class="notranslate">web_search</code> 工具和按 URL 读取网页的 <code class="notranslate">web_fetch</code> 工具；</li>
+<li>MCP router 可以把资料库里的多个 MCP server 合成一个 <code class="notranslate">magpie</code> 入口。</li>
+</ul>
+<p><strong>生图 / 生视频：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie tools
+magpie tool generate_image <span class="pl-s"><span class="pl-pds">"</span>一只喜鹊，水彩<span class="pl-pds">"</span></span> -o hero.png
+magpie tool generate_image --n 2 --quality high --background transparent <span class="pl-s"><span class="pl-pds">"</span>an app icon<span class="pl-pds">"</span></span>
+magpie tool analyze_image ./shot.png --prompt <span class="pl-s"><span class="pl-pds">"</span>what does the error say?<span class="pl-pds">"</span></span></pre></div>
+<ul>
+<li>通过 MCP 给任何 Agent 一个生图工具；</li>
+<li>用你选的模型；</li>
+<li>有 Grok 订阅或 MiniMax API Key（MiniMax H3）还能生成视频；</li>
+<li>生成的图片保存到 <code class="notranslate">-o</code>（文件或文件夹）或当前目录，不会覆盖已有文件。</li>
+</ul>
+<h3>14.3 远程 magpie：另一台电脑用同一套模型</h3>
+<p>一个 magpie 可以服务多台电脑。在保存 provider 的电脑上配置一次，其他电脑把它添加为 <strong>远程 magpie</strong>。</p>
+<p><strong>第 1 步：在共享端打开共享</strong></p>
+<ul>
+<li>设置 → 网络与共享 → <strong>局域网共享</strong> → 开启；</li>
+<li>magpie 随即在局域网监听，并生成一个名为 <strong>Magpie</strong> 的网关密钥；</li>
+<li>开关下方显示其他电脑访问它的地址，例如 <code class="notranslate">http://192.168.1.20:3425</code>；</li>
+<li>给每台电脑一个密钥：网关 → 网关密钥，或 <code class="notranslate">magpie gateway-key add "Laptop"</code>。</li>
+</ul>
+<p><strong>第 2 步：在其他电脑上添加</strong></p>
+<p>应用：</p>
+<ul>
+<li>供应商 → ＋ 添加供应商 → 最下面的 <strong>另一台电脑上的 magpie</strong> → <strong>Remote magpie</strong>；</li>
+<li>填地址和密钥。</li>
+</ul>
+<p>TUI：</p>
+<ul>
+<li><code class="notranslate">magpie tui</code> → Providers 页按 <code class="notranslate">a</code> → Remote magpie → 填地址和密钥；</li>
+<li>在它那一行按 <code class="notranslate">w</code> 改地址，按 <code class="notranslate">m</code> 重新获取列表。</li>
+</ul>
+<p>CLI：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie provider add remote-magpie sk-magpie-key-… url=http://192.168.1.20:3425 id=office
+magpie models
+magpie provider refresh office</pre></div>
+<p><code class="notranslate">id=</code> 是本机的名字，也是模型 id 的前缀（<code class="notranslate">office/…</code>）。</p>
+<p><strong>能用到什么：</strong></p>
+<ul>
+<li>共享端的模型：<code class="notranslate">office/deepseek/deepseek-v4-pro</code>；</li>
+<li>共享端的路由组：<code class="notranslate">office/group/…</code>；</li>
+<li>所有 API 原样转发；</li>
+<li>图像和视频模型；</li>
+<li>额度卡片（带远程名字，如 <code class="notranslate">Codex · office</code>）；</li>
+<li>用量在共享端统计，在本机显示。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>本机的 Agent 仍由本机 magpie 配置；</li>
+<li>只有模型来自另一台；</li>
+<li>共享端不可用时，使用它的请求会失败；只有你的路由组里还放了本机模型时，才会由路由组接上。</li>
+</ul>
+<h3>14.4 Docker 与 NAS</h3>
+<p><strong>镜像：</strong></p>
+<pre class="notranslate"><code class="notranslate">ghcr.io/yetone/magpie
+</code></pre>
+<p>支持 <code class="notranslate">linux/amd64</code> 和 <code class="notranslate">linux/arm64</code>。镜像以非 root 用户（uid 65532）运行；绑定挂载 <code class="notranslate">/config</code> 时要让它可写。</p>
+<p><strong>标签：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">标签</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">latest</code></td>
+<td align="left">最新正式版</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">stable</code></td>
+<td align="left">与桌面版稳定版通道一致：每周一个已发布满三天的版本</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">0.1.1150</code></td>
+<td align="left">某个具体版本</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">0.1</code></td>
+<td align="left">某个次版本</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">edge</code></td>
+<td align="left"><code class="notranslate">main</code> 上的每次改动</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>端口：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">端口</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">3425</code></td>
+<td align="left">Agent 调用的网关</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">3430</code></td>
+<td align="left">容器运行 <code class="notranslate">magpie web</code> 时的浏览器界面；也响应网关的 <code class="notranslate">/v1</code> 路由</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>数据卷：</strong></p>
+<pre class="notranslate"><code class="notranslate">/config
+</code></pre>
+<p>里面包括：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">路径</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">/config/magpie</code></td>
+<td align="left">magpie 自己的文件：settings、provider、网关密钥、路由组</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/config/home</code></td>
+<td align="left">容器的 <code class="notranslate">HOME</code>：登录保存在对应 Agent 的位置（<code class="notranslate">~/.codex</code>、<code class="notranslate">~/.claude</code>……）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/config/cache</code></td>
+<td align="left">模型目录、插件用的 Bun、<code class="notranslate">magpie claude-code install</code> 下载的 Claude Code</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">/config/data</code>、<code class="notranslate">/config/state</code></td>
+<td align="left">其他内容</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>运行（带 Web 界面）：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker run -d --name magpie --restart unless-stopped \
+  -p 127.0.0.1:3425:3425 -p 127.0.0.1:3430:3430 \
+  -e MAGPIE_WEB_KEY=<span class="pl-s"><span class="pl-pds">$(</span>openssl rand -hex 16<span class="pl-pds">)</span></span> \
+  -v magpie-config:/config \
+  ghcr.io/yetone/magpie:latest web --addr 0.0.0.0:3430 --no-open
+
+docker logs magpie</pre></div>
+<p>日志里会给出带 key 的页面地址：</p>
+<pre class="notranslate"><code class="notranslate">● magpie web on http://127.0.0.1:3430/?k=…
+</code></pre>
+<blockquote>
+<p>容器里的页面是<strong>网关模式</strong>：只有供应商、网关、路由、用量、插件和设置，没有 Agent、会话和资源库，因为容器里没有 Agent。用它的 Agent 运行在别的机器上。</p>
+</blockquote>
+<p><strong>网关密钥：</strong></p>
+<ul>
+<li>容器里任何 key 都行；</li>
+<li>容器外的请求（包括宿主机自己的）必须带一个启用的网关密钥，否则 401；</li>
+<li>生成：</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> magpie magpie gateway-key add <span class="pl-s"><span class="pl-pds">"</span>Laptop<span class="pl-pds">"</span></span></pre></div>
+<ul>
+<li>每个密钥可以有自己的每日/每周/每月上限和可用模型。</li>
+</ul>
+<p><strong>环境变量：</strong></p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">变量</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_ADDR</code></td>
+<td align="left">网关监听地址；镜像里是 <code class="notranslate">0.0.0.0:3425</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_PUBLIC_URL</code></td>
+<td align="left">其他机器访问网关用的地址，例如 <code class="notranslate">http://192.168.1.20:3425</code></td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_WEB_KEY</code></td>
+<td align="left">Web 界面 key，重启后不变（16 个字符以上）</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_TLS_CERT</code>、<code class="notranslate">MAGPIE_TLS_KEY</code></td>
+<td align="left">挂载进容器的 PEM 证书和私钥；其他机器只能用 https</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">MAGPIE_ALLOW_IPS</code></td>
+<td align="left">只允许这些 IP/CIDR 访问；其他地址即使有密钥也 403</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">HOME</code>、<code class="notranslate">XDG_*</code></td>
+<td align="left">镜像已设为 <code class="notranslate">/config</code> 下的目录，不要改</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>在容器里登录订阅：</strong></p>
+<p>厂商登录完成后会把浏览器跳回 <code class="notranslate">localhost</code>（ChatGPT 是 <code class="notranslate">http://localhost:1455/auth/callback?code=…</code>），那是你自己的电脑，不是容器，所以页面打不开。把地址栏里的完整地址复制下来，粘贴到登录的 <strong>回调 URL</strong> 一栏。</p>
+<p>终端方式：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it magpie magpie accounts add codex</pre></div>
+<p>打开它打印的链接并登录，再把浏览器最后停在的地址粘贴回去。</p>
+<p><strong>Claude 订阅：</strong></p>
+<ul>
+<li>登录和请求都经过 Claude Code，而镜像里没有它；</li>
+<li>magpie 会说明版本、下载来源和保存位置，问过你再下载，并用 Anthropic 清单里的 SHA-256 校验；</li>
+<li>保存在 <code class="notranslate">/config/cache</code>，换新镜像也还在；</li>
+<li>缺少时也可以手动装：</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it magpie magpie claude-code install</pre></div>
+<p><strong>Grok 订阅：</strong></p>
+<ul>
+<li>通过 xAI 的 Grok Build CLI 登录，镜像里同样没有它；</li>
+<li>在浏览器界面登录，或 <code class="notranslate">magpie plugin login grok</code> 时，magpie 会先按 xAI 安装脚本的方式安装它。</li>
+</ul>
+<p><strong>Compose 示例：</strong></p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-ent">services</span>:
+  <span class="pl-ent">magpie</span>:
+    <span class="pl-ent">image</span>: <span class="pl-s">ghcr.io/yetone/magpie:latest</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+    <span class="pl-ent">ports</span>:
+      - <span class="pl-s"><span class="pl-pds">"</span>127.0.0.1:3425:3425<span class="pl-pds">"</span></span>
+      - <span class="pl-s"><span class="pl-pds">"</span>127.0.0.1:3430:3430<span class="pl-pds">"</span></span>
+    <span class="pl-ent">environment</span>:
+      <span class="pl-ent">MAGPIE_PUBLIC_URL</span>: <span class="pl-s">http://&lt;nas-address&gt;:3425</span>
+      <span class="pl-ent">MAGPIE_WEB_KEY</span>: <span class="pl-s">&lt;random-key&gt;</span>
+    <span class="pl-ent">volumes</span>:
+      - <span class="pl-s">./config:/config</span>
+    <span class="pl-ent">command</span>: <span class="pl-s">[web, --addr, 0.0.0.0:3430, --no-open]</span></pre></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R 65532:65532 ./config
+docker compose up -d</pre></div>
+<p>然后通过 SSH 隧道打开：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ssh -L 3430:127.0.0.1:3430 you@nas</pre></div>
+<p>在浏览器打开日志里的链接。</p>
+<p><strong>安全提醒：</strong></p>
+<ul>
+<li>拿到 Web 链接的人都能修改 magpie、看到它的密钥；</li>
+<li>让 3430 只在回环地址或 VPN 上；</li>
+<li>跨网络访问用 HTTPS（<code class="notranslate">MAGPIE_TLS_CERT</code> / <code class="notranslate">MAGPIE_TLS_KEY</code>）或带 TLS 的反向代理；</li>
+<li>跨互联网优先用 Tailscale / WireGuard，不要直接开放 3425。</li>
+</ul>
+<p><strong>更新：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker pull ghcr.io/yetone/magpie:latest
+docker rm -f magpie
+<span class="pl-c"><span class="pl-c">#</span> 再执行同样的 docker run</span></pre></div>
+<p>或：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker compose pull <span class="pl-k">&amp;&amp;</span> docker compose up -d</pre></div>
+<p><strong>健康检查：</strong></p>
+<p>镜像带 <code class="notranslate">HEALTHCHECK</code>：网关能应答时 <code class="notranslate">magpie healthcheck</code> 返回 0，<code class="notranslate">docker ps</code> 会显示 healthy。</p>
+<h3>14.5 备份与多机同步</h3>
+<p><strong>备份：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie backup                            <span class="pl-c"><span class="pl-c">#</span> 写 magpie.magpie-backup，询问口令两次</span>
+magpie backup --no-keys <span class="pl-k">~</span>/b.magpie-backup  <span class="pl-c"><span class="pl-c">#</span> 不含 API key</span>
+magpie restore magpie.magpie-backup        <span class="pl-c"><span class="pl-c">#</span> 在另一台机器恢复</span>
+magpie restore --no-agents b.magpie-backup <span class="pl-c"><span class="pl-c">#</span> 只恢复 provider、设置、方案</span>
+magpie restore --no-library b.magpie-backup</pre></div>
+<p>备份包含：</p>
+<ul>
+<li>provider（含 key，除非 <code class="notranslate">--no-keys</code>）；</li>
+<li>provider 的图标；</li>
+<li>设置；</li>
+<li>方案；</li>
+<li>每个 Agent 的模型；</li>
+<li>资料库（除非 <code class="notranslate">--no-library</code>）。</li>
+</ul>
+<p><strong>不包含</strong>：订阅登录（每台机器重新登录）。</p>
+<p>加密：AES-256-GCM，密钥由口令经 PBKDF2-SHA256 派生；没有口令读不出内容。</p>
+<p><strong>同步：</strong></p>
+<p>设置 → 同步和备份 → WebDAV / S3 / GitHub，每 3 分钟同步一次。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie webdav on https://dav.jianguoyun.com/dav/ user=me@example.com
+magpie s3 on s3://my-bucket/magpie endpoint=https://<span class="pl-k">&lt;</span>account<span class="pl-k">&gt;</span>.r2.cloudflarestorage.com access-key-id=…
+magpie github on github://owner/private-backups/settings branch=main</pre></div>
+<ul>
+<li>文件在本地加密，服务器只存密文；</li>
+<li>每台机器只覆盖它读到的版本（条件写），不会丢失另一台机器的更新；</li>
+<li>GitHub 仓库必须是私有的，token 需要 Contents 读写权限。</li>
+</ul>
+<h3>14.6 OTLP 导出</h3>
+<p>设置 → 可观测性 可以把网关请求元数据导出到你的 OpenTelemetry 收集器（如 Langfuse）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">MAGPIE_OTEL_ENABLED=true MAGPIE_OTEL_ENDPOINT=http://localhost:4318 magpie serve</pre></div>
+<ul>
+<li>默认关闭；</li>
+<li>只发到你设置的地址；</li>
+<li>可导出 agent、provider、模型、token 数、状态、耗时、估算费用；</li>
+<li>另有开关加指标、本地 agent 对话、请求和回复正文（密钥已遮盖）。</li>
+</ul>
+<h3>14.7 后台服务</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie daemon install    <span class="pl-c"><span class="pl-c">#</span> 写服务并启动</span>
+magpie daemon status     <span class="pl-c"><span class="pl-c">#</span> 运行状态、pid、文件、日志、网关是否应答</span>
+magpie daemon restart    <span class="pl-c"><span class="pl-c">#</span> 更新后重启</span>
+magpie daemon stop
+magpie daemon start
+magpie daemon uninstall  <span class="pl-c"><span class="pl-c">#</span> 停止并删除服务文件</span>
+magpie daemon web on     <span class="pl-c"><span class="pl-c">#</span> 服务同时提供浏览器页面</span></pre></div>
+<ul>
+<li><strong>Linux</strong>：systemd user unit <code class="notranslate">~/.config/systemd/user/magpie.service</code>，用 <code class="notranslate">systemctl --user</code>；日志 <code class="notranslate">journalctl --user -u magpie -f</code>；</li>
+<li><strong>macOS</strong>：launch agent <code class="notranslate">~/Library/LaunchAgents/com.yetone.magpie.serve.plist</code>，日志 <code class="notranslate">~/Library/Logs/magpie/serve.log</code>；</li>
+<li><strong>Windows</strong>：不是服务；用 <code class="notranslate">magpie autostart on</code>，登录时打开 magpie，由它提供网关；</li>
+<li><strong>WSL</strong>：和 Linux 一样；需要先打开 systemd（<code class="notranslate">/etc/wsl.conf</code> 里 <code class="notranslate">[boot] systemd=true</code>）。</li>
+</ul>
+<blockquote>
+<p>服务模式和 <code class="notranslate">magpie autostart</code> 不能同时用：两者会抢同一个端口。安装服务时如果 autostart 开着，会被拒绝。</p>
+</blockquote>
+<h3>14.8 资料库与 Agent 版本管理</h3>
+<p><strong>资料库：</strong></p>
+<ul>
+<li>指令、MCP servers、skills、子代理只写一次；</li>
+<li>magpie 按每个 Agent 的格式写进它的文件；</li>
+<li>删除时只删自己写的部分。</li>
+</ul>
+<p>适合多 Agent 共用同一套规则和工具。</p>
+<p><strong>Agent 版本管理：</strong></p>
+<ul>
+<li><strong>Agent</strong> 页显示每个 CLI 的版本；</li>
+<li>按当初的安装方式更新；</li>
+<li>没装的 Agent 也会给出安装命令。</li>
+</ul>
+<hr>
+<h2>15. 常见问题 FAQ</h2>
+<h3>Q1：需要自己 export <code class="notranslate">OPENAI_BASE_URL</code> 或 <code class="notranslate">ANTHROPIC_BASE_URL</code> 吗？</h3>
+<p><strong>不需要。</strong> 对 magpie 列表里的 Agent，它会把网关地址和令牌直接写进 Agent 自己的配置文件。</p>
+<p>这些环境变量只用于 magpie 不管理的、带 base URL 设置的其他工具。</p>
+<h3>Q2：magpie 必须一直开着吗？</h3>
+<p>通过 magpie 使用的模型需要网关在运行。</p>
+<ul>
+<li>关掉窗口后它仍留在菜单栏 / 托盘；</li>
+<li><code class="notranslate">magpie tray</code> 只启动图标（可以放进登录项）；</li>
+<li><code class="notranslate">magpie serve</code> 只运行网关；</li>
+<li><code class="notranslate">magpie daemon install</code> 把它装成服务（Linux 是 systemd，Mac 是 launchd），登录时启动，不需要窗口；Linux 上无人登录也要运行需 <code class="notranslate">sudo loginctl enable-linger $USER</code>。</li>
+</ul>
+<p>Agent 用它自己的模型和自己的登录时，不经过 magpie。</p>
+<h3>Q3：怎么把 Agent 恢复原样？</h3>
+<ul>
+<li>在模型选择器里选 Agent 自带的模型；或</li>
+<li>运行 <code class="notranslate">magpie &lt;agent&gt; default</code>。</li>
+</ul>
+<p>magpie 会删掉它写入的内容，并恢复被它替换掉的值（比如你原来的 <code class="notranslate">ANTHROPIC_BASE_URL</code>）。</p>
+<h3>Q4：换了模型，Agent 还在用旧的？</h3>
+<p>已在运行的会话保持启动时的模型。<strong>开一个新会话</strong>；如果是 Codex，还要<strong>重启 Codex 应用</strong>和已打开的 <code class="notranslate">codex</code> 会话。</p>
+<h3>Q5：手动改 Agent 的配置会冲突吗？</h3>
+<p>不会。magpie 每次都重新读取文件，只动它设置的那几个键，你的其他设置和注释都会保留。</p>
+<p>用"导入…"带进来的 provider 是一份拷贝：之后在 Agent 里的改动不会再同步过来。</p>
+<h3>Q6：没有梯子，安装或更新连不上 GitHub 怎么办？</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --proxy http://127.0.0.1:7890
+magpie update --proxy socks5://127.0.0.1:1080</pre></div>
+<p>支持 http、https、socks5、socks5h；<code class="notranslate">HTTPS_PROXY</code>、<code class="notranslate">ALL_PROXY</code> 同样生效。</p>
+<p>也可以用镜像：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie update --mirror https://mirror.example/
+magpie update mirror <span class="pl-k">&lt;</span>前缀<span class="pl-k">&gt;</span>    <span class="pl-c"><span class="pl-c">#</span> 之后每次更新都用它</span>
+magpie update mirror off       <span class="pl-c"><span class="pl-c">#</span> 取消</span></pre></div>
+<h3>Q7：Linux 上安装脚本装的是哪个版本？</h3>
+<ul>
+<li>有 GTK 3 + WebKitGTK 4.1 → 桌面版；</li>
+<li>有桌面但缺库 → 脚本用包管理器装 WebKitGTK 4.1，再装桌面版；</li>
+<li>没有终端、没有 sudo、发行版不认识或装库失败 → 终端版，并告诉你该装哪个包；</li>
+<li>想自己选：<code class="notranslate">--gui</code> 或 <code class="notranslate">--tui</code>。</li>
+</ul>
+<h3>Q8：怎么卸载 magpie？</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 脚本安装的：卸载程序，保留设置</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --uninstall
+
+<span class="pl-c"><span class="pl-c">#</span> 彻底删除：断开 Agent、恢复原配置、删除设置/provider/用量</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --uninstall --purge</pre></div>
+<p>用其他方式安装的：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie uninstall</pre></div>
+<p>或设置 → 卸载 magpie。</p>
+<h3>Q9：magpie 的日志在哪里？</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">系统</th>
+<th align="left">路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">macOS</td>
+<td align="left"><code class="notranslate">~/Library/Logs/magpie/app.log</code></td>
+</tr>
+<tr>
+<td align="left">Windows</td>
+<td align="left"><code class="notranslate">%LOCALAPPDATA%\magpie\logs\app.log</code></td>
+</tr>
+<tr>
+<td align="left">Linux</td>
+<td align="left"><code class="notranslate">~/.local/state/magpie/app.log</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><code class="notranslate">magpie log</code> 打印路径，<code class="notranslate">magpie log -f</code> 持续跟随。</p>
+<h3>Q10：magpie 会发送我的哪些信息？</h3>
+<ul>
+<li>你的 prompt、回复、密钥、账号<strong>只发给你用的供应商</strong>，中间没有 magpie 自己的服务器；</li>
+<li>正式版每天发一次匿名计数（随机 ID、版本、系统、用了哪些 agent/provider/model）；</li>
+<li>不发送名称、Base URL、账号、密钥、prompt、用量；</li>
+<li>关闭方法见 <a href="#1110-%E9%81%A5%E6%B5%8Bmagpie-%E8%87%AA%E5%B7%B1%E4%BC%9A%E5%8F%91%E4%BB%80%E4%B9%88">11.10</a>。</li>
+</ul>
+<h3>Q11：Agent 报 502 或连不上，但路由页什么都没有？</h3>
+<p>代理软件把发往 <code class="notranslate">127.0.0.1:3425</code> 的请求接走了。解决办法见 <a href="#162-agent-%E6%8A%A5-502%E4%BD%86%E8%B7%AF%E7%94%B1%E9%A1%B5%E4%BB%80%E4%B9%88%E9%83%BD%E6%B2%A1%E6%9C%89">16.2</a>。</p>
+<h3>Q12：Claude Code 里能用 ChatGPT 订阅吗？</h3>
+<p>可以。在 magpie 里登录 ChatGPT 订阅，然后在 Claude Code 那一行选 <code class="notranslate">codex/…</code> 模型。</p>
+<h3>Q13：Codex 里能用 Claude 订阅吗？</h3>
+<p>可以。登录 Claude 订阅，在 Codex 那一行选 <code class="notranslate">claude/…</code> 模型。</p>
+<blockquote>
+<p>Claude 订阅的请求通过本机 Claude Code 运行，所以请保留 Claude Code。</p>
+</blockquote>
+<h3>Q14：能在 Claude Code 里用 Antigravity 的模型吗？</h3>
+<p>可以。在 magpie 里登录 Antigravity，然后在 Claude Code 那一行选 <code class="notranslate">antigravity/…</code> 模型。</p>
+<blockquote>
+<p>Google 可能封禁在 Antigravity 之外使用的 Antigravity 账号，请用丢了也不心疼的账号。</p>
+</blockquote>
+<h3>Q15：一个 provider 能放多个账号吗？</h3>
+<p>可以。再点一次同一张卡片即可再加一个账号；它们都列在这个 provider 下面，点一下切换，或交给路由自动分配。</p>
+<h3>Q16：多个账号额度用完了会自动换吗？</h3>
+<p>会。默认的 <code class="notranslate">smart</code> 路由会在还有余量的订阅里优先用最快重置的那个。只有一个账号又没建路由组时，没有可换的，报错会原样回给 Agent。</p>
+<h3>Q17：magpie 支持本地模型吗？</h3>
+<p>支持。Ollama 和 LM Studio 都在预设里，无需 key。</p>
+<h3>Q18：我的中转站没有预设怎么办？</h3>
+<p>用 <strong>自定义</strong>：填 OpenAI 兼容地址（以 <code class="notranslate">/v1</code> 结尾）或 Anthropic 兼容根地址，再填 key 和模型列表。</p>
+<h3>Q19：magpie 会改坏我的配置吗？</h3>
+<p>不会。它只改需要的键，保留注释、顺序、缩进，写入是原子的；<code class="notranslate">magpie &lt;agent&gt; default</code> 可以恢复。</p>
+<h3>Q20：换电脑怎么迁移？</h3>
+<p>用 <code class="notranslate">magpie backup</code> / <code class="notranslate">magpie restore</code>，或 WebDAV / S3 / GitHub 同步。订阅登录不包含在内，每台机器要重新登录。</p>
+<h3>Q21：magpie 收费吗？</h3>
+<p>magpie 本身是 <strong>MIT 许可、免费</strong>的。你要付的是各 provider 的模型费用或订阅费用，按 provider 自己的计费方式结算。</p>
+<h3>Q22：DeepSeek Harness 能保留自己的 DeepSeek 行，同时走 magpie 吗？</h3>
+<p>可以，需要手动配置。连接 dsh 时 magpie 只加自己的路由，dsh 的 DeepSeek 行（<code class="notranslate">llm-deepseek</code>）留给 dsh。要让它也经过 magpie，在 <code class="notranslate">~/.dsh/profiles/&lt;profile&gt;/cordis.patch.yml</code> 里给这一行加上：</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate">- <span class="pl-ent">id</span>: <span class="pl-s">llm-deepseek</span>
+  <span class="pl-ent">config</span>:
+    <span class="pl-ent">baseURL</span>: <span class="pl-s">http://127.0.0.1:3425</span>
+    <span class="pl-ent">apiKeyEnv</span>: <span class="pl-s">MAGPIE_DS_KEY</span>
+    <span class="pl-ent">models</span>:
+      - <span class="pl-ent">id</span>: <span class="pl-s">deepseek/deepseek-flash</span>
+        <span class="pl-ent">name</span>: <span class="pl-s">DeepSeek V4.1 Flash (magpie)</span>
+        <span class="pl-ent">contextWindow</span>: <span class="pl-c1">1000000</span>
+        <span class="pl-ent">inputModalities</span>: <span class="pl-s">[text, image]</span>
+        <span class="pl-ent">systemPromptUpdate</span>: <span class="pl-s">in-history</span>
+        <span class="pl-ent">toolUpdate</span>: <span class="pl-s">addition-only</span></pre></div>
+<ul>
+<li><code class="notranslate">baseURL</code> 不带 <code class="notranslate">/anthropic</code>；</li>
+<li><code class="notranslate">MAGPIE_DS_KEY</code> 里放<strong>网关密钥</strong>（本机是 <code class="notranslate">magpie</code>），不是你的 DeepSeek key；</li>
+<li>模型 id 用 <code class="notranslate">magpie models</code> 的输出；</li>
+<li>详见官方参考文档的 DeepSeek Harness 一节。</li>
+</ul>
+<hr>
+<h2>16. 故障排查手册</h2>
+<h3>16.1 先做这三件事</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie ls                    <span class="pl-c"><span class="pl-c">#</span> Agent 当前设置</span>
+magpie provider <span class="pl-c1">test</span> <span class="pl-k">&lt;</span>id<span class="pl-k">&gt;</span>    <span class="pl-c"><span class="pl-c">#</span> provider 是否可用</span>
+magpie log -n 200            <span class="pl-c"><span class="pl-c">#</span> 最近的错误</span></pre></div>
+<p>90% 的问题能在这里定位。</p>
+<h3>16.2 Agent 报 502，但路由页什么都没有</h3>
+<p><strong>症状：</strong></p>
+<ul>
+<li>Agent 报 502 / 连不上；</li>
+<li>magpie 的网关页或路由页看不到任何请求。</li>
+</ul>
+<p><strong>原因：</strong></p>
+<p>代理软件（Surge、Clash、mihomo 等，开了系统代理、TUN 或增强模式）把 Agent 发往 <code class="notranslate">http://127.0.0.1:3425</code> 的请求接走、转去了别处，请求根本没到 magpie。</p>
+<p>只在跳过列表里写 <code class="notranslate">127.0.0.1</code> 不一定够：有些 Agent（比如 Codex）照样会走代理。</p>
+<p><strong>解决：</strong></p>
+<p>在代理软件里加两条本地地址直连的规则，放在其他规则前面。</p>
+<p>Surge：</p>
+<pre class="notranslate"><code class="notranslate">IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+IP-CIDR6,::1/128,DIRECT,no-resolve
+</code></pre>
+<p>Clash / mihomo：写在 <code class="notranslate">rules:</code> 下，每行前面加 <code class="notranslate">- </code>：</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-ent">rules</span>:
+  - <span class="pl-s">IP-CIDR,127.0.0.0/8,DIRECT,no-resolve</span>
+  - <span class="pl-s">IP-CIDR6,::1/128,DIRECT,no-resolve</span></pre></div>
+<p>改完让 Agent 重新发一次请求即可。</p>
+<h3>16.3 Docker 里返回 401</h3>
+<p><strong>原因：</strong> 容器外的请求必须带一个启用的网关密钥。</p>
+<p><strong>解决：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> magpie magpie gateway-key add <span class="pl-s"><span class="pl-pds">"</span>Laptop<span class="pl-pds">"</span></span></pre></div>
+<p>把打印出来的 <code class="notranslate">sk-magpie-key-…</code> 填进 Agent 的 API key 设置。</p>
+<p>旧镜像升级后，原来发送 <code class="notranslate">magpie</code> 或其他非启用密钥的 Agent 会收到 401；给它换一个启用的网关密钥即可。</p>
+<h3>16.4 模型列表是空的 / 找不到某个模型</h3>
+<p>可能原因：</p>
+<ol>
+<li><strong>provider 没拉取到模型</strong>：<code class="notranslate">magpie provider models &lt;id&gt;</code> 重新拉；</li>
+<li><strong>模型被隐藏</strong>：展开 provider 那一行，检查暴露的模型；</li>
+<li><strong>模型已弃用</strong>：厂商说 deprecated / retired 的模型会从列表里消失，直到有人用 <code class="notranslate">provider/model</code> 请求它，或过一周；</li>
+<li><strong>模型 ID 写错</strong>：用 <code class="notranslate">magpie models</code> 看准确写法；</li>
+<li><strong>订阅没登录成功</strong>：重新登录，或检查 <code class="notranslate">magpie accounts</code>；</li>
+<li><strong>自定义 provider 没填 models</strong>：在编辑页补上，或 <code class="notranslate">magpie provider models &lt;id&gt; a b c</code>。</li>
+</ol>
+<h3>16.5 provider 测试失败</h3>
+<p>按错误类型排查：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">现象</th>
+<th align="left">先查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">401 / 403</td>
+<td align="left">key 是否正确、是否过期、是否有权限</td>
+</tr>
+<tr>
+<td align="left">404</td>
+<td align="left">base URL 是否正确（OpenAI 兼容要以 <code class="notranslate">/v1</code> 结尾；Anthropic 兼容用根地址）</td>
+</tr>
+<tr>
+<td align="left">429</td>
+<td align="left">额度 / 频率限制；换账号或等重置</td>
+</tr>
+<tr>
+<td align="left">超时</td>
+<td align="left">网络 / 代理 / 厂商服务状态</td>
+</tr>
+<tr>
+<td align="left">TLS 错误</td>
+<td align="left">代理软件拦截、系统证书、base URL 协议</td>
+</tr>
+<tr>
+<td align="left">模型不存在</td>
+<td align="left">模型 ID 是否是该 provider 的真实 ID；用 <code class="notranslate">magpie models</code> 确认</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>16.6 改了模型但 Agent 还用旧的</h3>
+<ul>
+<li>Agent 只在启动时读配置：<strong>开新会话</strong>；</li>
+<li>Codex 还要重启应用；</li>
+<li>Claude Desktop 需要重启；</li>
+<li>编辑器插件要重新加载窗口；</li>
+<li>确认改的是正确的 Agent 行（<code class="notranslate">magpie ls</code>）。</li>
+</ul>
+<h3>16.7 端口被占用 / 网关起不来</h3>
+<ul>
+<li>检查是否有另一个 magpie 在跑：<code class="notranslate">magpie daemon status</code>；</li>
+<li>服务模式和 <code class="notranslate">magpie autostart</code> 不能同时用；</li>
+<li>改了 <code class="notranslate">MAGPIE_ADDR</code> 时确认端口没被其他程序占用；</li>
+<li>用 <code class="notranslate">magpie log -n 200</code> 看具体错误。</li>
+</ul>
+<h3>16.8 安装脚本失败</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">现象</th>
+<th align="left">处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">下载失败 / 超时</td>
+<td align="left"><code class="notranslate">--proxy</code> 或 <code class="notranslate">--mirror</code></td>
+</tr>
+<tr>
+<td align="left">Linux 缺 WebKitGTK</td>
+<td align="left">按提示装 <code class="notranslate">libwebkit2gtk-4.1-0</code>（Debian/Ubuntu）或 <code class="notranslate">webkit2gtk4.1</code>（Fedora）</td>
+</tr>
+<tr>
+<td align="left">没有桌面</td>
+<td align="left">用 <code class="notranslate">--tui</code></td>
+</tr>
+<tr>
+<td align="left">没有 sudo</td>
+<td align="left">用 <code class="notranslate">--tui</code>，或手动装依赖</td>
+</tr>
+<tr>
+<td align="left">Alpine</td>
+<td align="left">只能用终端版</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">magpie: command not found</code></td>
+<td align="left">重开终端；确认安装脚本的输出；检查 <code class="notranslate">PATH</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>16.9 Web 界面打不开 / 401</h3>
+<ul>
+<li>链接必须带 <code class="notranslate">?k=&lt;key&gt;</code>；</li>
+<li>没设 <code class="notranslate">MAGPIE_WEB_KEY</code> 时，每次启动 key 都会变，旧链接失效；</li>
+<li>设置了 <code class="notranslate">MAGPIE_WEB_KEY</code> 时，浏览器保持登录 400 天；</li>
+<li>反向代理场景注意 <code class="notranslate">MAGPIE_PUBLIC_URL</code> 和 <code class="notranslate">MAGPIE_WEB_URL</code>；</li>
+<li>同一地址上的其他服务可能清掉 cookie 或占满 cookie 限额，导致登录丢失。</li>
+</ul>
+<h3>16.10 订阅登录回调失败（Docker / 远程）</h3>
+<p>厂商把浏览器跳回 <code class="notranslate">localhost</code>，但 <code class="notranslate">localhost</code> 是你自己的电脑，不是容器/远程主机。</p>
+<p><strong>解决：</strong> 复制浏览器地址栏里的完整回调地址，粘贴到登录界面的 <strong>回调 URL</strong> 一栏。</p>
+<h3>16.11 额度显示不对 / 不刷新</h3>
+<ul>
+<li>额度最多每 30 秒读一次：<code class="notranslate">magpie quota refresh codex</code>；</li>
+<li>共享 magpie 的额度在共享端读取，本机显示的是那边最近一次的结果；</li>
+<li>想完全手动刷新：设置 → 额度 → 额度刷新 → 仅手动。</li>
+</ul>
+<h3>16.12 用量里没有某些请求</h3>
+<p>只有<strong>经过网关</strong>的请求才会计入。以下情况不会计入：</p>
+<ul>
+<li>Agent 用它自己的模型、自己的登录，直连厂商；</li>
+<li>你在 Agent 里临时切到了非 magpie 的 provider；</li>
+<li>请求在到达网关前就被代理接走了（见 16.2）。</li>
+</ul>
+<h3>16.13 脱敏打开后请求返回 503</h3>
+<p>说明脱敏已打开但运行不了：</p>
+<ul>
+<li>检查内置插件 <strong>隐私遮盖</strong> 是否被手动关掉；</li>
+<li>如果开了本地模型，检查它是否在运行 / 下载完成；</li>
+<li>这是有意设计：<strong>绝不退回成不脱敏直接发送</strong>；</li>
+<li>临时处理：关掉脱敏，或把该 provider 设为"请求不脱敏"。</li>
+</ul>
+<h3>16.14 模型被厂商弃用</h3>
+<p>厂商说 deprecated / retired 的模型会从 <code class="notranslate">magpie models</code>、<code class="notranslate">/v1/models</code> 和 Agent 列表里消失，即使厂商自己的列表还列着它。</p>
+<p>它会在有人用 <code class="notranslate">provider/model</code> 请求它之后回来，或过一周。</p>
+<h3>16.15 想彻底重来</h3>
+<ol>
+<li><code class="notranslate">magpie backup</code> 先备份；</li>
+<li><code class="notranslate">magpie &lt;agent&gt; default</code> 逐个恢复 Agent；</li>
+<li>或 <code class="notranslate">magpie uninstall</code>（断开所有 Agent 并删除 magpie 数据）；</li>
+<li>重新安装、重新添加 provider。</li>
+</ol>
+<hr>
+<h2>17. 卸载与恢复原样</h2>
+<h3>17.1 只恢复某个 Agent</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie claude default
+magpie codex default</pre></div>
+<p>或在模型选择器里选 Agent 自带的模型。</p>
+<h3>17.2 卸载脚本安装的内容（保留设置）</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --uninstall</pre></div>
+<p>会拿掉：</p>
+<ul>
+<li><code class="notranslate">magpie</code> 命令；</li>
+<li>macOS 上的应用；</li>
+<li>Linux 上的菜单项、图标和 <code class="notranslate">magpie://</code> 链接处理；</li>
+<li>Linux 上会去启动一个已不存在的 magpie 的后台服务和开机启动。</li>
+</ul>
+<p>保留：</p>
+<ul>
+<li><code class="notranslate">~/.config/magpie</code> 里的设置、provider 和用量；</li>
+<li>已连接的 Agent 仍指向 magpie 的地址（直到你恢复它们）。</li>
+</ul>
+<h3>17.3 彻底删除</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh -s -- --uninstall --purge</pre></div>
+<p><code class="notranslate">--purge</code> 会先运行 <code class="notranslate">magpie uninstall --yes</code>：</p>
+<ul>
+<li>断开每个 Agent；</li>
+<li>恢复它原来的配置；</li>
+<li>删除 magpie 的设置、provider 和用量。</li>
+</ul>
+<p>用其他方式安装的：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">magpie uninstall</pre></div>
+<p>或设置 → 卸载 magpie（做的是 <code class="notranslate">--purge</code> 那些事，程序本身留给你删除）。</p>
+<h3>17.4 手动清理</h3>
+<p>如果安装脚本已经不在：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">rm -rf <span class="pl-k">~</span>/.config/magpie
+rm -rf <span class="pl-k">~</span>/.cache/magpie
+<span class="pl-c"><span class="pl-c">#</span> macOS</span>
+rm -rf <span class="pl-k">~</span>/Library/Logs/magpie
+<span class="pl-c"><span class="pl-c">#</span> Linux</span>
+rm -rf <span class="pl-k">~</span>/.local/state/magpie</pre></div>
+<blockquote>
+<p>删除前先确认已经用 <code class="notranslate">magpie &lt;agent&gt; default</code> 恢复了 Agent 配置，否则 Agent 可能还指向一个不存在的网关。</p>
+</blockquote>
+<hr>
+<h2>18. 术语表</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">术语</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Agent</strong></td>
+<td align="left">使用模型的工具，如 Claude Code、Codex、Gemini CLI</td>
+</tr>
+<tr>
+<td align="left"><strong>Provider</strong></td>
+<td align="left">模型来源：订阅、API Key 厂商、本地模型、自定义地址</td>
+</tr>
+<tr>
+<td align="left"><strong>Model</strong></td>
+<td align="left">具体模型，写作 <code class="notranslate">provider/model</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Gateway</strong></td>
+<td align="left">本地网关 <code class="notranslate">127.0.0.1:3425</code>，所有请求的入口</td>
+</tr>
+<tr>
+<td align="left"><strong>Routing group</strong></td>
+<td align="left">把多个模型/账号合成一个，写作 <code class="notranslate">group/&lt;id&gt;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Profile / 方案</strong></td>
+<td align="left">所有 Agent 配置的命名快照</td>
+</tr>
+<tr>
+<td align="left"><strong>Subscription</strong></td>
+<td align="left">你登录的订阅（Claude、ChatGPT、Copilot 等）</td>
+</tr>
+<tr>
+<td align="left"><strong>API Key provider</strong></td>
+<td align="left">用密钥接入的厂商</td>
+</tr>
+<tr>
+<td align="left"><strong>Relay / 中转站</strong></td>
+<td align="left">兼容 OpenAI/Anthropic 的第三方转发服务</td>
+</tr>
+<tr>
+<td align="left"><strong>Gateway key</strong></td>
+<td align="left">给其他电脑/客户端使用的网关密钥</td>
+</tr>
+<tr>
+<td align="left"><strong>Remote magpie</strong></td>
+<td align="left">把另一台电脑上的 magpie 当作 provider</td>
+</tr>
+<tr>
+<td align="left"><strong>Failover</strong></td>
+<td align="left">一个账号/模型失败时自动换下一个</td>
+</tr>
+<tr>
+<td align="left"><strong>Session stickiness</strong></td>
+<td align="left">对话保持在回答它的账号上</td>
+</tr>
+<tr>
+<td align="left"><strong>Masking / 脱敏</strong></td>
+<td align="left">请求离开电脑前把敏感值换成占位符</td>
+</tr>
+<tr>
+<td align="left"><strong>OTLP</strong></td>
+<td align="left">OpenTelemetry 导出协议</td>
+</tr>
+<tr>
+<td align="left"><strong>MCP</strong></td>
+<td align="left">Model Context Protocol，给 Agent 提供工具</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>19. 官方链接汇总</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th align="left">内容</th>
+<th align="left">链接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">官网 / 下载</td>
+<td align="left"><a href="https://usemagpie.ai/zh/" rel="nofollow">https://usemagpie.ai/zh/</a></td>
+</tr>
+<tr>
+<td align="left">中文快速上手</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/start" rel="nofollow">https://usemagpie.ai/docs/zh/start</a></td>
+</tr>
+<tr>
+<td align="left">中文插件文档</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/plugins" rel="nofollow">https://usemagpie.ai/docs/zh/plugins</a></td>
+</tr>
+<tr>
+<td align="left">中文意图路由</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/intent" rel="nofollow">https://usemagpie.ai/docs/zh/intent</a></td>
+</tr>
+<tr>
+<td align="left">中文 Docker</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/docker" rel="nofollow">https://usemagpie.ai/docs/zh/docker</a></td>
+</tr>
+<tr>
+<td align="left">中文远程 magpie</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/remote" rel="nofollow">https://usemagpie.ai/docs/zh/remote</a></td>
+</tr>
+<tr>
+<td align="left">中文本地脱敏</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/masking" rel="nofollow">https://usemagpie.ai/docs/zh/masking</a></td>
+</tr>
+<tr>
+<td align="left">中文隐私</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/privacy" rel="nofollow">https://usemagpie.ai/docs/zh/privacy</a></td>
+</tr>
+<tr>
+<td align="left">中文 MCP 路由</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/mcp-router" rel="nofollow">https://usemagpie.ai/docs/zh/mcp-router</a></td>
+</tr>
+<tr>
+<td align="left">中文导入链接</td>
+<td align="left"><a href="https://usemagpie.ai/docs/zh/import" rel="nofollow">https://usemagpie.ai/docs/zh/import</a></td>
+</tr>
+<tr>
+<td align="left">完整参考（英文）</td>
+<td align="left"><a href="https://github.com/yetone/magpie/blob/main/docs/reference.md">https://github.com/yetone/magpie/blob/main/docs/reference.md</a></td>
+</tr>
+<tr>
+<td align="left">插件社区</td>
+<td align="left"><a href="https://github.com/magpie-community/plugins">https://github.com/magpie-community/plugins</a></td>
+</tr>
+<tr>
+<td align="left">Discord</td>
+<td align="left"><a href="https://discord.gg/vGSnD3ZKQF" rel="nofollow">https://discord.gg/vGSnD3ZKQF</a></td>
+</tr>
+<tr>
+<td align="left">发布记录</td>
+<td align="left"><a href="https://github.com/yetone/magpie-releases/releases">https://github.com/yetone/magpie-releases/releases</a></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><strong>许可：</strong> MIT。magpie 与 Apache Magpie 及 Apache 软件基金会没有隶属关系。</p>
+<p><strong>反馈：</strong> 官方仓库不接受 Pull Request；问题、想法和模型缺失请去 Discord。</p>
+<hr>
+<h2>附录 A：常用命令清单</h2>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> ===== 状态 =====</span>
+magpie ls
+magpie providers
+magpie models
+magpie presets
+magpie quota
+magpie usage 7d
+magpie settings
+magpie log -f
+
+<span class="pl-c"><span class="pl-c">#</span> ===== Provider =====</span>
+magpie provider add deepseek sk-…
+magpie provider add ollama
+magpie provider add <span class="pl-s"><span class="pl-pds">"</span>My Relay<span class="pl-pds">"</span></span> url=https://relay.example.com/v1 key=sk-… models=gpt-5.5
+magpie provider <span class="pl-c1">test</span> deepseek
+magpie provider models deepseek
+magpie provider refresh deepseek
+magpie provider key deepseek sk-…
+magpie provider rm deepseek
+
+<span class="pl-c"><span class="pl-c">#</span> ===== Agent =====</span>
+magpie claude deepseek/deepseek-v4-pro
+magpie codex moonshot/kimi-k2.5
+magpie opencode anthropic/claude-sonnet-5
+magpie codex effort high
+magpie claude haiku deepseek/deepseek-v4-flash
+magpie claude haiku <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+magpie claude default
+magpie codex default
+
+<span class="pl-c"><span class="pl-c">#</span> ===== 方案 =====</span>
+magpie save work
+magpie use work
+magpie profiles
+magpie rm work
+
+<span class="pl-c"><span class="pl-c">#</span> ===== 路由组 =====</span>
+magpie groups
+magpie group add <span class="pl-s"><span class="pl-pds">"</span>Opus anywhere<span class="pl-pds">"</span></span> models=claude/claude-opus-5-5,copilot/claude-opus-5.5 routing=smart
+magpie group <span class="pl-c1">set</span> opus-anywhere models+=openrouter/anthropic/claude-opus-5.5
+magpie group <span class="pl-c1">set</span> opus-anywhere routing=weight weight=claude/claude-opus-5-5=3
+magpie group rule add opus-anywhere use=deepseek/deepseek-v4-flash compact
+magpie group rule opus-anywhere
+magpie group rm opus-anywhere
+magpie claude group/opus-anywhere
+
+<span class="pl-c"><span class="pl-c">#</span> ===== 账号 =====</span>
+magpie accounts add codex
+magpie accounts switch claude next
+magpie accounts discovery off
+
+<span class="pl-c"><span class="pl-c">#</span> ===== 运行 =====</span>
+magpie
+magpie tray
+magpie tui
+magpie web
+magpie serve
+magpie daemon install
+magpie daemon status
+magpie daemon restart
+magpie healthcheck
+
+<span class="pl-c"><span class="pl-c">#</span> ===== 工具 =====</span>
+magpie tools
+magpie tool generate_image <span class="pl-s"><span class="pl-pds">"</span>一只喜鹊，水彩<span class="pl-pds">"</span></span> -o hero.png
+magpie tool web_search <span class="pl-s"><span class="pl-pds">"</span>go 1.27 release notes<span class="pl-pds">"</span></span>
+magpie tool analyze_image ./shot.png --prompt <span class="pl-s"><span class="pl-pds">"</span>what does the error say?<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> ===== 维护 =====</span>
+magpie sync
+magpie backup
+magpie restore magpie.magpie-backup
+magpie update
+magpie update channel stable
+magpie update mirror https://mirror.example/
+magpie uninstall</pre></div>
+<hr>
+<h2>附录 B：三套最小可用配置</h2>
+<h3>B.1 Claude Code + DeepSeek API Key</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 1. 安装</span>
+curl -fsSL https://usemagpie.ai/install.sh <span class="pl-k">|</span> sh
+
+<span class="pl-c"><span class="pl-c">#</span> 2. 添加 provider</span>
+magpie provider add deepseek sk-你的key
+
+<span class="pl-c"><span class="pl-c">#</span> 3. 选模型</span>
+magpie claude deepseek/deepseek-v4-pro
+
+<span class="pl-c"><span class="pl-c">#</span> 4. 验证</span>
+magpie ls
+magpie provider <span class="pl-c1">test</span> deepseek
+
+<span class="pl-c"><span class="pl-c">#</span> 5. 新开一个终端</span>
+claude</pre></div>
+<h3>B.2 Codex + Kimi API Key</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 1. 查看 Kimi / Moonshot 预设的 id（不同版本可能是 kimi 或 moonshot）</span>
+magpie presets <span class="pl-k">|</span> grep -i -E <span class="pl-s"><span class="pl-pds">'</span>kimi|moonshot<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 2. 用上一步看到的 id 添加（下面的 &lt;id&gt; 要替换成真实 id）</span>
+magpie provider add <span class="pl-k">&lt;</span>id<span class="pl-k">&gt;</span> sk-你的key
+
+<span class="pl-c"><span class="pl-c">#</span> 3. 确认模型的完整写法</span>
+magpie models <span class="pl-k">|</span> grep -i kimi
+
+<span class="pl-c"><span class="pl-c">#</span> 4. 给 Codex 选模型（下面的 &lt;provider&gt;/&lt;model&gt; 用上一步看到的完整写法）</span>
+magpie codex <span class="pl-k">&lt;</span>provider<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>model<span class="pl-k">&gt;</span>
+magpie codex effort high
+magpie ls
+
+<span class="pl-c"><span class="pl-c">#</span> 重启 Codex 应用，再开新会话</span>
+codex</pre></div>
+<blockquote>
+<p>如果 <code class="notranslate">magpie presets</code> 给出的 id 是 <code class="notranslate">moonshot</code>，把上面的 <code class="notranslate">&lt;id&gt;</code> 换成 <code class="notranslate">moonshot</code>，模型写法也以 <code class="notranslate">magpie models</code> 的输出为准。</p>
+</blockquote>
+<h3>B.3 OpenCode + 本地 Ollama</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 先在本地启动 Ollama，并拉一个模型</span>
+ollama pull qwen3-coder
+
+magpie provider add ollama
+magpie opencode ollama/qwen3-coder
+magpie ls</pre></div>
+<blockquote>
+<p>本地模型的 provider id 和模型名以 <code class="notranslate">magpie models</code> 的输出为准。</p>
+</blockquote>
+<hr>
+<h2>附录 C：上线前检查清单</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 已备份 <code class="notranslate">~/.claude/settings.json</code>、<code class="notranslate">~/.codex/config.toml</code> 等配置</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> magpie 已安装并能启动（<code class="notranslate">magpie ls</code> 有输出）</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 至少一个 provider 测试通过（<code class="notranslate">magpie provider test &lt;id&gt;</code>）</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 目标 Agent 显示正确的 <code class="notranslate">provider/model</code></li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 新开会话后能正常对话</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> <code class="notranslate">magpie usage today</code> 能看到请求</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 网关页 / 路由页能看到这次请求</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 代理软件已放行 <code class="notranslate">127.0.0.1</code>（如使用 TUN / 增强模式）</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 如使用 Docker，已生成并配置网关密钥</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 如使用局域网共享，已给每台电脑分配密钥</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 如使用订阅，已确认厂商的使用条款和封禁风险</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 如需隐私保护，已开启脱敏并用"试一试"验证</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 已了解 <code class="notranslate">magpie &lt;agent&gt; default</code> 可以恢复原样</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" aria-label="Incomplete task"> 已了解日志位置（<code class="notranslate">magpie log</code>）</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>最后一句：</strong> magpie 的核心只有三步——<strong>加 provider → 给 Agent 选模型 → 开新会话</strong>。剩下的路由组、方案、脱敏、远程共享，都是在你需要时再逐层加上的可选能力。遇到问题先跑 <code class="notranslate">magpie ls</code>、<code class="notranslate">magpie provider test</code>、<code class="notranslate">magpie log -n 200</code>，大多数问题都能定位。</p>
+</blockquote></div>
+<div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://ivanlee99.github.io/">Youngs羊示</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("11/25/2024"!=""){
+    var startSite=new Date("11/25/2024");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","IVANLEE99/IVANLEE99.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
