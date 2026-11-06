@@ -21,7 +21,7 @@ Skill（技能）是 Claude Code 的扩展机制，允许用户定义可复用�
 <meta property="og:url" content="https://ivanlee99.github.io//post/50.html">
 <meta property="og:image" content="">
 <title>Claude Code Skill 详解：微信读书助手（weread）</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -190,11 +190,10 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>若未设置，提示用户：<code class="notranslate">export WEREAD_API_KEY=&lt;你的apikey&gt;</code></li>
 </ul>
 <h3>请求格式</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">curl -X POST "https://i.weread.qq.com/api/agent/gateway" \
-  -H "Authorization: Bearer $WEREAD_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"api_name": "/store/search", "keyword": "三体", "count": 10, "skill_version": "1.0.3"}'
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -X POST <span class="pl-s"><span class="pl-pds">"</span>https://i.weread.qq.com/api/agent/gateway<span class="pl-pds">"</span></span> \
+  -H <span class="pl-s"><span class="pl-pds">"</span>Authorization: Bearer <span class="pl-smi">$WEREAD_API_KEY</span><span class="pl-pds">"</span></span> \
+  -H <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/json<span class="pl-pds">"</span></span> \
+  -d <span class="pl-s"><span class="pl-pds">'</span>{"api_name": "/store/search", "keyword": "三体", "count": 10, "skill_version": "1.0.3"}<span class="pl-pds">'</span></span></pre></div>
 <h3>关键规则</h3>
 <ol>
 <li><strong>版本上报</strong>：每次请求 body 必须包含 <code class="notranslate">"skill_version": "1.0.3"</code>（取 SKILL.md 顶部 version 字段的值），用于服务端检查版本更新</li>
@@ -323,26 +322,23 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <pre class="notranslate"><code class="notranslate">下载 https://cdn.weread.qq.com/skills/weread-skills.zip 安装 skill
 </code></pre>
 <h3>方式二：手动安装</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">mkdir -p ~/.claude/skills/weread
-cd ~/.claude/skills/weread
-curl -sL "https://cdn.weread.qq.com/skills/weread-skills.zip" -o /tmp/weread-skills.zip
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkdir -p <span class="pl-k">~</span>/.claude/skills/weread
+<span class="pl-c1">cd</span> <span class="pl-k">~</span>/.claude/skills/weread
+curl -sL <span class="pl-s"><span class="pl-pds">"</span>https://cdn.weread.qq.com/skills/weread-skills.zip<span class="pl-pds">"</span></span> -o /tmp/weread-skills.zip
 unzip -o /tmp/weread-skills.zip -d /tmp/weread-skills-extracted
-cp /tmp/weread-skills-extracted/weread-skills/*.md .
-</code></pre>
+cp /tmp/weread-skills-extracted/weread-skills/<span class="pl-k">*</span>.md <span class="pl-c1">.</span></pre></div>
 <h3>配置 API Key</h3>
 <p>API Key 用于连接你的微信读书账号，数据仅你可见。</p>
 <ol>
 <li>登录微信读书获取 API Key：<a href="https://weread.qq.com" rel="nofollow">https://weread.qq.com</a></li>
 <li>设置环境变量：</li>
 </ol>
-<pre lang="bash" class="notranslate"><code class="notranslate">export WEREAD_API_KEY=&lt;你的apikey&gt;
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-k">export</span> WEREAD_API_KEY=<span class="pl-k">&lt;</span>你的apikey<span class="pl-k">&gt;</span></pre></div>
 <p>API Key 格式为 <code class="notranslate">wrk-xxxxxxxx</code>，绑定用户身份（vid），需要用户身份的接口会自动注入，无需手动传 vid。</p>
 <hr>
 <h2>五、创建详细过程</h2>
 <h3>第 1 步：创建目录结构</h3>
-<pre lang="bash" class="notranslate"><code class="notranslate">mkdir -p ~/.claude/skills/weread
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkdir -p <span class="pl-k">~</span>/.claude/skills/weread</pre></div>
 <p>最终结构：</p>
 <pre class="notranslate"><code class="notranslate">~/.claude/skills/weread/
 ├── SKILL.md          # 入口文件（能力列表 + 接口规范 + 通用规则）
@@ -466,17 +462,13 @@ cp /tmp/weread-skills-extracted/weread-skills/*.md .
 <h2>七、常见陷阱与最佳实践</h2>
 <h3>1. 参数不要嵌套</h3>
 <p><strong>正确</strong>（参数平铺在 body 顶层）：</p>
-<pre lang="json" class="notranslate"><code class="notranslate">{"api_name":"/user/notebooks","count":100,"skill_version":"1.0.5"}
-</code></pre>
+<div class="highlight highlight-source-json"><pre class="notranslate">{<span class="pl-ent">"api_name"</span>:<span class="pl-s"><span class="pl-pds">"</span>/user/notebooks<span class="pl-pds">"</span></span>,<span class="pl-ent">"count"</span>:<span class="pl-c1">100</span>,<span class="pl-ent">"skill_version"</span>:<span class="pl-s"><span class="pl-pds">"</span>1.0.5<span class="pl-pds">"</span></span>}</pre></div>
 <p><strong>正确</strong>（下一页继续平铺 <code class="notranslate">lastSort</code>）：</p>
-<pre lang="json" class="notranslate"><code class="notranslate">{"api_name":"/user/notebooks","count":100,"lastSort":1516907353,"skill_version":"1.0.5"}
-</code></pre>
+<div class="highlight highlight-source-json"><pre class="notranslate">{<span class="pl-ent">"api_name"</span>:<span class="pl-s"><span class="pl-pds">"</span>/user/notebooks<span class="pl-pds">"</span></span>,<span class="pl-ent">"count"</span>:<span class="pl-c1">100</span>,<span class="pl-ent">"lastSort"</span>:<span class="pl-c1">1516907353</span>,<span class="pl-ent">"skill_version"</span>:<span class="pl-s"><span class="pl-pds">"</span>1.0.5<span class="pl-pds">"</span></span>}</pre></div>
 <p><strong>错误</strong>（不要包在 <code class="notranslate">params</code> 里，会导致分页失效）：</p>
-<pre lang="json" class="notranslate"><code class="notranslate">{"api_name":"/user/notebooks","params":{"count":100,"lastSort":1516907353},"skill_version":"1.0.5"}
-</code></pre>
+<div class="highlight highlight-source-json"><pre class="notranslate">{<span class="pl-ent">"api_name"</span>:<span class="pl-s"><span class="pl-pds">"</span>/user/notebooks<span class="pl-pds">"</span></span>,<span class="pl-ent">"params"</span>:{<span class="pl-ent">"count"</span>:<span class="pl-c1">100</span>,<span class="pl-ent">"lastSort"</span>:<span class="pl-c1">1516907353</span>},<span class="pl-ent">"skill_version"</span>:<span class="pl-s"><span class="pl-pds">"</span>1.0.5<span class="pl-pds">"</span></span>}</pre></div>
 <p><strong>错误</strong>（不要使用 <code class="notranslate">offset</code>/<code class="notranslate">limit</code>，这些字段不是分页参数）：</p>
-<pre lang="json" class="notranslate"><code class="notranslate">{"api_name":"/user/notebooks","offset":20,"limit":20,"skill_version":"1.0.5"}
-</code></pre>
+<div class="highlight highlight-source-json"><pre class="notranslate">{<span class="pl-ent">"api_name"</span>:<span class="pl-s"><span class="pl-pds">"</span>/user/notebooks<span class="pl-pds">"</span></span>,<span class="pl-ent">"offset"</span>:<span class="pl-c1">20</span>,<span class="pl-ent">"limit"</span>:<span class="pl-c1">20</span>,<span class="pl-ent">"skill_version"</span>:<span class="pl-s"><span class="pl-pds">"</span>1.0.5<span class="pl-pds">"</span></span>}</pre></div>
 <h3>2. 书架数量必须包含专辑</h3>
 <p>书架总数 = <code class="notranslate">books.length + albums.length + (mp 非空 ? 1 : 0)</code></p>
 <ul>
@@ -556,14 +548,13 @@ cp /tmp/weread-skills-extracted/weread-skills/*.md .
 </ul>
 <hr>
 <h2>八、使用方式</h2>
-<pre lang="bash" class="notranslate"><code class="notranslate"># 手动调用
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 手动调用</span>
 /weread
 
-# 自动触发
-# 说 "帮我看看微信读书里的笔记" 即可
-# 说 "搜一下三体" 即可
-# 说 "我这个月读了多久" 即可
-</code></pre>
+<span class="pl-c"><span class="pl-c">#</span> 自动触发</span>
+<span class="pl-c"><span class="pl-c">#</span> 说 "帮我看看微信读书里的笔记" 即可</span>
+<span class="pl-c"><span class="pl-c">#</span> 说 "搜一下三体" 即可</span>
+<span class="pl-c"><span class="pl-c">#</span> 说 "我这个月读了多久" 即可</span></pre></div>
 <hr>
 <h2>九、文件内容</h2>
 <p>Skill 已安装至 <code class="notranslate">~/.claude/skills/weread/</code> 目录，完整文件请查看：</p>
